@@ -249,7 +249,6 @@ nav {
 .post-preview {
   position: relative;
   padding: 25px 0 35px;
-  min-height: 14em;
   overflow: hidden;
   clear: both;
 }
