@@ -13,7 +13,8 @@
 
     <!--Description-->
     
-        <meta name="description" content="最小二乘法">
+        <meta name="description" content="最小二乘法最小二乘法又称为最小平方法，是一种数学优化建模方法。它通过最小化误差的平方和寻找数据的最佳函数匹配。最小二乘法是对线性方程组，即方程个数比未知数更多的方程组，以回归分析求得近似解的标准方法。在这个解决方案中，最小二乘法演算为每一方程的结果中，将残差平方和的总和最小化。
+最小二乘法分为线性和">
     
 
     <!--Author-->
@@ -23,7 +24,7 @@
 
     <!-- Title -->
     
-    <title>Least_Sqaure | He1o</title>
+    <title>1. LeastSqaure | He1o</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -72,7 +73,7 @@
                     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                         <div class="post-heading">
                             <h1>
-                                Least_Sqaure
+                                1. LeastSqaure
                             </h1>
                         </div>
                     </div>
@@ -86,10 +87,10 @@
                 <div class="row">
                     <!-- Post Main Content -->
                     <div class="post-content col-lg-9 col-lg-offset-1.75 col-md-12 col-md-offset-1">
-                        <p>最小二乘法<br><span id="more"></span></p>
+                        <span id="more"></span>
 <h1 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h1><p>最小二乘法又称为最小平方法，是一种数学优化建模方法。它通过最小化误差的平方和寻找数据的最佳函数匹配。最小二乘法是对线性方程组，即方程个数比未知数更多的方程组，以回归分析求得近似解的标准方法。在这个解决方案中，最小二乘法演算为每一方程的结果中，将残差平方和的总和最小化。</p>
 <p>最小二乘法分为线性和非线性，取决于所有未知数中的残差是否为线性。线性的最小二乘问题发生在统计回归分析中，具有一个封闭形式的解决方案。非线性的问题通常由迭代细致化来解决，每次迭代中，系统由线性近似，因此这两种情况下核心演算是相同的。</p>
-<h2 id="1、历史背景"><a href="#1、历史背景" class="headerlink" title="1、历史背景"></a>1、历史背景</h2><p>最小二乘法发展于天文学和大地测量学领域，科学家和数学家尝试为大航海探索时期的海洋航行挑战提供解决方案。准确描述天体的行为是船舰在大海洋上航行的关键，水手不能再依靠陆上目标导航作航行。</p>
+<h2 id="1-历史背景"><a href="#1-历史背景" class="headerlink" title="1. 历史背景"></a>1. 历史背景</h2><p>最小二乘法发展于天文学和大地测量学领域，科学家和数学家尝试为大航海探索时期的海洋航行挑战提供解决方案。准确描述天体的行为是船舰在大海洋上航行的关键，水手不能再依靠陆上目标导航作航行。</p>
 <p>这个方法是在十八世纪期间一些进步的集大成：</p>
 <ul>
 <li>不同观测值的组合是真实值的最佳估计；多次观测会减少误差而不是增加，也许在1722年由Roger Cotes首先阐明。</li>
@@ -100,7 +101,7 @@
 <p>1801年，意大利天文学家朱塞普·皮亚齐发现了第一颗小行星谷神星。经过40天的追踪观测后，由于谷神星运行至太阳背后，使得皮亚齐失去了谷神星的位置。随后全世界的科学家利用皮亚齐的观测数据开始寻找谷神星，但是根据大多数人计算的结果来寻找谷神星都没有结果。当年24岁的高斯也计算了谷神星的轨道。奥地利天文学家海因里希·奥伯斯根据高斯计算出来的轨道重新发现了谷神星。</p>
 <p>高斯使用的最小二乘法的方法发表于1809年他的著作《天体运动论》中，而法国科学家勒让德于1806年独立发现“最小二乘法”，但因不为世人所知而没没无闻。两人曾为谁最早创立最小二乘法原理发生争执。</p>
 <p>1829年，高斯提供了最小二乘法的优化效果强于其他方法的证明，见高斯-马尔可夫定理。</p>
-<h2 id="2、问题引入"><a href="#2、问题引入" class="headerlink" title="2、问题引入"></a>2、问题引入</h2><p>如果对同一目标例如手机宽度通过尺子测量长度，通过同一尺子不同测量员或者不同尺子同一测量员得到的结果都有可能不同，那么如何通过所有的测量结果来得到准确的真值呢？</p>
+<h2 id="2-问题引入"><a href="#2-问题引入" class="headerlink" title="2. 问题引入"></a>2. 问题引入</h2><p>如果对同一目标例如手机宽度通过尺子测量长度，通过同一尺子不同测量员或者不同尺子同一测量员得到的结果都有可能不同，那么如何通过所有的测量结果来得到准确的真值呢？</p>
 <p>假设测量结果分别为72.5mm、72.2mm、72.9mm、72.4mm、72.5mm。</p>
 <p>只要做过初中物理实验的都知道，通常都会对同一实验进行多次重复操作，把得到的结果进行平均求和，最后的结果作为实验的准确结果</p>
 <script type="math/tex; mode=display">\overline{x}=\frac{72.5+72.2+72.9+72.4+72.5}{5}=72.5</script><p>直觉告诉我们取平均值是正确的，那么这么做得依据是什么呢？</p>
@@ -164,7 +165,7 @@
 </table>
 </div>
 <p>如何通过这些已有数据在给定社会商品零售总额的情况下预测营业税税收总额呢？</p>
-<h2 id="3、问题求解"><a href="#3、问题求解" class="headerlink" title="3、问题求解"></a>3、问题求解</h2><p>我们将第一个问题用公式进行描述，假设要猜测的真实值是$y$，测量值则为$y_i$，上述求平均公式则为：</p>
+<h2 id="3-问题求解"><a href="#3-问题求解" class="headerlink" title="3. 问题求解"></a>3. 问题求解</h2><p>我们将第一个问题用公式进行描述，假设要猜测的真实值是$y$，测量值则为$y_i$，上述求平均公式则为：</p>
 <script type="math/tex; mode=display">\displaystyle{\frac{\sum y_i}{n}}=y</script><p>公式可以转化为：</p>
 <script type="math/tex; mode=display">\sum (y_i-y)=0</script><p>满足上式时，误差平方和取得最小值，因为导数为0</p>
 <script type="math/tex; mode=display">\frac{d}{dy}S_{\epsilon^2}=\frac{d}{dy}\sum (y_i-y)^2=0</script><p>至此，我们明白求平均的实质是希望预测值与测量值的误差平方和最小，最小二乘法也就是最小平方法，二乘实际上也是日语中平方的意思。</p>
@@ -224,21 +225,20 @@
 \begin{aligned}
     X^TXw&=X^Ty\\
     w&=(X^TX)^{-1}X^Ty
-\end{aligned}</script><h2 id="4、思考"><a href="#4、思考" class="headerlink" title="4、思考"></a>4、思考</h2><p>为什么损失函数不用误差的绝对值？</p>
+\end{aligned}</script><h2 id="4-思考"><a href="#4-思考" class="headerlink" title="4. 思考"></a>4. 思考</h2><p>为什么损失函数不用误差的绝对值？</p>
 <script type="math/tex; mode=display">Q(\beta_0,\beta_1)=\sum_{i=1}^n |y_i-\beta_0-\beta_1x_i|</script><p>网上有人说是太麻烦，但我觉得主要原因是<strong>绝对值函数连续但不可导</strong>，无法通过求导数的为零的极值点，也无法通过梯度下降法进行求解。</p>
-<h2 id="5、算例"><a href="#5、算例" class="headerlink" title="5、算例"></a>5、算例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line">x = np.array([<span class="number">142.08</span>, <span class="number">177.30</span>, <span class="number">204.68</span>, <span class="number">242.88</span>, <span class="number">316.24</span>, <span class="number">332.69</span>, <span class="number">341.99</span>, <span class="number">389.29</span>, <span class="number">453.40</span>])</span><br><span class="line">y = np.array([<span class="number">3.93</span>,   <span class="number">5.96</span>,   <span class="number">7.85</span>,   <span class="number">9.82</span>,   <span class="number">12.50</span>,  <span class="number">15.79</span>,  <span class="number">15.55</span>,  <span class="number">16.39</span>,  <span class="number">18.45</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过代数方法求解</span></span><br><span class="line"><span class="comment"># numpy的协方差默认是样本方差，无偏的，自由度n-1，因此要加bias = True</span></span><br><span class="line">beta_0 = np.cov(x, y, bias = <span class="literal">True</span>)[<span class="number">0</span>,<span class="number">1</span>] / np.var(x)  </span><br><span class="line">beta_1 = np.<span class="built_in">sum</span>(y) / <span class="number">9</span> - np.<span class="built_in">sum</span>(x) / <span class="number">9</span> * beta_0</span><br><span class="line"><span class="built_in">print</span>(beta_0, beta_1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过公式计算，与上面相同</span></span><br><span class="line"><span class="comment"># a = np.sum(np.multiply(x, y)) - np.sum(x) * np.sum(y) / 9</span></span><br><span class="line"><span class="comment"># b = np.sum(np.multiply(x, x)) - np.sum(x) * np.sum(x) / 9</span></span><br></pre></td></tr></table></figure>
+<h2 id="5-算例"><a href="#5-算例" class="headerlink" title="5. 算例"></a>5. 算例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line">x = np.array([<span class="number">142.08</span>, <span class="number">177.30</span>, <span class="number">204.68</span>, <span class="number">242.88</span>, <span class="number">316.24</span>, <span class="number">332.69</span>, <span class="number">341.99</span>, <span class="number">389.29</span>, <span class="number">453.40</span>])</span><br><span class="line">y = np.array([<span class="number">3.93</span>,   <span class="number">5.96</span>,   <span class="number">7.85</span>,   <span class="number">9.82</span>,   <span class="number">12.50</span>,  <span class="number">15.79</span>,  <span class="number">15.55</span>,  <span class="number">16.39</span>,  <span class="number">18.45</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过代数方法求解</span></span><br><span class="line"><span class="comment"># numpy的协方差默认是样本方差，无偏的，自由度n-1，因此要加bias = True</span></span><br><span class="line">beta_0 = np.cov(x, y, bias = <span class="literal">True</span>)[<span class="number">0</span>,<span class="number">1</span>] / np.var(x)  </span><br><span class="line">beta_1 = np.<span class="built_in">sum</span>(y) / <span class="number">9</span> - np.<span class="built_in">sum</span>(x) / <span class="number">9</span> * beta_0</span><br><span class="line"><span class="built_in">print</span>(beta_0, beta_1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过公式计算，与上面相同</span></span><br><span class="line"><span class="comment"># a = np.sum(np.multiply(x, y)) - np.sum(x) * np.sum(y) / 9</span></span><br><span class="line"><span class="comment"># b = np.sum(np.multiply(x, x)) - np.sum(x) * np.sum(x) / 9</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>计算结果<br>0.04867773628668675 -2.2609874555936926</p>
 </blockquote>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 通过矩阵法实现最小二乘法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">least_sqaure</span>(<span class="params">X, Y</span>):</span></span><br><span class="line">    <span class="keyword">return</span> (X.T * X).I * X.T * Y</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成多项式</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">polynomial</span>(<span class="params">x, n</span>):</span></span><br><span class="line">    X = np.mat(x)</span><br><span class="line">    X = np.append(np.ones((<span class="number">1</span>, <span class="number">9</span>)), X, axis = <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, n):</span><br><span class="line">        X = np.append(X, np.mat(x**(i + <span class="number">1</span>)), axis = <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> X.T</span><br><span class="line"></span><br><span class="line">Y = np.mat(y).T</span><br><span class="line"></span><br><span class="line"><span class="comment"># 线性拟合</span></span><br><span class="line">X = polynomial(x, <span class="number">1</span>)</span><br><span class="line">beta = np.array(least_sqaure(X, Y)).flatten()[::-<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;beta:&#x27;</span>, beta)</span><br><span class="line">plt.subplot(<span class="number">221</span>)</span><br><span class="line">plt.plot(x, y, <span class="string">&#x27;bo&#x27;</span>, label=<span class="string">&#x27;noise&#x27;</span>)</span><br><span class="line">plt.plot(x, np.poly1d(beta)(x), label=<span class="string">&#x27;fitted curve&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 二次拟合</span></span><br><span class="line">X = polynomial(x, <span class="number">2</span>)</span><br><span class="line">beta = np.array(least_sqaure(X, Y)).flatten()[::-<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;beta:&#x27;</span>, beta)</span><br><span class="line">plt.subplot(<span class="number">222</span>)</span><br><span class="line">plt.plot(x, y, <span class="string">&#x27;bo&#x27;</span>, label=<span class="string">&#x27;noise&#x27;</span>)</span><br><span class="line">plt.plot(x, np.poly1d(beta)(x), label=<span class="string">&#x27;fitted curve&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 三次拟合</span></span><br><span class="line">X = polynomial(x, <span class="number">3</span>)</span><br><span class="line">beta = np.array(least_sqaure(X, Y)).flatten()[::-<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;beta:&#x27;</span>, beta)</span><br><span class="line">plt.subplot(<span class="number">223</span>)</span><br><span class="line">plt.plot(x, y, <span class="string">&#x27;bo&#x27;</span>, label=<span class="string">&#x27;noise&#x27;</span>)</span><br><span class="line">plt.plot(x, np.poly1d(beta)(x), label=<span class="string">&#x27;fitted curve&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 六次拟合</span></span><br><span class="line">X = polynomial(x, <span class="number">6</span>)</span><br><span class="line">beta = np.array(least_sqaure(X, Y)).flatten()[::-<span class="number">1</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;beta:&#x27;</span>, beta)</span><br><span class="line">plt.subplot(<span class="number">224</span>)</span><br><span class="line">plt.plot(x, y, <span class="string">&#x27;bo&#x27;</span>, label=<span class="string">&#x27;noise&#x27;</span>)</span><br><span class="line">plt.plot(x, np.poly1d(beta)(x), label=<span class="string">&#x27;fitted curve&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/Machine%20Learning/1.least_square/source/Figure_1.png" alt="最小二乘法拟合图"></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/37031188">1. 最小二乘法的本质是什么？</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/5976811.html">2. 最小二乘法小结-刘建平Pinard</a></p>
-<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95">3. 最小二乘法-维基百科</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/84133777">4. 最小二乘法详细推导 - 知乎</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/89373759">5. 最小二乘法 - 知乎</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/87582571">6. 矩阵形式下的最小二乘法推导 - 知乎</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24709748">7. 矩阵求导术（上）- 知乎</a></p>
+<p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/Machine%20Learning/1.LeastSquare/source/Figure_1.png" alt="最小二乘法拟合图"></p>
+<center>最小二乘法拟合图</center>
+
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/37031188">1. 最小二乘法的本质是什么？</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/5976811.html">2. 最小二乘法小结-刘建平Pinard</a><br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95">3. 最小二乘法-维基百科</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/84133777">4. 最小二乘法详细推导 - 知乎</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/89373759">5. 最小二乘法 - 知乎</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/87582571">6. 矩阵形式下的最小二乘法推导 - 知乎</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24709748">7. 矩阵求导术（上）- 知乎</a></p>
+</blockquote>
 
 
                             <!-- Meta -->
@@ -306,13 +306,13 @@
 
     <aside id="article-toc" role="navigation" class="fixed">
         <div id="article-toc-inner">
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95"><span class="toc-text">最小二乘法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1、历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5"><span class="toc-text">2、问题引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E9%97%AE%E9%A2%98%E6%B1%82%E8%A7%A3"><span class="toc-text">3、问题求解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%80%9D%E8%80%83"><span class="toc-text">4、思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E7%AE%97%E4%BE%8B"><span class="toc-text">5、算例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95"><span class="toc-text">最小二乘法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5"><span class="toc-text">2. 问题引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%97%AE%E9%A2%98%E6%B1%82%E8%A7%A3"><span class="toc-text">3. 问题求解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%80%9D%E8%80%83"><span class="toc-text">4. 思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%AE%97%E4%BE%8B"><span class="toc-text">5. 算例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol>
         </div>
     </aside>
 
     <!-- Scripts -->
     <script type="text/javascript">
-    console.log("© zchen9 🙋 2015-" + new Date().getFullYear());
+    console.log("© He1o 2021-" + new Date().getFullYear());
 </script>
   
     <!-- Google Analytics -->

@@ -117,14 +117,17 @@ ol > li {
   padding-top: 5px;
   padding-bottom: 5px;
 }
-div > p {
-  text-indent: 2em;
+p {
+  text-align: justify;
   letter-spacing: 0.1px;
   line-height: 1.8;
   margin: 20px 0;
 }
-div > p a {
+p a {
   text-decoration: underline;
+}
+div > p {
+  text-indent: 2em;
 }
 h1,
 h2,
