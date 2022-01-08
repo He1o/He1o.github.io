@@ -163,6 +163,10 @@ article .container .row ul {
   padding-left: 36px;
   line-height: 1.8;
 }
+article .container .row ol {
+  padding-left: 36px;
+  line-height: 1.8;
+}
 figure.highlight {
   background: #eee;
   border: 1px solid #eee;
