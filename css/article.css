@@ -216,6 +216,14 @@ figure.highlight table .line {
 figure.highlight table .line.marked {
   background: #d6d6d6;
 }
+pre {
+  background: #eee;
+}
+pre .code {
+  padding-left: 15px;
+  border-left: 1px solid #fff;
+  color: #666;
+}
 pre .comment,
 pre .template_comment,
 pre .diff .header,
