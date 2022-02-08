@@ -184,6 +184,7 @@ import matplotlib.pyplot as plt
 
 class Perceptron(object):
     def __init__(self, train_data, lable):
+        self.data_pos = train_data
         self.train_data = np.array(train_data)
         self.lable = np.array(lable)
         self.length = len(train_data)
@@ -203,29 +204,33 @@ class Perceptron(object):
             flag = True
             for i, inpute_data in enumerate(self.train_data):
                 if self.lable[i] * self.predict(inpute_data) &lt;= 0:
-                    vectorA = self.eta * self.lable[i] * inpute_data
+                    self.vectorA = self.eta * self.lable[i] * inpute_data
                     Y = lambda x,y: (- y[2] - (x) * y[0]) / y[1]
-                    plt.style.use(&#39;Solarize_Light2&#39;)
-                    plt.figure().add_subplot(111).set_aspect(&#39;equal&#39;)
                     plt.cla()
-                    scat()
-                    # plt.scatter(0, -self.weights[2] / self.weights[1], c=&#39;k&#39;)
+                    plt.figure().set_size_inches(6, 6)
+                    plt.style.use(&#39;Solarize_Light2&#39;)
+
+                    plt.subplots_adjust(top = 0.93, bottom = 0.07, right = 0.93, left = 0.07, hspace = 0, wspace = 0)
                     plt.ylim((-5, 10))
-
-                    plt.xlim((-5, 10))
-                    plt.plot([0, vectorA[0]], [Y(0, self.weights), Y(0, self.weights) + vectorA[1]])
-                    plt.plot([0, self.weights[0]], [Y(0, self.weights), Y(0, self.weights) + self.weights[1]])
-
-                    vectorB = self.weights + vectorA
-                    plt.plot([-5,10], [Y(-5, self.weights), Y(10, self.weights)])
-                    plt.plot([0, vectorB[0]], [Y(0, self.weights), Y(0, self.weights) + vectorB[1]])
-                    plt.plot([-5,10], [Y(-5, vectorB), Y(10, vectorB)])
-                    print(self.weights, self.eta * self.lable[i] * inpute_data, self.predict(inpute_data), self.lable[i])
+                    plt.xlim((-5, 10))               
+                    plt.scatter([x[0] for x in self.data_pos[:5]], [x[1] for x in self.data_pos[:5]], c=&#39;r&#39;)
+                    plt.scatter([x[0] for x in self.data_pos[5:]], [x[1] for x in self.data_pos[5:]], c=&#39;b&#39;)
                     plt.scatter(inpute_data[0], inpute_data[1], c=&#39;k&#39;)
-                    plt.savefig(&#39;testblueline&#123;&#125;-&#123;&#125;.jpg&#39;.format(idx,i))
-                    self.weights += vectorA
+                    plt.scatter(0, -self.weights[2] / self.weights[1], c=&#39;k&#39;)
+                    plt.plot([0, self.vectorA[0]], [Y(0, self.weights), Y(0, self.weights) + self.vectorA[1]])
 
+                    plt.plot([0, self.weights[0]], [Y(0, self.weights), Y(0, self.weights) + self.weights[1]])
+                    plt.plot([-5,10], [Y(-5, self.weights), Y(10, self.weights)])
+
+                    self.vectorB = self.weights + self.vectorA
+                    plt.plot([0, self.vectorB[0]], [Y(0, self.weights), Y(0, self.weights) + self.vectorB[1]])
+                    plt.plot([-5,10], [Y(-5, self.vectorB), Y(10, self.vectorB)])
+
+                    print(self.weights, self.eta * self.lable[i] * inpute_data, self.predict(inpute_data), self.lable[i])
+                    plt.savefig(&#39;img_&#123;&#125;_&#123;&#125;.jpg&#39;.format(idx,i))
                     flag = False
+
+                    self.weights = self.vectorB
                     # plt.pause(0.5)
             if flag:
                 return self.weights
@@ -234,21 +239,16 @@ train_data = [[2, 3], [1, 4], [3, 5], [2, 6], [4, 5], [3, 1], [4, 3], [6, 2], [2
 lable = [1, 1, 1, 1, 1, -1, -1, -1 ,-1]
 
 plt.ion()
-
-def scat():
-    plt.scatter([x[0] for x in train_data[:5]], [x[1] for x in train_data[:5]], c=&#39;r&#39;)
-    plt.scatter([x[0] for x in train_data[5:]], [x[1] for x in train_data[5:]], c=&#39;b&#39;)
-
 ptron = Perceptron(train_data, lable)
 ptron.train()
 </code></pre>
-<p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/source/img/perceptron_iteration.gif" alt="感知机迭代过程图"></p>
+<p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/img/perceptron_iteration.gif" alt="感知机迭代过程图"></p>
 <center>感知机迭代过程图</center>
 
-<h2 id="5-思考"><a href="#5-思考" class="headerlink" title="5. 思考"></a>5. 思考</h2><p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/source/img/img_1_0.jpg" alt="感知机迭代过程图1"></p>
+<h2 id="5-思考"><a href="#5-思考" class="headerlink" title="5. 思考"></a>5. 思考</h2><p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/img/img_1_0.jpg" alt="感知机迭代过程图1"></p>
 <center>感知机迭代过程图1</center>
 
-<p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/source/img/img_1_6.jpg" alt="感知机迭代过程图2"></p>
+<p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/img/img_1_6.jpg" alt="感知机迭代过程图2"></p>
 <center>感知机迭代过程图2</center>
 
 <p>对两个过程图进行进一步分析，以下为自己理解：</p>

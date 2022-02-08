@@ -110,6 +110,7 @@ nav,
 }
 body,
 html {
+  line-break: strict;
   width: 100%;
   font-size: 17px;
   color: #4d4d4d;
@@ -117,6 +118,7 @@ html {
 ol > li {
   padding-top: 5px;
   padding-bottom: 5px;
+  text-align: justify;
 }
 p {
   text-align: justify;
@@ -583,7 +585,7 @@ body {
 article .container .row img {
   position: relative;
   margin: 30px auto;
-  max-width: 70% !important;
+  max-width: 50% !important;
   height: auto;
   display: block;
   box-shadow: 0 0 0 5px #fff, 0 0 15px 0 #4d4d4d;

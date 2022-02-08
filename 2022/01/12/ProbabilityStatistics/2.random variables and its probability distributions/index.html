@@ -13,8 +13,7 @@
 
     <!--Description-->
     
-        <meta name="description" content="决策树1. 历史背景关于树形结构的历史可以追溯到古巴比伦，在这里就不过多阐述。
-1963：最早的发表在文献中的回归树算法是Automatic Interaction Detection(AID, Morgan &amp;amp; Sonquist)。AID 从根节点开始递归的将数据拆分为两个子节点，选择划分">
+        <meta name="description" content="随机变量及其概率分布1. 随机变量1.1 随机变量人们对随机现象的兴趣常常集中在其结果的某个数量方面。例如，再检查产品的过程中关心的是不合格产品的个数。若记20个产品中不合格的个数为 $X$ ，则这个 $X$ 可能取 $0,1,2,\cdots,20$ 中任意一个数，但最终是哪一个数要看检验结果，事">
     
 
     <!--Author-->
@@ -90,31 +89,36 @@
                 <div class="row">
                     <!-- Post Main Content -->
                     <div class="post-content col-lg-9 col-lg-offset-1.75 col-md-12 col-md-offset-1">
-                        <h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><h2 id="1-历史背景"><a href="#1-历史背景" class="headerlink" title="1. 历史背景"></a>1. 历史背景</h2><p>关于树形结构的历史可以追溯到古巴比伦，在这里就不过多阐述。</p>
-<p>1963：最早的发表在文献中的回归树算法是Automatic Interaction Detection(AID, Morgan &amp; Sonquist)。AID 从根节点开始递归的将数据拆分为两个子节点，选择划分特征的依据是通过类似于方差的公式 $\sum (X-\overline{X})^2$ ，称为不纯函数，计算划分子节点的误差平方和使其越小说明划分效果越好，因为 $\sum (X-\overline{X})^2=\sum X^2-N\overline{X}^2$，所以最终只要计算划分后 $\sum N_i\overline{X_i}^2$ 即可，选择最大的特征进行划分。当划分后的误差平方减少值小于 $0.02(\sum X^2-N\overline{X}^2)$ 则结束算法。</p>
-<p>1972：THeta Automatic Interaction Detection (THAID, Messenger &amp; Mandell) 将上述思想应用到分类问题中，提出了第一个分类树，并用熵函数和基尼指数代替上述不纯函数。</p>
-<p>1980：CHi-squared Automatic Interaction Detector (CHAID) 由 Kass 创建，通过 $\mathcal{X}^2$ 拟合优度检验来找到主要特征，假设有两个类别，默认分布概率都是 $1/2$，计算 $\mathcal{X}^2=\sum\sqrt{(n_i-np_i)/(np_i)}$，选取最大的特征进行分割。卡方拟合优度越大意味着观察频数与默认均匀分布的区别越大，也就是越趋于有序，当同一特征将样本均归于同一类时，卡方拟合优度达到最大，当两个类别各有一半时，卡方拟合优度则为0。</p>
-<p>1984：Classification And Regression Trees (CART) 伯克利的统计学教授 Leo Breiman 和 Charles Stone 以及斯坦福的 Jerome Friedman 和 Richard Olshen 共同建立。它同样使用 AID 的贪婪搜索方法，但增加了新颖的改进。CART 不再使用停止规则，而是生成一颗大树，通过最低交叉验证对树结构进行剪枝。这解决了 AID 和 THAID 的欠拟合和过拟合问题。</p>
-<p>1986：John Ross Quinlan 提出了一个新概念有多个答案的树，而CART 和所有其他算法对每个问题只有两个答案（称为二叉树）。Quinlan 使用称为增益比的杂质标准发明了  Iterative Dichotomiser 3（ID3）。</p>
-<p>1993：C4.5 是 ID3 算法的扩展，C4.5 解决了其前身的缺点，在数据挖掘杰出论文的 Top 10 算法中排名第一（Springer LNCS，2008）。</p>
-<h2 id="2-CART-算法"><a href="#2-CART-算法" class="headerlink" title="2. CART 算法"></a>2. CART 算法</h2><p>CART 算法由 Breiman 等人在 1984 年提出。CART 同样由特征选择、树的生成以及剪枝组成，既可用于分类也可以用于回归。</p>
-<p>CART 是在给定输入随机变量 $X$ 条件下输出随机变量 $Y$ 的条件概率分布的学习方法。CART 是二叉树，递归的二分每个特征，分为“是”或“否”，将输入空间即特征空间划分为有限个单元，并在每个单元上确定预测的概率分布。</p>
-<p>CART回归树实际是基于AID的决策树方法，但增加了最优切分点的寻找以及剪枝的过程。CART分类树使用到的基尼指数也不是第一次出现。</p>
-<h3 id="2-1-CART-回归"><a href="#2-1-CART-回归" class="headerlink" title="2.1 CART 回归"></a>2.1 CART 回归</h3><p>回归树需要解决三个问题</p>
-<ol>
-<li>在每个中间节点选择分裂的方法</li>
-<li>终止条件</li>
-<li>每个终端叶子节点的输出值<br>训练数据集：<script type="math/tex; mode=display">T=\{(\mathbf x_1,y_1),(\mathbf x_2,y_2),...,(\mathbf x_N,y_N)\}</script></li>
-</ol>
-<p>第三个问题最直观也最好解决，假设输出值的函数为 $d$，总的均方误差为</p>
-<script type="math/tex; mode=display">R(d)=\frac{1}{N}\sum_n^N(y_n-d(\mathbf x_n))^2</script><p>对于每个叶子节点，假设输入空间为 $t$，根据最小二乘法，为了使 $R(d)$ 最小，输出值应为</p>
-<script type="math/tex; mode=display">d_t(\mathbf x_n)=\overline{y}_t=\frac{1}{N_t}\sum_{\mathbf x_n\in t}y_n</script><p><strong>即回归树建立完后，每个叶子节点的输出值为其分配样本的均值。</strong></p>
-<p>进一步的，将预测值带入每个节点 $t$，并用 $R(T)$ 取代 $R(d)$</p>
-<script type="math/tex; mode=display">R(T)=\frac{1}{N}\sum_{t\in T}\sum_{\mathbf x_n\in t}(y_n-\overline{y}_t)^2</script><p>定义</p>
-<script type="math/tex; mode=display">R(t)=\frac{1}{N}\sum_{\mathbf x_n\in t}(y_n-\overline{y}_t)^2</script><blockquote>
-<p>注意这里不是 $N_t$ </p>
+                        <h1 id="随机变量及其概率分布"><a href="#随机变量及其概率分布" class="headerlink" title="随机变量及其概率分布"></a>随机变量及其概率分布</h1><h2 id="1-随机变量"><a href="#1-随机变量" class="headerlink" title="1. 随机变量"></a>1. 随机变量</h2><h3 id="1-1-随机变量"><a href="#1-1-随机变量" class="headerlink" title="1.1 随机变量"></a>1.1 随机变量</h3><p>人们对随机现象的兴趣常常集中在其结果的某个数量方面。例如，再检查产品的过程中关心的是不合格产品的个数。若记20个产品中不合格的个数为 $X$ ，则这个 $X$ 可能取 $0,1,2,\cdots,20$ 中任意一个数，但最终是哪一个数要看检验结果，事先不能确定，因此 $X$ 的取值带有随机性，这样的变量就称为随机变量。有了随机变量之后，有关事件的表示也方便了。如 $X=2$ 表示“20个产品中有两个不合格产品” 这一事件。</p>
+<blockquote>
+<p>随机变量与随机事件的关系也就类似于变量与常量的关系，所以前文中随机事件都是用 $A,B$ 之类的常量字母表示。直观来说，随机变量就是“随机取值的变量”，或者“取值随机会而定的变量”。</p>
 </blockquote>
-<p><a target="_blank" rel="noopener" href="https://holypython.com/dt/decision-tree-history/">https://holypython.com/dt/decision-tree-history/</a><br><a target="_blank" rel="noopener" href="https://www.explorium.ai/blog/the-complete-guide-to-decision-trees/">https://www.explorium.ai/blog/the-complete-guide-to-decision-trees/</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/C4.5_algorithm">https://en.wikipedia.org/wiki/C4.5_algorithm</a><br><a target="_blank" rel="noopener" href="https://www.analyticsvidhya.com/blog/2021/05/implement-of-decision-tree-using-chaid/">https://www.analyticsvidhya.com/blog/2021/05/implement-of-decision-tree-using-chaid/</a></p>
+<p><strong>定义1</strong>　假如一个变量在数轴上的取值依赖于随机现象的基本结果，则称此变量为<strong>随机变量</strong>，常用大写字母 $X,Y,Z$ 等表示，其取值用小写字母 $x,y,z$ 等表示。假如一个随机变量仅去数轴上的有限个或可列个孤立点，则称此随机变量为<strong>离散随机变量</strong>。假如一个随机变量的可能取值充满数轴上的一个区间 $(a,b)$ ，则称此随机变量为<strong>连续随机变量</strong>，其中 $a$ 可以是 $-\infty$， $b$ 可以是 $+\infty$ 。</p>
+<h3 id="1-2-随机变量的概率分布"><a href="#1-2-随机变量的概率分布" class="headerlink" title="1.2 随机变量的概率分布"></a>1.2 随机变量的概率分布</h3><p>在定义中有随机变量 $X$ 的“取值依赖于基本结果”的说法，意味着随机变量 $X$ 是基本结果 $\omega$ 的函数，即可以把 $X$ 即为 $X(\omega)$，</p>
+<script type="math/tex; mode=display">X=X(\omega),\omega \in \Omega</script><p>对随机变量 $X$ 来说，不容许基本空间 $\Omega$ 中有一个基本结果 $\omega$ 没有实数与其对应，综上所述，随机变量也可看作定义在基本空间 $\Omega$ 的实值函数。因此，“随机变量 $X$ 的取值为 $x$” 就是满足等式 $X(\omega)=x$ 的一切 $\omega$ 组成的集合，用”$X=x$“表示，即</p>
+<script type="math/tex; mode=display">“X=x”=\{\omega:X(w)=x\}\subset \Omega</script><p>类似的，“随机变量 $X$ 的取值小于或等于 $x$”就是满足不等式 $X(\omega)\le x$ 的一切 $\omega$ 组成的集合，用“$X\le x$”表示，即</p>
+<script type="math/tex; mode=display">“X\le x”=\{\omega:X(w)\le x\}\subset \Omega</script><blockquote>
+<p>当一个函数等于一个值的时候其实它就是一个方程了，因此上述就类似于 $f(x)=a$。</p>
+</blockquote>
+<p>上述两种形式的事件是典型事件。例如，要确定一个离散随机变量 $X$ 取值的概率，只要对其可能取值 $x_i$ 确定形如 “$X=x_i$” 事件的概率即可。而对一般随机变量 $X$ ，要确定它取值的概率，就要对任意实数 $x$ ，确定形如 “$X\le x$” 的事件概率，这类事件的概率 $P(X\le x)$ 是 $x$ 的函数，随 $x$ 变化而变化，将这个函数记为 $F(x)$ ，即为分布函数。</p>
+<p><strong>定义2</strong>　设 $X$ 为一个随机变量，对任意实数 $x$ ，事件 $X\le x$ 的概率是 $x$ 的函数，记为</p>
+<script type="math/tex; mode=display">F(x)=P(X\le x)</script><p>这个函数称为 $X$ 的累积概率分布函数，简称分布函数。</p>
+<p>从分布函数定义可以得到它的一些基本性质。</p>
+<ol>
+<li>$0\le F(x)\le 1$。分布函数值是特定形式事件 “$X\le x$” 的概率，而概率总是在0和1之间。</li>
+<li>$F(-\infty)=\lim\limits_{x\rightarrow -\infty}F(x)=0$。这是因为事件 “$X\le -\infty$” 是不可能事件。</li>
+<li>$F(+\infty)=\lim\limits_{x\rightarrow +\infty}F(x)=1$。这是因为事件 “$X\le +\infty$” 是必然事件。</li>
+<li>$F(x)$ 是非降函数，即对任意 $x_1&lt;x_2$， $F(x_1)\le F(x_2)$。这是因为事件“$X\le x_2$” 包含事件 “$X\le x_1$”。</li>
+<li>$F(x)$ 是右连续函数，即 $F(x)=F(x+0)$，其中 $F(x+0)$ 是函数在 $x$ 处的右极限，对任意给定的 $x$，取一个下降数列 $\{x_n\}$，使其极限为 $x$ ，即<script type="math/tex; mode=display">x_1>x_2>\cdots>x_n>\cdots\rightarrow x</script></li>
+</ol>
+<script type="math/tex; mode=display">F(x+0)=\lim\limits_{x_n\rightarrow x}F(x)</script><p><strong>可列可加性公理</strong>　若 $A_1,A_2,\cdots$ 是一列互不相容事件，则有</p>
+<script type="math/tex; mode=display">P(\bigcup\limits _{n=1}^\infty A_n)=\sum _{n=1}^\infty P(A_n)</script><p>此公理与非负性公理、正则性公理一起组成新的公理体系，它使可列个事件经运算后所得事件可谈及概率。</p>
+<h2 id="2-离散随机变量"><a href="#2-离散随机变量" class="headerlink" title="2. 离散随机变量"></a>2. 离散随机变量</h2><p><strong>定义3</strong>　设 $X$ 是离散随机变量，它的所有可能取值时 $x_1,x_2,\cdots,x_n,\cdots$，假如 $X$ 取 $x_i$ 的概率为</p>
+<script type="math/tex; mode=display">P(X=x_i)=p(x_i)\ge 0,i=1,2,\cdots,n,\cdots</script><p>且满足如下条件：</p>
+<script type="math/tex; mode=display">\sum_{i=1}^\infty p(x_i)=1</script><p>则称这组概率 $\{p(x_i)\}$ 为该随机变量 $X$ 的<strong>分布列</strong>，或 $X$ 的<strong>概率分布</strong>，记为 $X\sim\{p(x_i) \}$，读成随机变量 $X$ 服从分布 $\{p(x_i)\}$ 。<br>若已知离散随机变量 $X$ 的分布列为 $\{p(x_i)\}$ ，容易写出 $X$ 的分布函数</p>
+<script type="math/tex; mode=display">F(x)=\sum_{x_i\le x}p(x_i)</script><p>但在离散随机变量场合，使用分布列更为方便，故常用分布列表示离散随机变量的概率分布，非必要不使用分布函数。</p>
+<p>分布列还有两种图表示方法：线条图与概率直方图。</p>
+<h3 id="2-1-离散随机变量的数学期望"><a href="#2-1-离散随机变量的数学期望" class="headerlink" title="2.1 离散随机变量的数学期望"></a>2.1 离散随机变量的数学期望</h3><p>“期望”在日常生活中常指有根据的希望，或发生可能性较大的希望，例如一台冰箱期望的使用寿命是10年，并不是指到10年的时间就一定坏，而是或早或晚都有可能。“期望”就是指用概率分布算得的一种加权平均。</p>
 
 
                             <!-- Meta -->
@@ -126,7 +130,7 @@
                                 </div>
                                 <div class="post-date">
                                     
-                                        2022-01-10
+                                        2022-01-12
                                     
                                 </div>
                             </div>
@@ -177,7 +181,7 @@
 
     <aside id="article-toc" role="navigation" class="fixed">
         <div id="article-toc-inner">
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91"><span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-CART-%E7%AE%97%E6%B3%95"><span class="toc-text">2. CART 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-CART-%E5%9B%9E%E5%BD%92"><span class="toc-text">2.1 CART 回归</span></a></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E5%8F%8A%E5%85%B6%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83"><span class="toc-text">随机变量及其概率分布</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F"><span class="toc-text">1. 随机变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F"><span class="toc-text">1.1 随机变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E7%9A%84%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83"><span class="toc-text">1.2 随机变量的概率分布</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%A6%BB%E6%95%A3%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F"><span class="toc-text">2. 离散随机变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%A6%BB%E6%95%A3%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E7%9A%84%E6%95%B0%E5%AD%A6%E6%9C%9F%E6%9C%9B"><span class="toc-text">2.1 离散随机变量的数学期望</span></a></li></ol></li></ol></li></ol>
         </div>
     </aside>
 

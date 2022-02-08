@@ -13,10 +13,8 @@
 
     <!--Description-->
     
-        <meta name="description" content="朴素贝叶斯分类器朴素贝叶斯分类器是基于贝叶斯定理与特征条件独立假设的分类方法。
-1.历史背景朴素贝叶斯分类器最早的出现时间在1964年，由Mosteller 和 Wallace 第一次应用在文本信息检索领域。
-朴素贝叶斯分类器的核心就是贝叶斯定理，而贝叶斯定理最早由托马斯·贝叶斯所发现
-贝叶斯于1">
+        <meta name="description" content="参数估计参数估计不仅指总体分布 $F(x;\theta)$ 中所含的参数 $\theta$，还指分布的各种特征数，如均值、方差、标准差、相关矩，也包括各种事件的概率等。对这些参数要精确确定是困难的，只能通过样本所提供的的信息对其作出某种估计。
+在本章中，设 $\theta$ 是总体的一个待估参数，$">
     
 
     <!--Author-->
@@ -92,85 +90,17 @@
                 <div class="row">
                     <!-- Post Main Content -->
                     <div class="post-content col-lg-9 col-lg-offset-1.75 col-md-12 col-md-offset-1">
-                        <h1 id="朴素贝叶斯分类器"><a href="#朴素贝叶斯分类器" class="headerlink" title="朴素贝叶斯分类器"></a>朴素贝叶斯分类器</h1><p>朴素贝叶斯分类器是基于贝叶斯定理与特征条件独立假设的分类方法。</p>
-<h2 id="1-历史背景"><a href="#1-历史背景" class="headerlink" title="1.历史背景"></a>1.历史背景</h2><p>朴素贝叶斯分类器最早的出现时间在1964年，由Mosteller 和 Wallace 第一次应用在文本信息检索领域。</p>
-<p>朴素贝叶斯分类器的核心就是贝叶斯定理，而贝叶斯定理最早由托马斯·贝叶斯所发现</p>
-<p>贝叶斯于1701年至1761年间居住在英国，他出生于赫特福德郡，1719年至1722年间就读于爱丁堡大学，学习逻辑学和神学。</p>
-<p>1734年搬到肯特后，他继承了家族传统并一直担任西恩山教堂的牧师直到1752年。</p>
-<p>贝叶斯在30多岁时只发表了两篇论文，一篇神学领域的，另一篇是数学领域的，并未产生多大影响。作为长老会牧师，他继续过着简朴的生活。</p>
-<p>直到贝叶斯去世后，他的朋友理查德·普莱斯收集并发表了贝叶斯有关概率的研究内容。普莱斯非常重视贝叶斯的想法，并对遗留手稿进行编辑、纠正、阐述说明，在1763年发表文章“An Essay towards solving X Problem in the Doctine of Chances”。可以说，没有普莱斯的工作，贝叶斯理论将不会闻名于世。</p>
-<p>但将贝叶斯理论推广开来，最终成为贝叶斯定理的是法国人拉普拉斯。</p>
-<p>补充一点，理论(theory)和定理(theorem)是不同的。前者是一种可验证但尚待证明(或目前在文明的段时间跨度内无法证明)的解释或陈述，后者是由公理证明的结果(被普遍接受为真理的数学逻辑或定律)。</p>
-<h2 id="2-基本原理"><a href="#2-基本原理" class="headerlink" title="2.基本原理"></a>2.基本原理</h2><p>假设训练数据集：</p>
-<script type="math/tex; mode=display">T=\{(\mathbf x_1,y_1),(\mathbf x_2,y_2),...,(\mathbf x_N,y_N)\}</script><p>其中，${\displaystyle \mathbf x_i\in \mathcal{X}\subseteq R^n}$ 表示实例的特征向量，$y\in \mathcal{Y}=\{c_1,c_2,\cdots,c_k\}$ 表示实例的类别，也就是标记（label）。给定实例特征向量$\mathbf x$，输出所属的类 $y$ 。</p>
-<p>从概率的角度来看，$X$ 是定义在输入空间 $\mathcal{X}$ 上的随机向量，$Y$ 是定义在输出空间 $\mathcal{Y}$ 上的随机变量。$P(X,Y)$ 是 $X$ 和 $Y$ 的联合概率分布。因此，训练数据集就是由 $P(X,Y)$ 独立同分布产生的。</p>
-<p>我们再简单回顾一下贝叶斯定理。贝叶斯定理实际是由条件概率和全概率公式得到的。</p>
-<p>从两个事件的条件概率开始，在 $y$ 事件已经发生的情况下，事件 $x$ 发生的概率：</p>
-<script type="math/tex; mode=display">P(x|y)=\frac{P(xy)}{P(y)}</script><p>而在事件 $x$ 已经发生，而 $y$ 事件发生的概率：</p>
-<script type="math/tex; mode=display">P(y|x)=\frac{P(xy)}{P(x)}</script><p>联立两个公式就可以得到：</p>
-<script type="math/tex; mode=display">P(y|x)P(x) = P(x|y)P(y)</script><script type="math/tex; mode=display">P(y|x) = \frac{P(x|y)P(y)}{P(x)}</script><p>在机器学习的场景中，$P(x|y)$ 就是当标签是 $y$ 的情况下，特征是 $x$ 的概率。在现实情况中，$P(x|y)$、$P(y)$、$P(x)$ 是可以求得的，这样就可以计算在某个特征的情况下，属于哪个类标签的概率 $P(y|x)$。这就是贝叶斯方程。</p>
-<p>$P(x)$ 可以通过全概率公式进一步分解</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-    P(x)&= P(xy)+P(x\overline{y})\\
-    &= P(x|y)P(y)+P(x\overline{y})P(\overline{y})\\
-\end{aligned}</script><p>如果标签的空间不仅仅分为 $y$ 和 $\overline{y}$，而是多个分割，那就可以得到更一般的贝叶斯公式</p>
-<p><strong>(贝叶斯公式)</strong>　设 $y_1,y_2,\cdots,y_n$ 是基本空间 $\Omega$ 的一个分割，且它们各自概率 $P(y_1),P(y_2),\cdots,P(y_n)$ 皆已知且为正，又设 $x$ 是 $\Omega$ 中的一个事件，$P(x)&gt;0$，且在诸 $y_i$ 下事件 $x$ 的条件概率 $P(x|y_1),P(x|y_2),\cdots,P(x|y_n)$ 可通过试验等手段获得，则再 $x$ 给定下，事件 $y_k$ 的条件概率为</p>
-<script type="math/tex; mode=display">P(y_k|x)=\frac{P(x|y_k)P(y_k)}{\sum\limits^n_{i=1}P(x|y_i)P(y_i)},k=1,2,\cdots,n</script><p>上述公式是在一个特征 $x$ 的情况下，如果是多个特征，则需要求这多个特征的条件概率分布。</p>
-<script type="math/tex; mode=display">P(X=\mathbf{x}|Y=c_k)=P(X^{(1)}=x^{(1)},\cdots,X^{(n)}=x^{(n)}|Y=c_k),k=1,2,\cdots,K</script><p>条件联合概率分布 $P(X=\mathbf{x}|Y=c_k)$ 有指数级数量的参数，假设 $x^{(j)}$ 可取值有 $N_j$ 个，$j=1,2,\cdots,n$，Y可取值有 $K$ 个，那么参数个数为 $K\prod \limits_{j=1}^nN_j$。如果一个特征空间和类别都是二元的，维度是10，那么需要估计的参数就有2048个，平均每个参数需要100个观测值的话，那就需要20万组数据，随着特征维度的增加，这个值还会随指数增长。</p>
-<p>除此之外，如果数据量不够大的情况下，由于数据的稀疏性，很容易统计到某个参数估计为0的情况，这也是不对的。</p>
-<p>朴素贝叶斯在求解条件概率分布时做了一个非常强的假设，条件独立性（conditional independence）。它的意思是在给定的类别下，不同维度特征的取值之间是相互独立的。朴素贝叶斯也因此得名。</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-    P(X=\mathbf{x}|Y=c_k)&=P(X^{(1)}=x^{(1)},\cdots,X^{(n)}=x^{(n)}|Y=c_k),k=1,2,\cdots,K\\
-    &= \prod \limits_{j=1}^n P(X^{(j)}=x^{(j)}|Y=c_k)\\
-\end{aligned}</script><p>朴素贝叶斯法实际上学习到生成数据的机制，所以属于生成模型。条件独立假设等于是说用于分类的特征在类确定的条件下都是条件独立的。这一假设使朴素贝叶斯法变得简单，但有时会牺牲一定的分类准确率。</p>
-<p>将上式带入贝叶斯公式，可以得到后验概率分布 $P(Y=c_k|X=\mathbf{x})$</p>
-<script type="math/tex; mode=display">P(Y=c_k|X=\mathbf{x})=\frac{P(Y=c_k)\prod \limits_{j=1}^n P(X^{(j)}=x^{(j)}|Y=c_k)}{\sum\limits_k P(Y=c_k)\prod \limits_{j=1}^n P(X^{(j)}=x^{(j)}|Y=c_k)},k=1,2,\cdots,n</script><p>朴素贝叶斯实际是一个概率分类器，求出在不同类别下某一特征的概率分布，找到最大后验概率的类别即可。同时上式中的分母实际就是 $P(X=\mathbf{x})$，可以直接求得，并且由于同一特征分母均相同，可以省略分母，就是只比较分子的大小，选出最大的即可。</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-    \hat{y}&=\argmax_{c_k}P(Y=c_k|X=\mathbf{x})\\
-    &= \argmax_{c_k} \frac{P(Y=c_k)\prod \limits_{j=1}^n P(X^{(j)}=x^{(j)}|Y=c_k)}{\sum\limits_k P(Y=c_k)\prod \limits_{j=1}^n P(X^{(j)}=x^{(j)}|Y=c_k)}\\
-    &= \argmax_{c_k}  P(Y=c_k)\prod \limits_{j=1}^n P(X^{(j)}=x^{(j)}|Y=c_k)
-\end{aligned}</script><h2 id="3-最大化含义"><a href="#3-最大化含义" class="headerlink" title="3.最大化含义"></a>3.最大化含义</h2><p>朴素贝叶斯法将实例分到后验概率最大的类。这等价于期望风险最小化。假设损失函数：</p>
-<script type="math/tex; mode=display">{\displaystyle 
-L(Y,f(X))={
-    \begin{cases}
-        +1&Y\ne f(X)\\
-        -1&Y=f(X)
-    \end{cases}
-    }
-}</script><p>式中 $f(X)$ 是分类决策函数。这时，期望风险函数为</p>
-<script type="math/tex; mode=display">R_{\exp}(f)=E[L(Y,f(X))]</script><p>期望是对联合分布 $P(X,Y)$ 取的。由此取条件期望</p>
-<script type="math/tex; mode=display">R_{\exp}(f)=E_X\sum^{K}_{k=1}[L(c_k,f(X))]P(c_k|X)</script><p>为了使期望风险最小化，需要对 $X=x$ 逐个极小化，由此得到：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-    f(x)&=\argmin_{y\in \mathcal Y}\sum^K_{k=1}L(c_k,y)P(c_k|X=x)\\
-    &=\argmin_{y\in \mathcal Y}\sum^K_{k=1}P(y\not ={c_k}|X=x)\\
-    &=\argmin_{y\in \mathcal Y}(1-P(y=c_k|X=x))\\
-    &=\argmax_{y\in \mathcal Y}P(y=c_k|X=x)
-\end{aligned}</script><p>这样一来，根据期望风险最小化准则就得到了后验概率最大化准则：</p>
-<script type="math/tex; mode=display">f(x)=\argmax_{c_k}P(c_k|X=x)</script><h2 id="3-参数估计"><a href="#3-参数估计" class="headerlink" title="3.参数估计"></a>3.参数估计</h2><p>以上可以知道要对哪些参数需要估计，那么具体如何对参数进行腹肌？可以用到极大似然估计或者贝叶斯估计。</p>
-<p>需要估计的参数有先验概率 $P(Y=c_k)$ 、条件概率 $P(X^{(j)}=a_{jl}|Y=c_k)$。</p>
-<p>先验概率 $P(Y=c_k)$ 的极大似然估计：</p>
-<script type="math/tex; mode=display">P(Y=c_k)=\frac{\sum\limits^N_{i=1}I(y_i=c_k)}{N},k=1,2,\cdots,K</script><p>条件概率 $P(X^{(j)}=a_{jl}|Y=c_k)$ 的极大似然估计：</p>
-<script type="math/tex; mode=display">P(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum\limits^N_{i=1}I(x_i^{(j)}=a_{jl},y_i=c_k)}{\sum\limits^N_{i=1}I(y_i=c_k)}</script><p>式中，$x_i^{(j)}$ 是样本的第 $j$ 个特征，$a_{jl}$ 是 $x^{(j)}$ 可能的取的第 $l$ 个值，$i$ 为指示函数。</p>
-<p>用极大似然估计可能会出现所要估计的概率值为 $0$ 的情况，这会影响到后验概率的计算结果，使分类产生偏差。解决方法是采用贝叶斯估计：</p>
-<script type="math/tex; mode=display">P(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum\limits^N_{i=1}I(x_i^{(j)}=a_{jl},y_i=c_k)+\lambda}{\sum\limits^N_{i=1}I(y_i=c_k)+S_j\lambda}</script><p>式中，$\lambda \ge 0$ ， $S_j$ 是 $l$ 的最大取值，即 第 $j$ 个特征的可选分类数量。</p>
-<p>上式相当于在随机变量各个取值的频数上赋予一个正数 $\lambda&gt;0$ 。当 $\lambda=0$ 时就是极大似然估计。当 $\lambda=1$ 时，称为拉普拉斯平滑（Laplacian smoothing）。显然，对于任何 $l=1,2,\cdots,S_j$ ， $k=1,2,\cdots,K$ ，都满足</p>
-<script type="math/tex; mode=display">P_\lambda(X^{(j)}=a_{jl}|Y=c_k)>0</script><script type="math/tex; mode=display">\sum^{S_j}_{l=1}P(X^{(j)}=a_{jl}|Y=c_k)=1</script><p>满足概率的公理化定义，表明条件概率 $P_\lambda(X^{(j)}=a_{jl}|Y=c_k)$ 是一种概率分布。</p>
-<p>同样，先验概率的贝叶斯估计是</p>
-<script type="math/tex; mode=display">P_\lambda(Y=c_k)=\frac{\sum\limits^N_{i=1}I(y_i=c_k)+\lambda}{N+K\lambda},k=1,2,\cdots,K</script><h2 id="4-算法流程"><a href="#4-算法流程" class="headerlink" title="4.算法流程"></a>4.算法流程</h2><p>以下给出朴素贝叶斯的完整算法。有些时候朴素贝叶斯计算会把后验概率映射到对数空间进行计算，这样做的好处是避免值太小以及加快计算速度（avoid underflow and increase speed）。</p>
-<p><strong>算法输入：</strong> 训练数据集 $T$ 和实例 $\mathbf x$。</p>
-<script type="math/tex; mode=display">T=\{(\mathbf x_1,y_1),(\mathbf x_2,y_2),...,(\mathbf x_N,y_N)\}</script><p>其中 $\mathbf x_i=(x_i^{(1)},x_i^{(2)},\cdots,x_i^{(n)})^T$，$x_i^{(j)}$ 是第 $i$ 个样本的第 $j$ 个特征，$x_i^{(j)}\in\{a_{j1},a_{j2},\cdots,a_{jS_j}\}$，$a_{jl}$ 是第 $j$ 个特征可能取的第 $l$ 个值，$j=1,2,\cdots,n$，$l=1,2,\cdots,S_j$，$y_i\in\{c_1,c_2,\cdots,c_K\}$</p>
-<p><strong>算法输出：</strong> 实例 $\mathbf x$ 的分类。</p>
-<p><strong>算法流程：</strong></p>
-<ol>
-<li>计算先验概率及条件概率<script type="math/tex; mode=display">P(Y=c_k)=\frac{\sum\limits^N_{i=1}I(y_i=c_k)}{N},k=1,2,\cdots,K</script><script type="math/tex; mode=display">P(X^{(j)}=a_{jl}|Y=c_k)=\frac{\sum\limits^N_{i=1}I(x_i^{(j)}=a_{jl},y_i=c_k)}{\sum\limits^N_{i=1}I(y_i=c_k)}</script></li>
-<li>对于给定的实例 $\mathbf{x}=(x^{(1)},x^{(2)},\cdots,x^{(n)})^T$，计算映射到对数空间的后验概率<script type="math/tex; mode=display">P(Y=c_k|X=\mathbf{x})=\log P(Y=c_k)+\sum_{j=1}^n\log P(X^{(j)}=x^{(j)}|Y=c_k),k=1,2,\cdots,K</script></li>
-<li>确定实例 $\mathbf{x}$ 的类别<script type="math/tex; mode=display">y=\argmax_{c_k} P(Y=c_k|X=\mathbf{x})</script><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><a target="_blank" rel="noopener" href="https://www.cnblogs.com/bonheur/p/12469873.html">https://www.cnblogs.com/bonheur/p/12469873.html</a><br><a target="_blank" rel="noopener" href="https://holypython.com/nbc/naive-bayes-classifier-history/">https://holypython.com/nbc/naive-bayes-classifier-history/</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20138060">https://www.zhihu.com/question/20138060</a><br>chrome-extension://bocbaocobfecmglnmeaeppambideimao/pdf/viewer.html?file=https%3A%2F%2Fweb.stanford.edu%2F~jurafsky%2Fslp3%2F4.pdf#cite.Mosteller</li>
-</ol>
-
+                        <h1 id="参数估计"><a href="#参数估计" class="headerlink" title="参数估计"></a>参数估计</h1><p>参数估计不仅指总体分布 $F(x;\theta)$ 中所含的参数 $\theta$，还指分布的各种特征数，如均值、方差、标准差、相关矩，也包括各种事件的概率等。对这些参数要精确确定是困难的，只能通过样本所提供的的信息对其作出某种估计。</p>
+<p>在本章中，设 $\theta$ 是总体的一个待估参数，$\theta$ 的一切可能取值构成的参数空间记为 $\Theta$。$X_1,X_2,\cdots,X_n$ 为从总体中抽取了一个容量为 $n$ 的样本，其观测值记为 $x_1,x_2,\cdots,x_n$</p>
+<p>参数估计的形式主要有两种：点估计与区间估计。</p>
+<p>参数的点估计，是构造一个统计量 $\hat{\theta}=\hat{\theta}(X_1,X_2,\cdots,X_n)$，然后用 $\hat{\theta}$ 去估计 $\theta$，称 $\hat{\theta}$ 为 $\theta$ 的点估计或估计量，简称估计，将样本观测值带入后便得到了 $\theta$ 的一个点估计值 $\hat{\theta}(x_1,x_2,\cdots,x_n)$。</p>
+<p>参数的区间估计，则是构造两个统计量 $\hat{\theta}_L$ 与 $\hat{\theta}_U$，且$\hat{\theta}_L&lt;\hat{\theta}_U$，然后以区间$[\hat{\theta}_L,\hat{\theta}_U]$ 的形式给出未知参数 $\theta$ 的估计，事件“区间$[\hat{\theta}_L,\hat{\theta}_U]$含有$\theta$” 的概率称为置信水平。</p>
+<p>点估计的方法有两种矩法估计与极大似然估计。</p>
+<h2 id="1-矩法估计"><a href="#1-矩法估计" class="headerlink" title="1. 矩法估计"></a>1. 矩法估计</h2><p>1900年英国统计学家 K.Pearson 提出了一个替换原则，用样本矩去替换总体矩，后来人们就称此为矩法估计。</p>
+<p>矩法估计的基本点是：用样本矩估计总体矩，用样本矩的相应函数估计总体矩的函数。</p>
+<p>设 $X_1,X_2,\cdots,X_n$ 是来自某总体 $X$ 的一个样本，则样本的 $k$ 阶原点矩为：</p>
+<script type="math/tex; mode=display">A_k=\frac{1}{n}\sum^n_{i=1}X_i^k,k=1,2,\cdots</script><p>如果总体 $X$ 的 $k$ 阶原点矩 $\mu_k=E(X^k)$ 存在，则用 $A_k$ 去估计 $\mu_k$，记为</p>
+<script type="math/tex; mode=display">\hat{\mu_k}=A_k</script>
 
                             <!-- Meta -->
                             <div class="post-meta">
@@ -181,7 +111,7 @@ L(Y,f(X))={
                                 </div>
                                 <div class="post-date">
                                     
-                                        2022-01-10
+                                        2022-01-12
                                     
                                 </div>
                             </div>
@@ -232,7 +162,7 @@ L(Y,f(X))={
 
     <aside id="article-toc" role="navigation" class="fixed">
         <div id="article-toc-inner">
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8"><span class="toc-text">朴素贝叶斯分类器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1.历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">2.基本原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9C%80%E5%A4%A7%E5%8C%96%E5%90%AB%E4%B9%89"><span class="toc-text">3.最大化含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1"><span class="toc-text">3.参数估计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="toc-text">4.算法流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1"><span class="toc-text">参数估计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%9F%A9%E6%B3%95%E4%BC%B0%E8%AE%A1"><span class="toc-text">1. 矩法估计</span></a></li></ol></li></ol>
         </div>
     </aside>
 
