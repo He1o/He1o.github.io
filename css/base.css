@@ -26,10 +26,10 @@ nav,
 .btn,
 .pagiantion li > a,
 .pagiantion li > span {
-  font-family: "Times New Roman", -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, serif;
+  font-family: "Times New Roman", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", Helvetica, Arial, serif;
 }
 .sans-serif {
-  font-family: Merriweather, "Open Sans", "Microsoft Jhenghei", "Microsoft Yahei", sans-serif;
+  font-family: "Times New Roman", "Microsoft YaHei", Merriweather, "Open Sans", "Microsoft Jhenghei", "Microsoft Yahei", sans-serif;
 }
 .animation,
 .post-preview {

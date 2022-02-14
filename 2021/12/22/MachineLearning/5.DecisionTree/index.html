@@ -27,7 +27,8 @@
     <title>5. Decision Tree | He1o</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.jsdelivr.net/npm/bootstrap@3.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
 
     <!-- Custom CSS -->
     
@@ -35,14 +36,16 @@
 
 
     <!-- Custom Fonts -->
-    <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//cdn.jsdelivr.net/npm/font-awesome@4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Noto+Serif:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
     <!-- jQuery -->
     <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/bootstrap@3.3.6/dist/js/bootstrap.min.js"></script>
+    <!-- <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -73,7 +76,7 @@
         <header class="intro-header">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="col-lg-8  col-md-10 ">
                         <div class="post-heading">
                             <h1>
                                 5. Decision Tree
@@ -89,7 +92,7 @@
             <div class="container">
                 <div class="row">
                     <!-- Post Main Content -->
-                    <div class="post-content col-lg-9 col-lg-offset-1.75 col-md-12 col-md-offset-1">
+                    <div class="post-content col-lg-10  col-md-10 ">
                         <span id="more"></span>
 <h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><h2 id="1-历史背景"><a href="#1-历史背景" class="headerlink" title="1. 历史背景"></a>1. 历史背景</h2><p>关于树形结构的历史可以追溯到古巴比伦，在这里就不过多阐述。</p>
 <p>1963：最早的发表在文献中的回归树算法是Automatic Interaction Detection(AID, Morgan &amp; Sonquist)。AID 从根节点开始递归的将数据拆分为两个子节点，选择划分特征的依据是通过类似于方差的公式 $\sum (X-\overline{X})^2$ ，称为不纯函数，计算划分子节点的误差平方和使其越小说明划分效果越好，因为 $\sum (X-\overline{X})^2=\sum X^2-N\overline{X}^2$，所以最终只要计算划分后 $\sum N_i\overline{X_i}^2$ 即可，选择最大的特征进行划分。当划分后的误差平方减少值小于 $0.02(\sum X^2-N\overline{X}^2)$ 则结束算法。</p>
@@ -247,7 +250,9 @@
 </blockquote>
 <p>基尼指数的一种解释方法是，不是使用多数选择的规则对节点 $t$ 中的对象进行分类，而是从节点中随机选择实例将该实例的类别分配给对象，因此将以概率 $p(i|t)$ 分配为类别 $i$，则误分类的概率就是 $\displaystyle \sum_{i\ne j}p(j|t)p(i|t)=p(j|t)(1-p(j|t))$，然后再对 $j$ 求和。因此</p>
 <script type="math/tex; mode=display">i(t)=\sum_j\sum_{i\ne j}p(j|t)p(i|t)</script><p>另一种解释方法如前所说，在节点 $t$ 中，为所有 $j$ 类对象分配值 $1$，为所有其他对象分配值 $0$。那么这些值的样本方差为$p(j|t)(1-p(j|t))$。对所有 $J$ 类重复操作并求和，则结果就是</p>
-<script type="math/tex; mode=display">i(t)=\sum_jp(j|t)(1-p(j|t))=1-\sum_jp^2(j|t)</script><h3 id="3-2-CART-回归"><a href="#3-2-CART-回归" class="headerlink" title="3.2 CART 回归"></a>3.2 CART 回归</h3><p>回归树同样需要解决上面三个问题</p>
+<script type="math/tex; mode=display">i(t)=\sum_jp(j|t)(1-p(j|t))=1-\sum_jp^2(j|t)</script><p>根据数据特征值是否为指定值 $a$，将节点 $t$ 分为两部分 $t_L$ 和 $t_R$，即</p>
+<script type="math/tex; mode=display">t_L=\{(\mathbf{x},y)|\mathbf{x}^{(i)}=a\},t_R=t-t_L</script><p>因此不纯值的减少即为</p>
+<script type="math/tex; mode=display">\triangle i(s,t)=i(t)-p_Li(t_L)-p_Ri(t_R)</script><h3 id="3-2-CART-回归"><a href="#3-2-CART-回归" class="headerlink" title="3.2 CART 回归"></a>3.2 CART 回归</h3><p>回归树同样需要解决上面三个问题</p>
 <p>训练数据集：</p>
 <script type="math/tex; mode=display">T=\{(\mathbf x_1,y_1),(\mathbf x_2,y_2),...,(\mathbf x_N,y_N)\}</script><p>第三个问题最直观也最好解决，假设输出值的函数为 $d$，总的均方误差为</p>
 <script type="math/tex; mode=display">R(d)=\frac{1}{N}\sum_n^N(y_n-d(\mathbf x_n))^2</script><p>对于每个叶子节点，假设输入空间为 $t$，根据最小二乘法，为了使 $R(d)$ 最小，输出值应为</p>
