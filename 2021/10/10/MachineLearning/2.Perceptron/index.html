@@ -248,7 +248,7 @@ ptron.train()
 <p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/img/perceptron_iteration.gif" alt="感知机迭代过程图"></p>
 <center>感知机迭代过程图</center>
 
-<h2 id="5-思考"><a href="#5-思考" class="headerlink" title="5. 思考"></a>5. 思考</h2><p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/img/img_1_0.jpg" alt="感知机迭代过程图1"></p>
+<h2 id="6-思考"><a href="#6-思考" class="headerlink" title="6. 思考"></a>6. 思考</h2><p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/img/img_1_0.jpg" alt="感知机迭代过程图1"></p>
 <center>感知机迭代过程图1</center>
 
 <p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/MachineLearning/2.Perceptron/img/img_1_6.jpg" alt="感知机迭代过程图2"></p>
@@ -256,8 +256,10 @@ ptron.train()
 
 <p>对两个过程图进行进一步分析，以下为自己理解：</p>
 <ol>
-<li>不同的系数可能绘制出同一条直线或同一个平面，例如 $[1,1,1]$ 和 $[-1,-1,-1]$ 都可以表示直线 $x+y+1=0$，但权重代表的法向量的方向相反。如上述图中垂直于直线的即为法向量也就是 $w$，当实例点与法向量点乘之后再加上位移量 $b$，就可以用来判断该点在直线的哪一侧。原理有很多中解释，其中一种就是$\mathbf w\cdot\mathbf x$ 的正负决定了它们之间的夹角大小是否超过 $90$ 度，确定相对角度之后还不足以判断该点相对于直线的位置，</li>
-<li>误分类的点改变的是直线法向量的方向和大小以及 $b$ 即直线的位置，误分类点也可以理解为一个向量，乘以衰减系数后作用在法向量上，作用可能是吸引或者排斥。当分类为正时为吸引作用，如图1，反之则为排斥作用如图2。前提都是错误的分类数据，即正分类点不会和法向量处在同一侧，因此正分类点希望法向量“转过来”，同理，负分类点会与法向量处于同一侧，它希望法向量“转过去”。</li>
+<li><p>不同的系数可能绘制出同一条直线或同一个平面，例如 $[1,1,1]$ 和 $[-1,-1,-1]$ 都可以表示直线 $x+y+1=0$，但权重代表的法向量的方向相反。如上述图中垂直于直线的即为法向量也就是 $w$，当实例点与法向量点乘之后再加上位移量 $b$，就可以用来判断该点在直线的哪一侧。原理有很多中解释，其中一种就是$\mathbf w\cdot\mathbf x$ 的正负决定了它们之间的夹角大小是否超过 $90$ 度，确定相对角度之后还不足以判断该点相对于直线的位置，</p>
+</li>
+<li><p>误分类的点改变的是直线法向量的方向和大小以及 $b$ 即直线的位置，误分类点也可以理解为一个向量，乘以衰减系数后作用在法向量上，作用可能是吸引或者排斥。当分类为正时为吸引作用，如图1，反之则为排斥作用如图2。前提都是错误的分类数据，即正分类点不会和法向量处在同一侧，因此正分类点希望法向量“转过来”，同理，负分类点会与法向量处于同一侧，它希望法向量“转过去”。</p>
+</li>
 </ol>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
 <p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%84%9F%E7%9F%A5%E5%99%A8">1. 感知器-维基百科</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/graphics/archive/2010/07/10/1774809.html">2. 点到平面的距离公式</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/song430/article/details/88718602">3. 用Python实现单层感知机</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xym4869/p/11282469.html">4. 深度学习基础——感知机</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/huangyc/p/9706575.html">5. 感知机原理</a><br><a target="_blank" rel="noopener" href="https://github.com/SmallVagetable/machine_learning_python">6. machine_learning_python</a></p>
@@ -329,7 +331,7 @@ ptron.train()
 
     <aside id="article-toc" role="navigation" class="fixed">
         <div id="article-toc-inner">
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="toc-text">感知机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%84%9F%E7%9F%A5%E6%9C%BA%E6%A8%A1%E5%9E%8B"><span class="toc-text">2. 感知机模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95"><span class="toc-text">3. 感知机学习算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%AE%97%E6%B3%95%E6%94%B6%E6%95%9B%E6%80%A7"><span class="toc-text">4. 算法收敛性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%AE%97%E4%BE%8B"><span class="toc-text">5. 算例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%80%9D%E8%80%83"><span class="toc-text">5. 思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%84%9F%E7%9F%A5%E6%9C%BA"><span class="toc-text">感知机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%84%9F%E7%9F%A5%E6%9C%BA%E6%A8%A1%E5%9E%8B"><span class="toc-text">2. 感知机模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%84%9F%E7%9F%A5%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95"><span class="toc-text">3. 感知机学习算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%AE%97%E6%B3%95%E6%94%B6%E6%95%9B%E6%80%A7"><span class="toc-text">4. 算法收敛性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%AE%97%E4%BE%8B"><span class="toc-text">5. 算例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%80%9D%E8%80%83"><span class="toc-text">6. 思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol>
         </div>
     </aside>
 
