@@ -158,13 +158,20 @@ article .container .row .pullquote {
 article .container .row .pullquote.left {
   float: left;
 }
+article .container .row div > p {
+  text-indent: 2em;
+}
 article .container .row ul {
   padding-left: 36px;
   line-height: 1.8;
 }
 article .container .row ol {
-  padding-left: 36px;
+  padding-left: 64px;
   line-height: 1.8;
+}
+article .container .row div > ol {
+  padding-left: 72px;
+  line-height: 1.2;
 }
 figure.highlight {
   background: #eee;

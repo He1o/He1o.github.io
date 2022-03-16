@@ -95,7 +95,7 @@
                     <div class="post-content col-lg-10  col-md-10 ">
                         <span id="more"></span>
 <h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><h2 id="1-历史背景"><a href="#1-历史背景" class="headerlink" title="1. 历史背景"></a>1. 历史背景</h2><p>关于树形结构的历史可以追溯到古巴比伦，在这里就不过多阐述。</p>
-<p>1963：最早的发表在文献中的回归树算法是Automatic Interaction Detection(AID, Morgan &amp; Sonquist)。AID 从根节点开始递归的将数据拆分为两个子节点，选择划分特征的依据是通过类似于方差的公式 $\sum (X-\overline{X})^2$ ，称为不纯函数，计算划分子节点的误差平方和使其越小说明划分效果越好，因为 $\sum (X-\overline{X})^2=\sum X^2-N\overline{X}^2$，所以最终只要计算划分后 $\sum N_i\overline{X_i}^2$ 即可，选择最大的特征进行划分。当划分后的误差平方减少值小于 $0.02(\sum X^2-N\overline{X}^2)$ 则结束算法。</p>
+<p>1963：最早的发表在文献中的回归树算法是Automatic Interaction Detection(AID, Morgan &amp; Sonquist)。AID 从根节点开始递归的将数据拆分为两个子节点，选择划分特征的依据是通过类似于方差的公式 $\sum (X-\overline{X})^2$ ，称为不纯函数，计算划分子节点的误差平方和使其越小说明划分效果越好，因为 $\sum (X-\overline{X})^2=\sum X^2-N\overline{X}^2$，所以最终只要计算划分后 $\sum N_i\overline{X_i}^2$ 即可，选择最大的特征进行划分。当划分后的误差平方减少值小于 $0.02(\sum X^2-N\overline{X}^2)$ 则结束算法（亦或0.006，CART书中所写）。</p>
 <p>1972：THeta Automatic Interaction Detection (THAID, Messenger &amp; Mandell) 将上述思想应用到分类问题中，提出了第一个分类树，并用熵函数和基尼指数代替上述不纯函数。</p>
 <p>1980：CHi-squared Automatic Interaction Detector (CHAID) 由 Kass 创建，通过 $\mathcal{X}^2$ 拟合优度检验来找到主要特征，假设有两个类别，默认分布概率都是 $1/2$，计算 $\mathcal{X}^2=\sum\sqrt{(n_i-np_i)/(np_i)}$，选取最大的特征进行分割。卡方拟合优度越大意味着观察频数与默认均匀分布的区别越大，也就是越趋于有序，当同一特征将样本均归于同一类时，卡方拟合优度达到最大，当两个类别各有一半时，卡方拟合优度则为0。</p>
 <p>1984：Classification And Regression Trees (CART) 伯克利的统计学教授 Leo Breiman 和 Charles Stone 以及斯坦福的 Jerome Friedman 和 Richard Olshen 共同建立。它同样使用 AID 的贪婪搜索方法，但增加了新颖的改进。CART 不再使用停止规则，而是生成一颗大树，通过最低交叉验证对树结构进行剪枝。这解决了 AID 和 THAID 的欠拟合和过拟合问题。</p>
@@ -125,10 +125,10 @@
 <li>决策树的剪枝 </li>
 </ol>
 <p>有关第一个问题，在这里先定义一个通用的方法和标准。</p>
-<p>定义训练集的输入实例数为 $N$，每个类别的数量为 $N_j$，则每个节点 $t$ 中的某一类别的数量为 $N_j(t)$，落入节点的概率为 $p(t) = N(t)/N$，条件概率$p(t|j)=N_j(t)/N_j$，属于 $j$ 类且落入节点 $t$ 两事件同时发生的概率为 $p(j,t)=p(t|j)p(j)$，在这里我们先假设先验概率 $p(j)$ 就是训练集中的类别概率 $p(j)=N_j/N$。因此，根据贝叶斯公式我们可以得到后验概率</p>
+<p>定义训练集的输入实例数为 $N$，每个类别的数量为 $N_j$，则每个节点 $t$ 中的某一类别的数量为 $N_j(t)$，落入节点的概率为 $p(t) = N(t)/N$，条件概率$p(t\,|\,j)=N_j(t)/N_j$，属于 $j$ 类且落入节点 $t$ 两事件同时发生的概率为 $p(j,t)=p(t\,|\,j)p(j)$，在这里我们先假设先验概率 $p(j)$ 就是训练集中的类别概率 $p(j)=N_j/N$。因此，根据贝叶斯公式我们可以得到后验概率</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    P(j|t)&=\frac{p(t|j)p(j)}{p(t)}\\
+    P(j\,|\,t)&=\frac{p(t\,|\,j)p(j)}{p(t)}\\
     &=\frac{(N_j(t)/N_j) \ast (N_j/N)}{N(t)/N}\\
     &=\frac{N_j(t)}{N(t)}
 \end{aligned}</script><blockquote>
@@ -137,9 +137,9 @@
 <p>通常情况下先验概率 $p(j)$ 被视为训练集中的比例 $N_j/N$。但学习样本中的比例无法反映到现实中实际的比例，就例如评价道路的好坏，实际上得到的训练集都是通过 bad case 中的路线，实际上，可能差路线存在的比例会更低。</p>
 <p>因此，我们由其他途径的得到先验概率 $\pi(j)$ 取代训练集中的概率 $p(j)$，联合概率即为 </p>
 <script type="math/tex; mode=display">p(j,t)=\pi(j)N_j(t)/N_j</script><p>同时任何案例落入节点 $t$ 的概率重新带入估计 </p>
-<script type="math/tex; mode=display">p(t)=\sum_jp(j,t)</script><p>最后再去计算条件概率 $p(j|t)$，可以发现，替换后的条件概率依旧满足 </p>
-<script type="math/tex; mode=display">\sum_jp(j|t)=1</script><p>决策树划分的目的就是希望能通过特征将实例的类别进行区分出来。决策树的每个内部节点将分割为更多的子区域，每个子区域的条件是一样的，而所希望的就是某一类的条件概率 $P(j|t)$ 尽可能的大。换句话说，希望每个后代节点中的数据比父节点中的数据更“纯”（purer）。</p>
-<p>例如，假设有个六分类问题，根节点的条件概率 $(p_1,p_2,p_3,p_4,p_5,p_6)$ 为 $(1/6,1/6,1/6,1/6,1/6,1/6)$，一个好的划分结果就是两个子节点的条件概率也就是类别比例为 $(1/3,1/3,1/3,0,0,0)$ 和 $(0,0,0,1/3,1/3,1/3)$ 。</p>
+<script type="math/tex; mode=display">p(t)=\sum_jp(j,t)</script><p>最后再去计算条件概率 $p(j\,|\,t)$，可以发现，替换后的条件概率依旧满足 </p>
+<script type="math/tex; mode=display">\sum_jp(j\,|\,t)=1</script><p>决策树划分的目的就是希望能通过特征将实例的类别进行区分出来。决策树的每个内部节点将分割为更多的子区域，每个子区域的条件是一样的，而所希望的就是某一类的条件概率 $P(j\,|\,t)$ 尽可能的大。换句话说，希望每个后代节点中的数据比父节点中的数据更“纯”（purer）。</p>
+<p>例如，假设有个六分类问题，根节点的条件概率 $(p_1,p_2,p_3,p_4,p_5,p_6)$ 为 $\displaystyle(\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6},\frac{1}{6})$，一个好的划分结果就是两个子节点的条件概率也就是类别比例为 $\displaystyle(\frac{1}{3},\frac{1}{3},\frac{1}{3},0,0,0)$ 和 $\displaystyle(0,0,0,\frac{1}{3},\frac{1}{3},\frac{1}{3})$ 。</p>
 <p>因此我们需要寻找一个测度去衡量一个节点中子集的不纯度（impurity），定义一个非负函数，要求当所有类均匀混合在一起时它的不纯度最大，当节点中只包含一个类时，该值最小，现将这个函数定义为 $i(t)$。</p>
 <p>对于任何中间节点 $t$，假设有一个节点的候选切分 $s$ 将节点分割为 $t_L$ 和 $t_R$，这样 $t$ 中的事件（case）分别进入 $t_L$ 和 $t_R$ 的比例为 $p_L$ 和 $p_R$，那么最终切分点 $s$ 的好坏定义为不纯度的好坏的减少</p>
 <script type="math/tex; mode=display">\triangle i(s,t)=i(t)-p_Li(t_L)-p_Ri(t_R)</script><p>对于不是二叉树而是多切分节点的算法只需将上公式扩展为多个即可，但始终 $p_1+p_2+\cdots+p_n=1$。</p>
@@ -157,28 +157,32 @@
 <ol>
 <li>每个终端叶子节点的输出结果</li>
 </ol>
-<p><strong>定义1</strong> 一个决策树的所有终端节点的集合为 $T$，每个终端节点 $t\in T$，所有分类标签的集合为 $j\in \{1,2,\cdots,J\}$，则某一节点所分配的类为 $j(t)$。</p>
+<p><strong>定义1</strong> 一个决策树的所有节点的集合为 $T$，终端节点的集合为 $\widetilde{T}$，每个终端节点 $t\in \widetilde{T}$，所有分类标签的集合为 $j\in \{1,2,\cdots,J\}$，则某一节点所分配的类为 $j(t)$。</p>
 <blockquote>
 <p>$j(t)$ 是类分配结果同时也代表一种类分配规则</p>
 </blockquote>
 <p>对于任何一种类分配结果 $j(t)$，如果实例落入节点 $t$，则错误分类概率的重新替换估计（resubstitution estimate）为</p>
-<script type="math/tex; mode=display">\sum_{j\ne j(t)}p(j|t)</script><p>我们需要最小化这个误分类估计的规则作为我们类分配规则 $j^*(t)$。</p>
+<script type="math/tex; mode=display">\sum_{j\ne j(t)}p(j\,|\,t)</script><p>我们需要最小化这个误分类估计的规则作为我们类分配规则 $j^\ast(t)$。</p>
 <p>由于一个节点最终只能输出一个类别，一个直观的类分配规则就是将某一节点中占比最大的类分配给该节点，这样做的另一个原因就是使误分类的概率最小。</p>
-<p><strong>定义2</strong> 类分配规则 $j^\ast(t)$：如果 $\displaystyle p(j|t)=\max_i p(i|t)$，则 $j^\ast(t)=j$，如果两个或多个不同类别达到最大值，则将 $j^\ast(t)$ 任意指定为任何一个最大化类别。</p>
+<p><strong>定义2</strong> 类分配规则 $j^\ast(t)$：如果 $\displaystyle p(j\,|\,t)=\max_i p(i\,|\,t)$，则 $j^\ast(t)=j$，如果两个或多个不同类别达到最大值，则将 $j^\ast(t)$ 任意指定为任何一个最大化类别。</p>
 <p>第三个问题得到解决。</p>
 <p>进一步地，我们就可以得到节点 $t$ 的误分类概率的重新带入估计 $r(t)$ 为</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    r(t)&=\sum_{j\ne j^*(t)}p(j|t)\\
-    &=1-\max_j p(j|t)
+    r(t)&=\sum_{j\ne j^*(t)}p(j\,|\,t)\\
+    &=1-\max_j p(j\,|\,t)
 \end{aligned}</script><p>整体决策树误分类率的重新代入估计则为 </p>
-<script type="math/tex; mode=display">R(T)=\sum_{t\in T}r(t)p(t)</script><p>$R(t)$ 的一个重要特性，以任何方式分割的越多，则 $R(T)$ 就会变得越小。一个节点 $t$ 分割成两部分 $t_L$ 和 $t_R$，则有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    R(T)&=\sum_{t\in \widetilde{T}}r(t)p(t)\\
+    &=\sum_{t\in \widetilde{T}}R(t)
+\end{aligned}</script><p>$R(t)$ 的一个重要特性，以任何方式分割的越多，则 $R(T)$ 就会变得越小。一个节点 $t$ 分割成两部分 $t_L$ 和 $t_R$，则有</p>
 <script type="math/tex; mode=display">R(t)\ge R(t_L)+R(t_R)</script><blockquote>
-<p>以上公式的推导是在假定所有错误分类为 $i$ 类对象的成本或损失都是一样的，在某些问题中希望能将它们区分出来，例如某一类错误分类的代价将会更大，也就是希望尽可能减少其误分类的概率。因此，引入一组错误分类成本 $c(i|j)$ 代表将 $j$ 类对象误分类为 $i$ 类对象的代价，它应该满足</p>
-<script type="math/tex; mode=display">{\displaystyle c(i|j)={\begin{cases}C_i(C_i\ge 0)&i\ne j\\0&i=j\end{cases}}}</script><p>随机一个实例落入节点 $t$ 并被分类为类别 $i$，则估计的预期误分类代价为 </p>
-<script type="math/tex; mode=display">\sum_j c(i|j)p(j|t)</script><p>一个自然地节点分配规则是选择 $i$ 来最小化这个表达式，因此，<br>令 $j^*(t)=i_0$，当 $i_0$ 最小化 $\displaystyle \sum_j c(i|j)p(j|t)$，给定节点 $t$ 定义预期错误分类成本的重新替代估计 $r(t)$ 为</p>
-<script type="math/tex; mode=display">r(t)=\min_i \sum_j c(i|j)p(j|t)</script><p>当 $c(i|j)=1,i\ne j$ 可以发现 </p>
-<script type="math/tex; mode=display">\sum_j c(i|j)p(j|t)=1-p(i|t)</script><p>最小化结果与上面相同</p>
+<p>以上公式的推导是在假定所有错误分类为 $i$ 类对象的成本或损失都是一样的，在某些问题中希望能将它们区分出来，例如某一类错误分类的代价将会更大，也就是希望尽可能减少其误分类的概率。因此，引入一组错误分类成本 $c(i\,|\,j)$ 代表将 $j$ 类对象误分类为 $i$ 类对象的代价，它应该满足</p>
+<script type="math/tex; mode=display">{\displaystyle c(i\,|\,j)={\begin{cases}C_i(C_i\ge 0)&i\ne j\\0&i=j\end{cases}}}</script><p>随机一个实例落入节点 $t$ 并被分类为类别 $i$，则估计的预期误分类代价为 </p>
+<script type="math/tex; mode=display">\sum_j c(i\,|\,j)p(j\,|\,t)</script><p>一个自然地节点分配规则是选择 $i$ 来最小化这个表达式，因此，<br>令 $j^\ast(t)=i_0$，当 $i_0$ 最小化 $\displaystyle \sum_j c(i\,|\,j)p(j\,|\,t)$，给定节点 $t$ 定义预期错误分类成本的重新替代估计 $r(t)$ 为</p>
+<script type="math/tex; mode=display">r(t)=\min_i \sum_j c(i\,|\,j)p(j\,|\,t)</script><p>当 $c(i\,|\,j)=1,i\ne j$ 可以发现 </p>
+<script type="math/tex; mode=display">\sum_j c(i\,|\,j)p(j\,|\,t)=1-p(i\,|\,t)</script><p>最小化结果与上面相同</p>
 </blockquote>
 <p>接下来，我们解决第一个问题</p>
 <ol>
@@ -190,25 +194,25 @@
 <p>第一个缺陷，用上式对节点 $t$ 进行切分有可能所有拆分结果都为 $0$。证明如下：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    r(t)&=\sum_{j}c(j^*(t)|j)p(j|t)\\
-    &=\sum_{j}c(j^*(t)|j)p(j,t)p(t)\\
-    &=\sum_{j}c(j^*(t)|j)[p(j,t_L)+p(j,t_R)]p(t)
+    r(t)&=\sum_{j}c(j^*(t)\,|\,j)p(j\,|\,t)\\
+    &=\sum_{j}c(j^*(t)\,|\,j)p(j,t)p(t)\\
+    &=\sum_{j}c(j^*(t)\,|\,j)[p(j,t_L)+p(j,t_R)]p(t)
 \end{aligned}</script><p>让 $p(t)=1$，因此</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
     r(t)&-P_Lr(t_L)-P_Rr(t_R)\\
-    &=\sum_{j}c(j^*(t)|j)[p(j,t_L)+p(j,t_R)]-\min_i\sum_jc(i|j)p(j|t_L)P_L-\min_i\sum_jc(i|j)p(j|t_R)P_R\\
-    &=\sum_{j}c(j^*(t)|j)[p(j,t_L)+p(j,t_R)]-\min_i\sum_jc(i|j)p(j,t_L)-\min_i\sum_jc(i|j)p(j,t_R)\\
-    &=\sum_{j}c(j^*(t)|j)p(j,t_L)-\min_i\sum_jc(i|j)p(j,t_L) + \sum_{j}c(j^*(t)|j)p(j,t_R)-\min_i\sum_jc(i|j)p(j,t_R)\\
-    &=\sum_{j}c(j^*(t)|j)p(j,t_L)-\sum_jc(j^*(t_L)|j)p(j,t_L) + \sum_{j}c(j^*(t)|j)p(j,t_R)-\sum_jc(j^*(t_R)|j)p(j,t_R)\\
-\end{aligned}</script><p>等号的右边是大于 $0$ 的，并且仅当 $j^<em>(t)=j^</em>(t_L)=j^*(t_R)$ 时等号成立。</p>
+    &=\sum_{j}c(j^*(t)\,|\,j)[p(j,t_L)+p(j,t_R)]-\min_i\sum_jc(i\,|\,j)p(j\,|\,t_L)P_L-\min_i\sum_jc(i\,|\,j)p(j\,|\,t_R)P_R\\
+    &=\sum_{j}c(j^*(t)\,|\,j)[p(j,t_L)+p(j,t_R)]-\min_i\sum_jc(i\,|\,j)p(j,t_L)-\min_i\sum_jc(i\,|\,j)p(j,t_R)\\
+    &=\sum_{j}c(j^*(t)\,|\,j)p(j,t_L)-\min_i\sum_jc(i\,|\,j)p(j,t_L) + \sum_{j}c(j^*(t)\,|\,j)p(j,t_R)-\min_i\sum_jc(i\,|\,j)p(j,t_R)\\
+    &=\sum_{j}c(j^*(t)\,|\,j)p(j,t_L)-\sum_jc(j^*(t_L)\,|\,j)p(j,t_L) + \sum_{j}c(j^*(t)\,|\,j)p(j,t_R)-\sum_jc(j^*(t_R)\,|\,j)p(j,t_R)\\
+\end{aligned}</script><p>等号的右边是大于 $0$ 的，并且仅当 $j^\ast(t)=j^\ast(t_L)=j^\ast(t_R)$ 时等号成立。</p>
 <blockquote>
-<p>这个式子可以这么理解，$j^\ast(t)$ 是使 $\displaystyle\sum_j c(i|j)p(j|t)$ 最小化的特征，当节点 $t$ 被切分为两部分后， $j^\ast(t_L)$ 是使 $\displaystyle\sum_j c(i|j)p(j|t_L)$ 最小化的特征，那么 $j^\ast(t)$ 无论是什么都不会使 $\displaystyle \sum_{j}c(j^<em>(t)|j)p(j,t_L)$ 比 $\displaystyle \sum_jc(j^</em>(t_L)|j)p(j,t_L)$ 更小。</p>
+<p>这个式子可以这么理解，$j^\ast(t)$ 是使 $\displaystyle\sum_j c(i\,|\,j)p(j\,|\,t)$ 最小化的特征，当节点 $t$ 被切分为两部分后， $j^\ast(t_L)$ 是使 $\displaystyle\sum_j c(i\,|\,j)p(j\,|\,t_L)$ 最小化的特征，那么 $j^\ast(t)$ 无论是什么都不会使 $\displaystyle \sum_{j}c(j^\ast(t)\,|\,j)p(j,t_L)$ 比 $\displaystyle \sum_jc(j^\ast(t_L)\,|\,j)p(j,t_L)$ 更小。</p>
 </blockquote>
 <p>从上式中可以知道，当父节点与切分后的两个节点的最大占比的类别一样时，无论怎么切分 $r(t)-P_Lr(t_L)-P_Rr(t_R)$ 均为 $0$，即不存在单个或少量的最优拆分点。</p>
 <p>第二个缺陷是很难对决策树进行准确的评价。换句话说，降低错误分类率似乎不是整个决策树生长过程的好的目标和标准。</p>
 <p>举一个简单的例子，父节点 $t$ 的分布为 400（类别1）和 400（类别2），一个切分方式生成两个节点，一个节点分布为 300（类别1）、100（类别2），另一个节点分布为 100（类别1）、300（类别2），其中 200 个实例被分类错误，误分类率为 0.25。另一种切分方式为200（类别1）、400（类别2）和 200（类别1）、0（类别2），误分类率同样为 0.25。</p>
-<p>误分类率对两种切分方式评价相同，不纯度值的减少分别为 $0.5-1/2<em>0.25-1/2</em>0.25=0.25$ 和 $0.5-6/8<em>2/6-2/8</em>0=0.25$。但对于决策树未来的生长来看，第二种切分方式更为可取，虽然一个节点的误分类率为 $2/6$ ，但另一个节点误分类率为 $0$，这个节点是终端，无需进一步切分。</p>
+<p>误分类率对两种切分方式评价相同，不纯度值的减少分别为 $\displaystyle \frac{1}{2}-\frac{1}{2}\ast \frac{1}{4}-\frac{1}{2}\ast \frac{1}{4}=0.25$ 和 $\displaystyle \frac{1}{2}-\frac{6}{8}\ast \frac{2}{6}-\frac{2}{8}\ast 0=0.25$。但对于决策树未来的生长来看，第二种切分方式更为可取，虽然一个节点的误分类率为 $\displaystyle\frac{2}{6}$ ，但另一个节点误分类率为 $0$，这个节点是终端，无需进一步切分。</p>
 <p>综上所述，为了解决误分类率作为不纯度函数的缺陷，需要对不纯度函数进行改进。</p>
 <p>从二分类问题出发，误分类率不纯度函数为</p>
 <script type="math/tex; mode=display">
@@ -233,102 +237,122 @@
 <p>最简单的满足条件的函数就是二次多项式</p>
 <script type="math/tex; mode=display">\varphi(x)=a+bx+cx^2</script><p>由 1 可以得到 $a=0,b+c=0$，因此</p>
 <script type="math/tex; mode=display">\varphi(x)=b(x-x^2)</script><p>公式 4 要求 $b&gt;0$，不失一般性，取 $b=1$，因此得到不纯度函数</p>
-<script type="math/tex; mode=display">i(t)=p(1|t)p(2|t)</script><p>这就是基尼指数的原型，公式简单且易于计算。一个直观的解释，假设节点 $t$ 中的所有 1 类对象被赋予数值 1，而 2 类对象被赋予数值 0，那么 $p(1|t)$ 和 $p(2|t)$ 是节点中两个类的比例，则节点中数值的样本方差就是 $p(1|t)p(2|t)$。</p>
+<script type="math/tex; mode=display">i(t)=p(1\,|\,t)p(2\,|\,t)</script><p>这就是基尼指数的原型，公式简单且易于计算。一个直观的解释，假设节点 $t$ 中的所有 1 类对象被赋予数值 1，而 2 类对象被赋予数值 0，那么 $p(1\,|\,t)$ 和 $p(2\,|\,t)$ 是节点中两个类的比例，则节点中数值的样本方差就是 $p(1\,|\,t)p(2\,|\,t)$。</p>
 <blockquote>
-<p>信息熵公式 $i(t)=-p(1|t)\log p(1|t)-p(2|t)\log p(2|t)$ 同样满足上述条件。原作者说想不出任何内在的原因为什么同样一个满足条件的函数应该优于任何其他函数，并且测试表明两个函数给出了相似的结果，因此依据简单性原则选择基尼指数。</p>
+<p>信息熵公式 $i(t)=-p(1\,|\,t)\log p(1\,|\,t)-p(2\,|\,t)\log p(2\,|\,t)$ 同样满足上述条件。原作者说想不出任何内在的原因为什么同样一个满足条件的函数应该优于任何其他函数，并且测试表明两个函数给出了相似的结果，因此依据简单性原则选择基尼指数。</p>
 </blockquote>
-<p>将二分类问题扩展到多分类问题中，给定节点 $t$ 的类估计概率 $p(j|t),j=1,\cdots,J$，基尼指数定义为</p>
-<script type="math/tex; mode=display">i(t)=\sum_j\sum_{i\ne j}p(j|t)p(i|t)</script><p>同样可以写成</p>
-<script type="math/tex; mode=display">i(t)=\sum_jp(j|t)(1-p(j|t))=1-\sum_jp^2(j|t)</script><p>对于二分类问题则有</p>
+<p>将二分类问题扩展到多分类问题中，给定节点 $t$ 的类估计概率 $p(j\,|\,t),j=1,\cdots,J$，基尼指数定义为</p>
+<script type="math/tex; mode=display">i(t)=\sum_j\sum_{i\ne j}p(j\,|\,t)p(i\,|\,t)</script><p>同样可以写成</p>
+<script type="math/tex; mode=display">i(t)=\sum_jp(j\,|\,t)(1-p(j\,|\,t))=1-\sum_jp^2(j\,|\,t)</script><p>对于二分类问题则有</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    i(t)&=2p(1|t)p(2|t)\\
+    i(t)&=2p(1\,|\,t)p(2\,|\,t)\\
     &=2p(1-p)\\
 
 \end{aligned}</script><blockquote>
-<p>这里与上面的不纯度函数不同，具体在于多了 2，基尼指数是在误差分类率上推导出来的，按理说$\displaystyle i(t)=\min_j\sum_{i\ne j}p(j|t)p(i|t)$，但实际上是累加的，基尼指数的最大值是1，而误分类率最大值是0.5，有些不解。如果按下述所说的，那么实际难道是随机选择分类吗？</p>
+<p>这里与上面的不纯度函数不同，具体在于多了 2，基尼指数是在误差分类率上推导出来的，按理说$\displaystyle i(t)=\min_j\sum_{i\ne j}p(j\,|\,t)p(i\,|\,t)$，但实际上是累加的，基尼指数的最大值是1，而误分类率最大值是0.5，有些不解。如果按下述所说的，那么实际难道是随机选择分类吗？</p>
 </blockquote>
-<p>基尼指数的一种解释方法是，不是使用多数选择的规则对节点 $t$ 中的对象进行分类，而是从节点中随机选择实例将该实例的类别分配给对象，因此将以概率 $p(i|t)$ 分配为类别 $i$，则误分类的概率就是 $\displaystyle \sum_{i\ne j}p(j|t)p(i|t)=p(j|t)(1-p(j|t))$，然后再对 $j$ 求和。因此</p>
-<script type="math/tex; mode=display">i(t)=\sum_j\sum_{i\ne j}p(j|t)p(i|t)</script><p>另一种解释方法如前所说，在节点 $t$ 中，为所有 $j$ 类对象分配值 $1$，为所有其他对象分配值 $0$。那么这些值的样本方差为$p(j|t)(1-p(j|t))$。对所有 $J$ 类重复操作并求和，则结果就是</p>
-<script type="math/tex; mode=display">i(t)=\sum_jp(j|t)(1-p(j|t))=1-\sum_jp^2(j|t)</script><p>根据数据特征值是否为指定值 $a$，将节点 $t$ 分为两部分 $t_L$ 和 $t_R$，即</p>
-<script type="math/tex; mode=display">t_L=\{(\mathbf{x},y)|\mathbf{x}^{(i)}=a\},t_R=t-t_L</script><p>因此不纯值的减少即为</p>
+<p>基尼指数的一种解释方法是，不是使用多数选择的规则对节点 $t$ 中的对象进行分类，而是从节点中随机选择实例将该实例的类别分配给对象，因此将以概率 $p(i\,|\,t)$ 分配为类别 $i$，则误分类的概率就是 $\displaystyle \sum_{i\ne j}p(j\,|\,t)p(i\,|\,t)=p(j\,|\,t)(1-p(j\,|\,t))$，然后再对 $j$ 求和。因此</p>
+<script type="math/tex; mode=display">i(t)=\sum_j\sum_{i\ne j}p(j\,|\,t)p(i\,|\,t)</script><p>另一种解释方法如前所说，在节点 $t$ 中，为所有 $j$ 类对象分配值 $1$，为所有其他对象分配值 $0$。那么这些值的样本方差为$p(j\,|\,t)(1-p(j\,|\,t))$。对所有 $J$ 类重复操作并求和，则结果就是</p>
+<script type="math/tex; mode=display">i(t)=\sum_jp(j\,|\,t)(1-p(j\,|\,t))=1-\sum_jp^2(j\,|\,t)</script><p>根据数据特征值是否为指定值 $a$，将节点 $t$ 分为两部分 $t_L$ 和 $t_R$，即</p>
+<script type="math/tex; mode=display">t_L=\{(\mathbf{x},y)\,|\,\mathbf{x}^{(i)}=a\},t_R=t-t_L</script><p>因此不纯值的减少即为</p>
 <script type="math/tex; mode=display">\triangle i(s,t)=i(t)-p_Li(t_L)-p_Ri(t_R)</script><p>最后一个需要解决的问题</p>
 <ol>
 <li>终止条件</li>
 </ol>
 <p>算法停止计算的条件是结点中的样本个数小于预定阀值，或样本集的基尼指数小于预定阔值(样本基本属于同一类)，或者没有更多特征。</p>
-<h4 id="CART决策树算法"><a href="#CART决策树算法" class="headerlink" title="CART决策树算法"></a><strong>CART决策树算法</strong></h4><ul>
+<p><strong>CART回归树算法</strong></p>
+<ul>
 <li><strong>输入</strong>：训练数据集 $D$</li>
 <li><strong>输出</strong>：CART 分类决策树</li>
-<li><strong>步骤</strong>：</li>
-<li><ol>
-<li>从初始节点开始，选取特征 $A$，对该特征可取的每个值 $a$，将数据集 $D$ 分为两部分 $\{D_1|A=a\}$ 和 $\{D_2|A\ne a\}$，分别计算基尼指数，选择基尼指数最小的特征值作为该特征的最优切分点。</li>
-</ol>
-</li>
-<li><ol>
+<li><strong>步骤</strong>：<ol>
+<li>从初始节点开始，选取特征 $A$，对该特征可取的每个值 $a$，将数据集 $D$ 分为两部分 $\{D_1\,|\,A=a\}$ 和 $\{D_2\,|\,A\ne a\}$，分别计算基尼指数，选择基尼指数最小的特征值作为该特征的最优切分点。</li>
 <li>对所有特征重复步骤 1，再在其中选取基尼指数最小的特征作为最优特征。根据最优特征及其最优切分点将数据集进行切分，把该节点分为两个子节点 $t_L$ 和 $t_R$，节点中的数据集即为 $D_1$ 和 $D_2$。</li>
-</ol>
-</li>
-<li><ol>
 <li>对两个子节点递归地重复步骤 1 和步骤 2。</li>
-</ol>
-</li>
-<li><ol>
 <li>当某一节点满足终止条件时，则停止切分，返回父节点，继续遍历其他节点。终止条件为节点中样本个数小于预定阈值，或节点中样本均为一个类别，或样本集的基尼指数小于预定阈值（样本基本属于同一类）。</li>
-</ol>
-</li>
-<li><ol>
 <li>当所有节点均遍历之后，即生成 CART 分类决策树，结束算法。</li>
 </ol>
 </li>
 </ul>
 <h3 id="3-2-CART-回归"><a href="#3-2-CART-回归" class="headerlink" title="3.2 CART 回归"></a>3.2 CART 回归</h3><p>回归树同样需要解决上面三个问题</p>
 <p>训练数据集：</p>
-<script type="math/tex; mode=display">T=\{(\mathbf x_1,y_1),(\mathbf x_2,y_2),...,(\mathbf x_N,y_N)\}</script><p>第三个问题最直观也最好解决，假设输出值的函数为 $d$，总的均方误差为</p>
+<script type="math/tex; mode=display">D=\{(\mathbf x_1,y_1),(\mathbf x_2,y_2),...,(\mathbf x_N,y_N)\}</script><p>第三个问题最直观也最好解决，假设输出值的函数为 $d$，总的均方误差为</p>
 <script type="math/tex; mode=display">R(d)=\frac{1}{N}\sum_n^N(y_n-d(\mathbf x_n))^2</script><p>对于每个叶子节点，假设输入空间为 $t$，根据最小二乘法，为了使 $R(d)$ 最小，输出值应为</p>
 <script type="math/tex; mode=display">d_t(\mathbf x_n)=\overline{y}_t=\frac{1}{N_t}\sum_{\mathbf x_n\in t}y_n</script><p><strong>即回归树建立完后，每个叶子节点的输出值为其分配样本的均值。</strong></p>
 <p>进一步的，将预测值带入每个节点 $t$，并用 $R(T)$ 取代 $R(d)$</p>
-<script type="math/tex; mode=display">R(T)=\frac{1}{N}\sum_{t\in T}\sum_{\mathbf x_n\in t}(y_n-\overline{y}_t)^2</script><p>定义</p>
+<script type="math/tex; mode=display">R(T)=\frac{1}{N}\sum_{t\in \widetilde{T}}\sum_{\mathbf x_n\in t}(y_n-\overline{y}_t)^2</script><p>定义</p>
 <script type="math/tex; mode=display">R(t)=\frac{1}{N}\sum_{\mathbf x_n\in t}(y_n-\overline{y}_t)^2</script><blockquote>
 <p>注意这里不是 $N_t$ </p>
 </blockquote>
 <p>因此，$R(T)$ 还可以写为</p>
-<script type="math/tex; mode=display">R(T)=\sum_{t\in T}R(t)</script><p>对以上表达式一个简单的解释就是，对于每个节点 $t$，$\displaystyle \sum_{\mathbf x_n\in t}(y_n-\overline{y}_t)^2$ 是节点内的误差平方和，对 $t$ 求和给出所有节点的总平方和，再除以 $N$ 给出平均值。</p>
+<script type="math/tex; mode=display">R(T)=\sum_{t\in \widetilde{T}}R(t)</script><p>对以上表达式一个简单的解释就是，对于每个节点 $t$，$\displaystyle \sum_{\mathbf x_n\in t}(y_n-\overline{y}_t)^2$ 是节点内的误差平方和，对 $t$ 求和给出所有节点的总平方和，再除以 $N$ 给出平均值。</p>
 <p>假定分割前的均方误差为 $R(t)$，分割点为特征向量 $j$，分割值为 $s$，输入空间 $t$ 将被分为两个区域</p>
-<script type="math/tex; mode=display">t_L=\{x|x^{(j)}\le s\},t_R=\{x|x^{(j)}\ge s\}</script><p>为了使分割更为有效，将使均方误差减少的尽可能多，因此目标函数为</p>
+<script type="math/tex; mode=display">t_L=\{x\,|\,x^{(j)}\le s\},t_R=\{x\,|\,x^{(j)}\ge s\}</script><p>为了使分割更为有效，将使均方误差减少的尽可能多，因此目标函数为</p>
 <script type="math/tex; mode=display">\triangle R(s,t)=R(t)-R(t_L)-R(t_R)</script><p>与 $s$ 相关的变量只有后两项，因此</p>
 <script type="math/tex; mode=display">\max \triangle R(s,t)=\min [R(t_L)+R(t_R)]</script><p>令 $p(t)=\frac{N_t}{N}$ 表示随机选择输入变量落入节点 $t$ 的概率，定义节点内方差</p>
 <script type="math/tex; mode=display">s^2(t)=\frac{1}{N_t}\sum_{\mathbf x_n\in t}(y_n-\overline{y}_t)^2</script><p>因此可得 $R(t)=s^2(t)p(t)$，并且</p>
-<script type="math/tex; mode=display">R(T)=\sum_{t\in T}s^2(t)p(t)</script><p>$t$ 的最佳分割也就是使加权方差最小化</p>
+<script type="math/tex; mode=display">R(T)=\sum_{t\in \widetilde{T}}s^2(t)p(t)</script><p>$t$ 的最佳分割也就是使加权方差最小化</p>
 <script type="math/tex; mode=display">\min[p(t_L)s^2(t_L)+p(t_R)s^2(t_R)]</script><p>实际上概率 $p$ 可以带入进去，再乘以 $N$，就得到李航书中的公式</p>
 <script type="math/tex; mode=display">\min_{j,s} \left[\sum_{x_i \in t_L} (y_i-\overline{y}_{t_L})^2+ \sum_{x_i \in t_R} (y_i-\overline{y}_{t_R})^2\right]</script><p>依次选取切分变量 $j$，遍历空间中所有输入点确定最优切分值 $s$，找到最优切分变量和切分值使上式最小。</p>
 <p>对每个区域依次重复上述过程，直到达到终止条件。与 AID 不同，CART 终止条件为节点中的样本个数小于特定阈值（通常为5），或者节点中样本均为一个类别，即该节点为纯节点。</p>
 <p>至此回归的三个问题均已解决，归纳如下</p>
-<h4 id="CART回归树算法"><a href="#CART回归树算法" class="headerlink" title="CART回归树算法"></a><strong>CART回归树算法</strong></h4><ul>
+<p><strong>CART回归算法</strong></p>
+<ul>
 <li><strong>输入</strong>：训练数据集 $D$</li>
 <li><strong>输出</strong>：CART 回归决策树</li>
-<li><strong>步骤</strong>：</li>
-<li><ol>
-<li>从初始节点开始，选取特征 $j$，遍历数据集 $D$ 中每个实例特征 $j$ 的取值 $s$，将数据集分为两部分$t_L=\{D_1|\mathbf x^{(j)}\le s\}$ 和 $t_R=\{D_2|\mathbf x^{(j)}\ge s\}$，每部分的输出值即为该部分所有实例的平均值 $\overline{y}_t$，依次用 $\displaystyle \sum_{x_i \in t_L} (y_i-\overline{y}_{t_L})^2+ \sum_{x_i \in t_R} (y_i-\overline{y}_{t_R})^2$ 计算分类误差，误差最小的 $s$ 即为最优切分值。</li>
-</ol>
-</li>
-<li><ol>
-<li>对所有特征重复步骤 1，再在其中选取分类误差最小的特征作为最优特征。根据最优特征及其最优切分点将数据集进行切分，把该节点分为两个子节点 $t_L$ 和 $t_R$，节点中的数据集即为 $\{D_1|\mathbf x^{(j)}\le s\}$ 和 $\{D_2|\mathbf x^{(j)}\ge s\}$</li>
-</ol>
-</li>
-<li><ol>
+<li><strong>步骤</strong>：<ol>
+<li>从初始节点开始，选取特征 $j$，遍历数据集 $D$ 中每个实例特征 $j$ 的取值 $s$，将数据集分为两部分$t_L=\{D_1\,|\,\mathbf x^{(j)}\le s\}$ 和 $t_R=\{D_2\,|\,\mathbf x^{(j)}\ge s\}$，每部分的输出值即为该部分所有实例的平均值 $\overline{y}_t$，依次用 $\displaystyle \sum_{x_i \in t_L} (y_i-\overline{y}_{t_L})^2+ \sum_{x_i \in t_R} (y_i-\overline{y}_{t_R})^2$ 计算分类误差，误差最小的 $s$ 即为最优切分值。</li>
+<li>对所有特征重复步骤 1，再在其中选取分类误差最小的特征作为最优特征。根据最优特征及其最优切分点将数据集进行切分，把该节点分为两个子节点 $t_L$ 和 $t_R$，节点中的数据集即为 $\{D_1\,|\,\mathbf x^{(j)}\le s\}$ 和 $\{D_2\,|\,\mathbf x^{(j)}\ge s\}$</li>
 <li>对两个子节点递归地重复步骤 1 和步骤 2。</li>
-</ol>
-</li>
-<li><ol>
 <li>当某一节点满足终止条件时，则停止切分，返回父节点，继续遍历其他节点。终止条件为节点中的样本个数小于特定阈值（通常为5），或者节点中样本均为一个类别，即该节点为纯节点。</li>
-</ol>
-</li>
-<li><ol>
 <li>当所有节点均遍历之后，即生成 CART 回归决策树，结束算法。</li>
 </ol>
 </li>
 </ul>
+<h3 id="3-2-CART-剪枝"><a href="#3-2-CART-剪枝" class="headerlink" title="3.2 CART 剪枝"></a>3.2 CART 剪枝</h3><p>随着决策树生成终端节点的增加，训练数据集的误分类率会下降，极端情况一个实例一个节点，则训练集的准确率会达到百分之百。但是，测试集的误分类率会随着决策树的变大先减少后增加，即决策树应当在一定大的时候停止分裂，这时预测效果才是最好的。产生这样的现象的原因是偏差和方差之间的权衡。</p>
+<p>在早期决策树的停止规则是设定阈值 $\beta$，当不纯值的最大减少小于 $\beta$ 则停止分裂节点。这样做的结果通常不会令人满意，主要有两个问题，第一如果 $\beta$ 设的太小则会导致决策树过大，如前所述，导致预测准确率下降；第二，如果 $\beta$ 过大，可能有节点的不纯值减少的很小，但其两个后代节点可能有分裂，且不纯值大幅减少，例如二维空间中一三象限同类，二四象限同类，且分布均匀，第一次无论怎么分割不纯值都不会减少很多，但第二次分割就可以区分出两个类别。</p>
+<p>最终，Breiman 等人认为寻找正确的停止规则本身就是一个错误的方式，并发现了一个更令人满意的方法：</p>
+<ol>
+<li>采用修剪而不是停止。不加约束的使决策树尽可能的生长，然后以正确的方式向上修剪，直到最终修剪回根节点。</li>
+<li>使用更准确的误分类率估计从修剪的子树中选择合适大小的树。</li>
+</ol>
+<p>对于更准确误分类率估计的方法，对于大样本量就是使用独立的测试样本，而对于小样本量，则应采用交叉验证的方法。</p>
+<p>进行修剪的前置条件是要求决策树足够的大，但两个足够大的树结构其实并没有区别，无论是从一个最大的树 $T_{max}$ 开始，还是一个较小但依然足够大的数 $T’_{max}$ 开始，如果从 $T_{max}$ 开始的剪枝过程产生的子树包含在 $T’_{max}$ 中，那么两个树结构将修剪出完全相同的子树。</p>
+<p>如前所述，CART 终止条件为节点中的样本个数小于特定阈值（通常为5，偶尔设置为1），或者节点中样本均为一个类别，即该节点为纯节点，或仅包含相同的测量向量（应该是特征值相同，但类别不同）。这样就可以保证生成一颗足够大的决策树。</p>
+<p>假设 CART 最终生成的决策树为 $T_{max}$，则对于任意一颗子树 $T\preceq T_{max}$ 的误分类率（或者基尼指数）重新带入估计为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    R(T)&=\sum_{t\in \widetilde{T}}r(t)p(t)\\
+    &=\sum_{t\in \widetilde{T}}R(t)
+\end{aligned}</script><p>定义一个新的损失函数</p>
+<script type="math/tex; mode=display">R_\alpha(T)=R(T)+\alpha|\widetilde{T}|</script><p>其中，$\alpha$ 称为复杂度参数且 $\alpha\ge 0$，$|\widetilde{T}|$ 是子树 $T$ 中终端节点的个数，$R_\alpha(T)$ 是损失值。如果将 $\alpha$ 视为每个终端节点的复杂度成本，那么 $R_\alpha(T)$ 实际上就是在树的错误分类成本上增加复杂度成本惩罚形成的。$\alpha$ 的作用就是权衡训练数据的拟合程度与模型的复杂度。</p>
+<p>现在，对任意取值的 $\alpha$，都可以找到一个子树 $T(\alpha)\preceq T_{max}$ 使损失值 $R_\alpha(T)$ 最小</p>
+<script type="math/tex; mode=display">R_\alpha(T(\alpha))=\min_{T\preceq T_{max}}R_\alpha(T)</script><p>在 $\alpha$ 固定的情况下，$T(\alpha)$ 在损失值 $R_\alpha(T)$ 最小的意义下是最优的，且是唯一的。当 $\alpha$ 较小时，具有大量终端节点的惩罚较小，最优子树 $T(\alpha)$ 较大。极端情况下，$\alpha=0$ ，那么 $T_{max}$ 就是最优的，无需进行剪枝。随着 $\alpha$ 的增大，最优子树 $T(\alpha)$ 将具有更少的终端节点。最后，对于足够大的 $\alpha$，最优子树 $T(\alpha)$ 将仅包含根节点 $\{t_1\}$。</p>
+<blockquote>
+<p>在这里，子树 $T(\alpha)$ 与 $T_{max}$ 是具有相同根节点的树。</p>
+</blockquote>
+<p>尽管 $\alpha$ 是连续取值的，但 $T_{max}$ 的子树的数量是有限的。那么随着 $\alpha$ 增加，剪枝过程会产生一个有限序列的子树 $T_1,T_2,T_3,\dots,\{t_1\}$ 终端节点不断减少。每个子树对应着 $\alpha$ 的一个区间，即在一定区间内，该子树都是最优子树。</p>
+<p>现在的问题在于，如何找到这些最优子树，如果确定 $\alpha$ 去找最优子树，那么 $\alpha$ 的增长步长是难以决定的，太大了容易跳过某些子树，太小则搜索效率太低，毕竟对应一个 $\alpha$ 值，每个子树都需要遍历一遍。同时，在理论上，一个 $\alpha$ 值对应的最优子树是否是唯一的，以及 $T_1,T_2,T_3,\dots$ 序列中，每个子树是否都是前一个子树修剪而成的，即嵌套 $T_1\succ T_2\succ T_3\dots\succ \{t_1\}$ 是否成立。</p>
+<p>Breiman 等人给出了如下的解决办法。</p>
+<p>从 $T_0 = T_{max}$ 开始，对任意节点 $t \in T_0$，以该单节点 $\{t\}$ 为子树的损失函数为</p>
+<script type="math/tex; mode=display">R_\alpha(\{t\})=R(t)+\alpha</script><p>以 $t$ 为根节点的子树 $T_t$ 的损失函数为</p>
+<script type="math/tex; mode=display">R_\alpha(T_t)=R(T_t)+\alpha|\widetilde{T}_t|</script><p>当 $\alpha$ 较小时，子树 $T_t$ 的成本复杂度比单个节点 $\{t\}$ 要小</p>
+<script type="math/tex; mode=display">R_\alpha(T_t)<R_\alpha(\{t\})</script><p>但当 $\alpha$ 达到某个临界值时，两个成本复杂度会变得相等，此时，单节点 $\{t\}$ 比 $T_t$ 的终端节点更少，因此 $\{t\}$ 比 $T_t$ 更可取。求解</p>
+<script type="math/tex; mode=display">R_\alpha(T_t)=R_\alpha(\{t\})</script><p>可以得到 $\alpha$ 的值</p>
+<script type="math/tex; mode=display">\alpha = \frac{R(t)-R(T_t)}{|\widetilde{T}_t|-1}</script><p>定义一个函数 $g(t)$，对 $T_0$ 中的每个点带入计算</p>
+<script type="math/tex; mode=display">{\displaystyle 
+g(t)={
+    \begin{cases}
+        \displaystyle\frac{R(t)-R(T_t)}{|\widetilde{T}_t|-1}&t\notin \widetilde{T}_t\\
+        +\infty&t\in \widetilde{T}_t
+    \end{cases}
+    }
+}</script><p>找到 $t_{min}$ 最小化该函数</p>
+<script type="math/tex; mode=display">g(t_{min})=\min g(t)</script><p>就可以得到剪枝之后的树</p>
+<script type="math/tex; mode=display">T_1=T_0-T_{t_{min}}</script><p>剪枝方法是保留 $t_{min}$ 节点，剔除其所有后代节点。</p>
+<p>同时，将 $g(t_{min})$ 设为 $\alpha_1$。至此，我们就得到了区间 $[\alpha_1,\alpha_2)$ 的最优子树 $T_1$。（区间 $[\alpha_0,\alpha_1)$ 的最优子树就是 $T_0$，也就是 $T_{max}$）</p>
+<p>进一步地，再在 $T_1$ 的基础上得到 $T_2$，直到得到根节点 $\{t_0 \}$。最终我们得到一连串的子树序列 $T_0,T_1,T_2,T_3,\dots,\{t_1\}$ ，且它们之间满足嵌套关系 $T_0\succ T_1\succ T_2\succ T_3\dots\succ \{t_1\}$ 。</p>
+<p>最后，通过独立验证数据集，在$T_0,T_1,T_2,T_3,\dots,\{t_1\}$ 中选取平方误差或基尼指数最小的子树作为最优的子树。</p>
 <p><a target="_blank" rel="noopener" href="https://holypython.com/dt/decision-tree-history/">https://holypython.com/dt/decision-tree-history/</a><br><a target="_blank" rel="noopener" href="https://www.explorium.ai/blog/the-complete-guide-to-decision-trees/">https://www.explorium.ai/blog/the-complete-guide-to-decision-trees/</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/C4.5_algorithm">https://en.wikipedia.org/wiki/C4.5_algorithm</a><br><a target="_blank" rel="noopener" href="https://www.analyticsvidhya.com/blog/2021/05/implement-of-decision-tree-using-chaid/">https://www.analyticsvidhya.com/blog/2021/05/implement-of-decision-tree-using-chaid/</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fushengweixie/p/8039991.html">https://www.cnblogs.com/fushengweixie/p/8039991.html</a></p>
 
 
@@ -397,7 +421,7 @@
 
     <aside id="article-toc" role="navigation" class="fixed">
         <div id="article-toc-inner">
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91"><span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%86%B3%E7%AD%96%E6%A0%91%E7%BB%93%E6%9E%84"><span class="toc-text">2.决策树结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-CART-%E7%AE%97%E6%B3%95"><span class="toc-text">3. CART 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-CART-%E5%88%86%E7%B1%BB"><span class="toc-text">3.1 CART 分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CART%E5%86%B3%E7%AD%96%E6%A0%91%E7%AE%97%E6%B3%95"><span class="toc-text">CART决策树算法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-CART-%E5%9B%9E%E5%BD%92"><span class="toc-text">3.2 CART 回归</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CART%E5%9B%9E%E5%BD%92%E6%A0%91%E7%AE%97%E6%B3%95"><span class="toc-text">CART回归树算法</span></a></li></ol></li></ol></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91"><span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%86%B3%E7%AD%96%E6%A0%91%E7%BB%93%E6%9E%84"><span class="toc-text">2.决策树结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-CART-%E7%AE%97%E6%B3%95"><span class="toc-text">3. CART 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-CART-%E5%88%86%E7%B1%BB"><span class="toc-text">3.1 CART 分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-CART-%E5%9B%9E%E5%BD%92"><span class="toc-text">3.2 CART 回归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-CART-%E5%89%AA%E6%9E%9D"><span class="toc-text">3.2 CART 剪枝</span></a></li></ol></li></ol></li></ol>
         </div>
     </aside>
 
