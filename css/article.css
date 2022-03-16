@@ -163,17 +163,17 @@ article .container .row div > p {
 }
 article .container .row ul {
   padding-left: 36px;
-  line-height: 1.8;
-  letter-spacing: 0.1px;
+  line-height: 1.5;
 }
 article .container .row ol {
   padding-left: 64px;
-  line-height: 1.8;
-  letter-spacing: 0.1px;
+  line-height: 1.5;
+}
+article .container .row div > ul > li > ol {
+  padding-left: 36px;
 }
 article .container .row div > ol {
   padding-left: 72px;
-  line-height: 1.2;
 }
 figure.highlight {
   background: #eee;
