@@ -129,9 +129,6 @@ p {
 p a {
   text-decoration: underline;
 }
-div > p {
-  text-indent: 2em;
-}
 h1,
 h2,
 h3 {
@@ -649,13 +646,22 @@ article .container .row .pullquote {
 article .container .row .pullquote.left {
   float: left;
 }
+article .container .row div > p {
+  text-indent: 2em;
+}
 article .container .row ul {
   padding-left: 36px;
-  line-height: 1.8;
+  line-height: 1.5;
 }
 article .container .row ol {
+  padding-left: 64px;
+  line-height: 1.5;
+}
+article .container .row div > ul > li > ol {
   padding-left: 36px;
-  line-height: 1.8;
+}
+article .container .row div > ol {
+  padding-left: 72px;
 }
 figure.highlight {
   background: #eee;

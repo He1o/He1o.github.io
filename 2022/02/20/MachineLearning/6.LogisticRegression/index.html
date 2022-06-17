@@ -141,8 +141,8 @@
 <script type="math/tex; mode=display">\mathrm{d}\ln Y=Y^{-1}\odot\mathrm{d}Y</script><p>因此可以得到</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\mathrm{d}\ell(\boldsymbol w)&=\boldsymbol y^T(p(X\boldsymbol w))^{-1}\odot p(X\boldsymbol w)\odot(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w+
-(\boldsymbol 1-\boldsymbol y^T)(\boldsymbol 1^T-p(X\boldsymbol w))^{-1}\odot -p(X\boldsymbol w)\odot(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w \\
+\mathrm{d}\ell(\boldsymbol w)&=\boldsymbol y^T(p(X\boldsymbol w))^{-1}\odot p(X\boldsymbol w)\odot(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w \\
+&+(\boldsymbol 1-\boldsymbol y^T)(\boldsymbol 1^T-p(X\boldsymbol w))^{-1}\odot -p(X\boldsymbol w)\odot(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w \\
 &=\boldsymbol y^T(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w - (\boldsymbol 1-\boldsymbol y^T)p(X\boldsymbol w)\odot X\mathrm{d}\boldsymbol w \\
 \end{aligned}</script><p>将上式套上迹</p>
 <script type="math/tex; mode=display">
@@ -157,13 +157,14 @@
 <script type="math/tex; mode=display">\frac {\partial f }{\partial X}=X^T(\boldsymbol y- p(X\boldsymbol w) )</script><p>迭代公式</p>
 <script type="math/tex; mode=display">\boldsymbol w=\boldsymbol w-\alpha X^T(\boldsymbol y- p(X\boldsymbol w) )</script><h3 id="2-3-多元逻辑回归"><a href="#2-3-多元逻辑回归" class="headerlink" title="2.3 多元逻辑回归"></a>2.3 多元逻辑回归</h3><p>一个事件的几率（odds）是指该事件的发生的概率与不发生的概率的比值。如果一个事件发生的概率 $p$，则不发生的概率为 $1-p$，那么该事件的几率为 $\displaystyle\frac{p}{1-p}$，该事件的对数几率或 logit 函数是</p>
 <script type="math/tex; mode=display">\mathrm{logit}(p)=\ln \frac{p}{1-p}</script><p>对于逻辑回归，一定满足</p>
-<script type="math/tex; mode=display">\ln \frac{p}{1-p}=\boldsymbol w\cdot\boldsymbol x</script><p>假设多元逻辑回归事件的类别分别为 $0,1,\dots,K$，$y=0$ 对应着事件不发生的概率。多元逻辑回归相较于二元逻辑回归，概率计算公式不变</p>
+<script type="math/tex; mode=display">\ln \frac{p}{1-p}=\boldsymbol w\cdot\boldsymbol x</script><p>假设多元逻辑回归事件的类别分别为 $1,2,\dots,K$。多元逻辑回归相较于二元逻辑回归，概率计算公式不变</p>
 <script type="math/tex; mode=display">\displaystyle p(\boldsymbol x)={\frac {1}{1+e^{-\boldsymbol w\cdot\boldsymbol x}}}</script><p>区别在于对于同一个实例，它所有类别的概率和为 1。在二元逻辑回归中，$y=0$ 时的概率就是 $1-p$，因此只需要一组参数即可，而在多元逻辑回归中， $K$ 个类别分别对应一组参数</p>
 <script type="math/tex; mode=display">\ln \frac{p(y=1|\boldsymbol x)}{1-p(y=0|\boldsymbol x)}=\boldsymbol w_1\cdot\boldsymbol x</script><script type="math/tex; mode=display">\ln \frac{p(y=2|\boldsymbol x)}{1-p(y=0|\boldsymbol x)}=\boldsymbol w_2\cdot\boldsymbol x</script><script type="math/tex; mode=display">\cdots</script><p>同时满足</p>
 <script type="math/tex; mode=display">\sum_{i=1}^Kp(y=i|\boldsymbol x)=1</script><p>最终解得</p>
-<script type="math/tex; mode=display">p(y=k|\boldsymbol x)=\frac{e^{\boldsymbol w_k\cdot\boldsymbol x}}{\displaystyle 1+\sum_{i=1}^Ke^{\boldsymbol w_i\cdot\boldsymbol x}}</script><script type="math/tex; mode=display">p(y=0|\boldsymbol x)=\frac{1}{\displaystyle 1+\sum_{i=1}^Ke^{\boldsymbol w_i\cdot\boldsymbol x}}</script><p>实际上就是 softmax 函数。</p>
-<p>似然函数</p>
-<script type="math/tex; mode=display">L=\prod_{i=0}^mp_1(\boldsymbol{x_i})^{y_i^1}p_2(\boldsymbol{x_i})^{y_i^2}\dots p_k(\boldsymbol{x_i})^{y_i^k}</script><p>将对数似然函数写成矩阵形式，对于每一组实例</p>
+<script type="math/tex; mode=display">p(y=k|\boldsymbol x)=\frac{e^{\boldsymbol w_k\cdot\boldsymbol x}}{\displaystyle 1+\sum_{i=1}^{K-1}e^{\boldsymbol w_i\cdot\boldsymbol x}}</script><script type="math/tex; mode=display">p(y=K|\boldsymbol x)=\frac{1}{\displaystyle 1+\sum_{i=1}^{K-1}e^{\boldsymbol w_i\cdot\boldsymbol x}}</script><p>实际上就是 softmax 函数的一种特例，输出的结果为 $k-1$ 个，因为概率和为 1，自然可以求出最后剩下的一个概率值。其实也可以输出 $k$ 个结果，概率的计算公式为</p>
+<script type="math/tex; mode=display">p(y=k|\boldsymbol x)=\frac{e^{\boldsymbol w_k\cdot\boldsymbol x}}{\displaystyle \sum_{i=1}^Ke^{\boldsymbol w_i\cdot\boldsymbol x}}</script><p>我们采用后一种方式，似然函数为</p>
+<script type="math/tex; mode=display">L=\prod_{i=0}^mp_1(\boldsymbol{x_i})^{y_i^1}p_2(\boldsymbol{x_i})^{y_i^2}\dots p_k(\boldsymbol{x_i})^{y_i^K}</script><p>对于一组输入 $\boldsymbol{x_i}$，$(y_i^1,y_i^2,\dots,y_i^K)$ 中只有一个值为 $1$，其他为 $0$。对数似然函数即为</p>
+<script type="math/tex; mode=display">\ell=\sum_{i}\sum_ky_i^k\log p_k(\boldsymbol{x_i})</script><p>将对数似然函数写成矩阵形式，对于每一组实例</p>
 <script type="math/tex; mode=display">\ell=\boldsymbol{y}^T\log \mathrm{softmax}(W\boldsymbol{x})</script><p>对于所有实例</p>
 <script type="math/tex; mode=display">\ell=\mathrm{tr}(Y^T\log \mathrm{softmax}(WX))</script><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
 <p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Logistic_regression">1. Logistic regression - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://papers.tinbergen.nl/02119.pdf">2. Cramer, J. S. (2002). The origins of logistic regression</a><br><a target="_blank" rel="noopener" href="https://synapse.koreamed.org/upload/synapsedata/pdfdata/0006jkan/jkan-43-154.pdf">3. An Introduction to Logistic Regression: From Basic Concepts to Interpretation with Particular Attention to Nursing Domain</a><br><a target="_blank" rel="noopener" href="https://ftp.idu.ac.id/wp-content/uploads/ebook/ip/REGRESI%20LOGISTIK/Practical%20Guide%20to%20Logistic%20Regression%20(%20PDFDrive%20">4. Practical Guide to Logistic Regression</a>.pdf)<br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Logistic_function">5. Logistic function - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6029432.html">6. 逻辑回归原理小结 - 刘建平</a></p>
@@ -266,7 +267,6 @@
     });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
 </body>
 
 </html>

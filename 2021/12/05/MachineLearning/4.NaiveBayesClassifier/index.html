@@ -117,7 +117,7 @@
 <script type="math/tex; mode=display">
 \begin{aligned}
     P(x)&= P(xy)+P(x\overline{y})\\
-    &= P(x|y)P(y)+P(x\overline{y})P(\overline{y})\\
+    &= P(x|y)P(y)+P(x|\overline{y})P(\overline{y})\\
 \end{aligned}</script><p>如果标签的空间不仅仅分为 $y$ 和 $\overline{y}$，而是多个分割，那就可以得到更一般的贝叶斯公式</p>
 <p><strong>（贝叶斯公式）</strong>　设 $y_1,y_2,\cdots,y_n$ 是基本空间 $\Omega$ 的一个分割，且它们各自概率 $P(y_1),P(y_2),\cdots,P(y_n)$ 皆已知且为正，又设 $x$ 是 $\Omega$ 中的一个事件，$P(x)&gt;0$，且在诸 $y_i$ 下事件 $x$ 的条件概率 $P(x|y_1),P(x|y_2),\cdots,P(x|y_n)$ 可通过试验等手段获得，则在 $x$ 给定下，事件 $y_k$ 的条件概率为</p>
 <script type="math/tex; mode=display">P(y_k|x)=\frac{P(x|y_k)P(y_k)}{\sum\limits^n_{i=1}P(x|y_i)P(y_i)},k=1,2,\cdots,n</script><p>上述公式是在一个特征 $x$ 的情况下，如果是多个特征，则需要求这多个特征的条件概率分布。</p>
@@ -278,7 +278,6 @@ L(Y,f(X))={
     });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
 </body>
 
 </html>

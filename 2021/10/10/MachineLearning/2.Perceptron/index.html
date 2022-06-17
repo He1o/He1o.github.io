@@ -116,7 +116,7 @@
     }
 }</script><p>映射函数同样可以写成如下的表述形式：</p>
 <script type="math/tex; mode=display">
-{\displaystyle y=\text{sign}(\sum_{i=1}^{n}{ {w}_{i}{x}_{i}+b})=\text{sign}( {W}^{T} {X})}</script><h2 id="3-感知机学习算法"><a href="#3-感知机学习算法" class="headerlink" title="3. 感知机学习算法"></a>3. 感知机学习算法</h2><p>假设训练数据是线性可分的，感知机的学习目标是寻找模型参数$w,b$来将数据集正负实例点通过超平面进行区分，因此需要一个损失函数并得到损失函数的极小值。</p>
+{\displaystyle y=\text{sign}(\sum_{i=1}^{n}{ {w}_{i}{x}_{i}+b})=\text{sign}( {W}^{T} {X})}</script><h2 id="3-感知机学习算法"><a href="#3-感知机学习算法" class="headerlink" title="3. 感知机学习算法"></a>3. 感知机学习算法</h2><p>假设训练数据是线性可分的，感知机的学习目标是寻找模型参数 $w,b$ 来将数据集正负实例点通过超平面进行区分，因此需要一个损失函数并得到损失函数的极小值。</p>
 <blockquote>
 <p>我们很自然的想到能否还用最小二乘法中的损失函数呢？</p>
 <script type="math/tex; mode=display">Q=min{||\text{sign}(\mathbf w\cdot \mathbf x+b)-y||}^2</script><p>感知机与最小二乘法的不同之处在于 $y$ 即映射函数 $f(x)$ 的不同。最小二乘法是线性函数，用于线性回归；而感知机是sign函数，用于分类。很明显sign是个阶跃的不连续函数，这就导致损失函数同样是不连续的，就无法通过微分来得到极值点。</p>
@@ -362,7 +362,6 @@ ptron.train()
     });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
 </body>
 
 </html>
