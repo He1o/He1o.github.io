@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="https://s3.bmp.ovh/imgs/2022/01/7b8dab551214d77c.png" type="image/png">
+    <link rel="shortcut icon" href="https://s3.bmp.ovh/imgs/2022/01/7b8dab551214d77c.png" type="image/png">
+
+
+    <!--Description-->
+    
+        <meta name="description" content="隐马尔科夫模型1. 历史背景2. 问题引入假设有一个由多个可观测的样本组合的序列 $\mathbf{x}=(x_1,x_2,\dots,x_T)$，我们称之为观测序列。观测序列中的 $t$ 可以指时间、染色体或 DNA 上位点的索引或单词在句子中的位置，对于每个 $t\in1,2,\dots,T$，">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="He1o">
+    
+
+    <!-- Title -->
+    
+    <title>10. Hidden Markov Models | He1o</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//cdn.jsdelivr.net/npm/bootstrap@3.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"> -->
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//cdn.jsdelivr.net/npm/font-awesome@4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Noto+Serif:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- jQuery -->
+    <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="//cdn.jsdelivr.net/npm/bootstrap@3.3.6/dist/js/bootstrap.min.js"></script>
+    <!-- <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/base16/tomorrow.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+    <script >hljs.initHighlightingOnLoad();</script> 
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="He1o" type="application/atom+xml">
+</head>
+
+<body>
+
+    <!-- Content -->
+    <section class="article-container">
+    <!-- Back Home -->
+    <a class="nav-back" href="/">
+    <!-- <i class="fa fa-puzzle-piece"></i> -->
+    <!-- <svg t="1641282408158" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1990" width="20" height="20"><path d="M176.01639 524.791207s-27.260759-212.767201-4.060113-284.047483c13.969751-42.859491 33.233691-71.366668 76.352339-70.132591 70.490473 2.048568 194.416477 193.34283 194.416476 193.34283L192.478976 529.591766z" fill="#C95065" p-id="1991"></path><path d="M193.490919 536.329826l-23.077238-6.812104-0.518312-3.998409c-1.12301-8.737265-27.149692-214.914494-3.813298-286.688408 12.291406-37.614664 31.654073-75.846367 82.399315-74.390156 31.098738 0.900876 74.229726 34.430746 128.220592 99.664051a1175.61869 1175.61869 0 0 1 71.206238 96.480133l3.319666 5.121419z m-11.847138-16.36386l9.872615 2.900081L434.172939 362.201574c-9.058125-13.574846-35.380985-52.078046-67.047398-90.309749-50.86865-61.444689-92.012775-94.332839-119.002037-95.122648-34.788628-0.999602-54.521518 17.462188-70.342384 65.887366-20.781855 63.86348 0.296178 247.839666 3.862661 277.309423z" fill="#A5213D" p-id="1992"></path><path d="M847.971269 524.791207s27.310122-212.705497 4.072454-283.985779c-13.982091-42.921195-33.184328-71.428372-76.37702-70.194295-70.502814 2.048568-194.428818 193.34283-194.428818 193.34283l250.270798 165.637803z" fill="#C95065" p-id="1993"></path><path d="M830.49674 536.329826l-2.394109-1.591959-255.330513-169.068537 3.319666-5.121419a1170.361522 1170.361522 0 0 1 71.23092-96.443111c53.990865-65.233306 97.134194-98.726153 128.220591-99.664051 50.782265-1.468552 70.132591 36.775492 82.399316 74.390156 23.447461 71.773913-2.690288 277.951143-3.813298 286.688408l-0.505972 3.998409z m-240.644998-174.128252l242.668884 160.664473 9.872616-2.900081c3.566482-29.482097 24.681538-213.495306 3.825638-277.309423-15.783844-48.425178-35.504393-66.886969-70.342384-65.887366-26.989262 0.789809-68.133386 33.677959-119.002037 95.122648-31.666414 38.231703-58.001615 76.747243-67.059739 90.309749z" fill="#A5213D" p-id="1994"></path><path d="M867.198187 614.434554c0 82.880605-27.75439 129.787869-99.108716 181.656122-63.530279 46.166817-165.144172 57.347554-258.045483 57.347554-102.428384 0-210.101594-18.794991-275.199151-73.612688-60.358702-50.794606-78.018342-101.453463-78.018343-176.806199 0-156.666064 155.987322-316.910951 353.242176-316.910952s357.129518 171.660099 357.129517 328.326163z" fill="#C95065" p-id="1995"></path><path d="M510.043988 859.596274c-56.384974 0-107.870663-5.516324-153.025537-16.413223-52.559336-12.686311-95.023922-32.40686-126.172024-58.630994-30.691493-25.841571-50.831628-51.744845-63.357508-81.523121-11.501597-27.347144-16.857491-59.124625-16.857491-99.96023 0-78.610699 38.120636-159.418056 104.600359-221.714258a375.801102 375.801102 0 0 1 114.041048-73.415236 367.471082 367.471082 0 0 1 140.771153-27.951842 353.63708 353.63708 0 0 1 141.474577 29.728913 387.426106 387.426106 0 0 1 115.36151 77.364281c32.554949 31.493643 59.470166 68.602336 77.82089 107.364692 18.757969 39.490461 28.667607 81.066512 28.667607 120.038661 0 42.970558-7.490847 76.512769-23.570869 105.451872-15.72214 28.383769-39.79898 53.373826-78.080046 81.189921-54.175976 39.330031-139.771551 58.470564-261.673669 58.470564z m0-567.317498c-91.408077 0-178.941152 34.81331-246.371115 98.03507-63.999229 59.963797-100.700676 137.50085-100.700676 212.705497 0 78.980922 20.547381 125.567326 75.821686 172.092025s151.606349 72.144136 271.250105 72.144137c119.199489 0 202.388614-18.363064 254.417296-56.162841 71.292623-51.83123 96.566518-98.047411 96.566519-176.65811 0-74.599949-38.404474-156.271159-102.724562-218.431613-69.145329-66.91165-157.307784-103.724165-248.259253-103.724165z" fill="#A5213D" p-id="1996"></path><path d="M323.673693 613.89156m-86.237295 0a86.237295 86.237295 0 1 0 172.474589 0 86.237295 86.237295 0 1 0-172.474589 0Z" fill="#FFFFFF" p-id="1997"></path><path d="M337.828555 595.42977m-44.61188 0a44.61188 44.61188 0 1 0 89.22376 0 44.61188 44.61188 0 1 0-89.22376 0Z" fill="#42393B" p-id="1998"></path><path d="M342.024416 587.605722m-16.265133 0a16.265134 16.265134 0 1 0 32.530267 0 16.265134 16.265134 0 1 0-32.530267 0Z" fill="#FFFFFF" p-id="1999"></path><path d="M700.326307 613.89156m-86.237294 0a86.237295 86.237295 0 1 0 172.474589 0 86.237295 86.237295 0 1 0-172.474589 0Z" fill="#FFFFFF" p-id="2000"></path><path d="M686.159104 595.42977m-44.61188 0a44.61188 44.61188 0 1 0 89.223761 0 44.61188 44.61188 0 1 0-89.223761 0Z" fill="#42393B" p-id="2001"></path><path d="M681.975584 587.605722m-16.265134 0a16.265134 16.265134 0 1 0 32.530267 0 16.265134 16.265134 0 1 0-32.530267 0Z" fill="#FFFFFF" p-id="2002"></path></svg> -->
+    <svg t="1641282544096" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2285" width="25" height="25"><path d="M169.607158 516.323824s-28.478046-221.801895-4.233745-296.130495c14.56717-44.705255 34.654938-74.457285 79.617564-73.144695 73.505014 2.136175 202.717873 201.598311 202.717873 201.598311L186.77377 521.394023z" fill="#647471" p-id="2286"></path><path d="M187.828989 528.407369l-24.064141-7.103426-0.540478-4.156533c-1.171036-9.123784-28.375097-224.105361-3.976374-298.948702 12.791314-39.223264 33.033503-79.064217 85.92314-77.584336 32.428683 0.939402 77.404177 35.903184 133.703974 103.926207a1228.416518 1228.416518 0 0 1 74.251389 100.606127l3.461633 5.353307z m-12.353784-17.063664l10.29482 3.024104 253.033805-167.535326c-9.445497-14.155377-36.894061-54.292307-69.914695-94.171865-53.04406-64.072385-95.947722-98.367004-124.091186-99.177722-36.263503-1.068088-56.853143 18.208963-73.350592 68.705055-21.670596 66.633222 0.308845 258.374243 4.027848 289.155754z" fill="#283330" p-id="2287"></path><path d="M870.298339 516.323824s28.478046-221.801895 4.246613-296.130495c-14.580039-44.705255-34.667806-74.457285-79.617564-73.144695-73.517883 2.136175-202.74361 201.598311-202.743609 201.598311l260.947947 172.747078z" fill="#647471" p-id="2288"></path><path d="M852.076507 528.407369l-2.496493-1.647171-266.249781-176.298791 3.461634-5.353306A1222.908789 1222.908789 0 0 1 661.030387 244.501973c56.299796-68.023023 101.288159-102.948199 133.703973-103.926207 52.966848-1.518486 73.131827 38.361073 85.923141 77.584337 24.450197 74.843341-2.805338 289.824918-3.976374 298.948701l-0.52761 4.156534z m-250.936235-181.574886l253.046673 167.535326 10.29482-3.024104c3.719004-30.730037 25.73705-222.625481 3.989243-289.155754-16.510317-50.470355-37.099957-69.773142-73.311986-68.705055-28.143464 0.810717-71.047126 35.105336-124.091186 99.177722-33.05924 39.879559-60.520673 80.042225-69.96617 94.171865z" fill="#283330" p-id="2289"></path><path d="M892.380727 609.852263c0 86.425013-28.928444 135.338276-103.334255 189.424687-66.247166 48.15402-172.219469 59.800035-269.093724 59.800035-106.744414 0-219.086636-19.598763-286.968105-76.747883-62.939955-52.966848-81.367683-105.792143-81.367683-184.380224 0-163.353055 162.658155-330.463719 368.348657-330.46372s372.41511 179.01405 372.41511 342.367105z" fill="#647471" p-id="2290"></path><path d="M519.952748 865.511247c-58.79629 0-112.483776-5.765099-159.569708-17.128006-54.807048-13.215975-99.087642-33.792746-131.55493-61.138362-32.01689-26.933823-53.005454-53.944856-66.079876-85.009475-11.993465-28.503783-17.578405-61.653103-17.578405-104.235052 0-81.959635 39.763742-166.235605 109.073617-231.18305a391.975268 391.975268 0 0 1 118.930907-76.567723 383.121723 383.121723 0 0 1 146.778395-29.147209 368.760449 368.760449 0 0 1 147.52477 31.051751 404.290447 404.290447 0 0 1 120.294971 80.685651c33.960037 32.827607 62.02629 71.523261 81.161786 111.956166 19.547289 41.243622 29.880715 84.520472 29.880715 125.159274 0 44.808204-7.798326 79.784854-24.566014 109.961545-16.407369 29.597607-41.513861 55.65637-81.419157 84.674894-56.505693 40.960515-145.761781 60.919597-272.877071 60.919596z m0-591.591826c-95.304295 0-186.593611 36.314977-256.907231 102.24043-66.73617 62.528162-105.007163 143.368236-105.007163 221.789027 0 82.358559 21.426094 130.950109 79.077086 179.451579s158.089828 75.242265 282.837308 75.242265c124.30995 0 211.043808-19.161234 265.310378-58.564656 74.341468-54.047805 100.683339-102.24043 100.683339-184.225803 0-77.790233-40.033981-162.954131-107.117601-227.77289-72.102345-69.760273-164.035087-108.159952-258.876116-108.159952z" fill="#283330" p-id="2291"></path><path d="M516.735617 428.328851a117.42529 117.42529 0 0 1-5.031593-23.536532 199.886797 199.886797 0 0 1 0-47.060195 116.614573 116.614573 0 0 1 5.05733-23.536532 117.541106 117.541106 0 0 1 5.070199 23.536532 201.739865 201.739865 0 0 1 0 47.060195 117.463895 117.463895 0 0 1-5.095936 23.536532zM586.959158 381.255787a48.2441 48.2441 0 0 1 0.527609 15.056174 71.343102 71.343102 0 0 1-2.959761 13.949481 70.468042 70.468042 0 0 1-5.559202 13.113027 47.201749 47.201749 0 0 1-9.110916 12.006334 47.870913 47.870913 0 0 1-0.540478-15.056174 73.350592 73.350592 0 0 1 8.583306-27.023903 47.973861 47.973861 0 0 1 9.059442-12.044939zM615.591625 452.495941a67.482545 67.482545 0 0 1 7.721115-16.201473 105.521904 105.521904 0 0 1 10.436374-13.769322 103.37286 103.37286 0 0 1 12.495338-11.916254 65.758162 65.758162 0 0 1 15.236333-9.471234 65.809636 65.809636 0 0 1-7.721115 16.201473 101.494056 101.494056 0 0 1-10.449242 13.756453 104.453817 104.453817 0 0 1-12.508206 11.916254 66.517405 66.517405 0 0 1-15.210597 9.484103zM661.467917 469.611079a25.865735 25.865735 0 0 1 4.169402-9.741473 32.338603 32.338603 0 0 1 14.605775-11.581673 25.634102 25.634102 0 0 1 10.449243-1.82733 25.608365 25.608365 0 0 1-4.156534 9.76721 31.566492 31.566492 0 0 1-6.434262 6.858924 32.171312 32.171312 0 0 1-8.158645 4.70988 25.73705 25.73705 0 0 1-10.474979 1.814462zM690.692337 501.846734a38.682786 38.682786 0 0 1 10.397768-8.493227 55.21884 55.21884 0 0 1 11.478724-5.018724 54.356649 54.356649 0 0 1 12.30231-2.367809 38.20665 38.20665 0 0 1 13.383266 1.158167 38.258125 38.258125 0 0 1-10.397768 8.506095 53.790434 53.790434 0 0 1-11.478725 4.992988 54.61402 54.61402 0 0 1-12.302309 2.35494 38.747128 38.747128 0 0 1-13.383266-1.13243zM446.524945 381.255787a48.282705 48.282705 0 0 1 9.085179 12.019202 73.003142 73.003142 0 0 1 8.570437 27.023903 47.124538 47.124538 0 0 1-0.540478 15.056174 47.446251 47.446251 0 0 1-9.098047-12.006334 70.519516 70.519516 0 0 1-5.546334-13.08729 72.269636 72.269636 0 0 1-2.946892-13.949481 48.2441 48.2441 0 0 1 0.476135-15.056174zM417.879609 452.495941a66.144218 66.144218 0 0 1-15.210597-9.484103 108.095609 108.095609 0 0 1-22.957448-25.672707 66.73617 66.73617 0 0 1-7.721115-16.201473 65.629477 65.629477 0 0 1 15.236334 9.471234 107.272024 107.272024 0 0 1 22.918842 25.73705 66.517405 66.517405 0 0 1 7.733984 16.149999zM372.003318 469.611079a25.64697 25.64697 0 0 1-10.436374-1.827331 31.720914 31.720914 0 0 1-8.158645-4.70988 31.257647 31.257647 0 0 1-6.434262-6.858923 25.608365 25.608365 0 0 1-4.156534-9.767211 25.634102 25.634102 0 0 1 10.449242 1.827331 32.171312 32.171312 0 0 1 14.592908 11.581672 25.659839 25.659839 0 0 1 4.143665 9.754342zM342.791766 501.846734a38.772866 38.772866 0 0 1-13.383266 1.13243 54.472466 54.472466 0 0 1-12.30231-2.35494 53.507327 53.507327 0 0 1-11.478724-4.992988 38.258125 38.258125 0 0 1-10.397768-8.506095 38.20665 38.20665 0 0 1 13.383266-1.158167 54.485334 54.485334 0 0 1 12.30231 2.367809 55.514816 55.514816 0 0 1 11.478724 5.018724 38.682786 38.682786 0 0 1 10.397768 8.493227zM520.467489 722.168749a73.955413 73.955413 0 0 1 5.031594 18.196094 118.519114 118.519114 0 0 1 1.3898 18.157488 116.884812 116.884812 0 0 1-1.364063 18.183226 72.835851 72.835851 0 0 1-5.057331 18.183226 72.333978 72.333978 0 0 1-5.070198-18.183226 116.884812 116.884812 0 0 1-1.364064-18.183226 118.519114 118.519114 0 0 1 1.389801-18.183225 73.440672 73.440672 0 0 1 5.044461-18.170357zM590.678161 758.522331a33.535376 33.535376 0 0 1-9.007967-8.5447 45.374419 45.374419 0 0 1-5.572071-9.934501 44.821072 44.821072 0 0 1-3.011235-10.976852 33.213663 33.213663 0 0 1 0.411792-12.366652 33.007766 33.007766 0 0 1 9.007968 8.5447 44.422148 44.422148 0 0 1 5.546334 9.921633 45.631789 45.631789 0 0 1 2.998366 10.98972 33.728404 33.728404 0 0 1-0.373187 12.366652zM619.323498 703.496519a53.584538 53.584538 0 0 1 14.760198 6.125418 81.277603 81.277603 0 0 1 12.379521 8.866413 79.656169 79.656169 0 0 1 10.565059 10.963984 52.490713 52.490713 0 0 1 8.158644 13.730716 53.082665 53.082665 0 0 1-14.773066-6.086813 80.428281 80.428281 0 0 1-12.366653-8.89215 81.30334 81.30334 0 0 1-10.565059-10.976852 53.700354 53.700354 0 0 1-8.158644-13.730716zM665.18692 690.319149a23.240556 23.240556 0 0 1 9.94737 0.167291 27.023902 27.023902 0 0 1 8.02996 3.294343 26.547767 26.547767 0 0 1 6.588684 5.649282 22.777289 22.777289 0 0 1 4.658406 8.789203 23.047528 23.047528 0 0 1-9.947369-0.154423 27.358484 27.358484 0 0 1-14.605776-9.007967 23.008923 23.008923 0 0 1-4.671275-8.737729zM694.41134 665.36708a37.486013 37.486013 0 0 1 13.061553-2.058964 52.760952 52.760952 0 0 1 12.21223 1.492749 51.911629 51.911629 0 0 1 11.581673 4.169402 37.524619 37.524619 0 0 1 10.719481 7.721115 37.537487 37.537487 0 0 1-13.074421 2.071832 52.001709 52.001709 0 0 1-12.199362-1.505617 53.314299 53.314299 0 0 1-11.581672-4.195139 37.666172 37.666172 0 0 1-10.719482-7.695378zM450.282555 758.522331a33.728404 33.728404 0 0 1-0.386056-12.366652 45.631789 45.631789 0 0 1 2.998366-10.98972 44.936889 44.936889 0 0 1 5.546334-9.921633 33.007766 33.007766 0 0 1 9.007968-8.5447 33.213663 33.213663 0 0 1 0.411793 12.366652 44.821072 44.821072 0 0 1-3.011235 10.976852 45.374419 45.374419 0 0 1-5.572071 9.934501 33.535376 33.535376 0 0 1-8.995099 8.5447zM421.598613 703.496519a53.700354 53.700354 0 0 1-8.158645 13.730716 81.30334 81.30334 0 0 1-10.565059 10.976852 80.428281 80.428281 0 0 1-12.366653 8.89215 53.082665 53.082665 0 0 1-14.773066 6.086813 52.851032 52.851032 0 0 1 8.158645-13.743585 79.656169 79.656169 0 0 1 10.565059-10.963983 81.277603 81.277603 0 0 1 12.379521-8.866414 53.584538 53.584538 0 0 1 14.760198-6.112549zM375.73519 690.319149a23.008923 23.008923 0 0 1-4.671275 8.776334 27.229799 27.229799 0 0 1-14.605775 9.007968 23.047528 23.047528 0 0 1-9.94737 0.154422 22.777289 22.777289 0 0 1 4.684143-8.930756 26.547767 26.547767 0 0 1 6.588685-5.649283 27.023902 27.023902 0 0 1 8.029959-3.294342 23.240556 23.240556 0 0 1 9.921633-0.064343zM346.51077 665.36708a37.666172 37.666172 0 0 1-10.719481 7.721115 53.314299 53.314299 0 0 1-11.581673 4.195139 52.001709 52.001709 0 0 1-12.199361 1.505617 37.537487 37.537487 0 0 1-13.074422-2.071832 37.524619 37.524619 0 0 1 10.719482-7.721115 51.911629 51.911629 0 0 1 11.581672-4.169402 52.760952 52.760952 0 0 1 12.21223-1.492749 37.434539 37.434539 0 0 1 13.061553 2.033227z" fill="#4B5451" p-id="2292"></path><path d="M331.248699 594.114057m-74.740392 0a74.740393 74.740393 0 1 0 149.480785 0 74.740393 74.740393 0 1 0-149.480785 0Z" fill="#E8BE48" p-id="2293"></path><path d="M708.656797 594.114057m-74.740392 0a74.740393 74.740393 0 1 0 149.480785 0 74.740393 74.740393 0 1 0-149.480785 0Z" fill="#E8BE48" p-id="2294"></path></svg>
+</a>
+
+
+        <!-- Page Header -->
+        <header class="intro-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8  col-md-10 ">
+                        <div class="post-heading">
+                            <h1>
+                                10. Hidden Markov Models
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Post Content -->
+        <article>
+            <div class="container">
+                <div class="row">
+                    <!-- Post Main Content -->
+                    <div class="post-content col-lg-10  col-md-10 ">
+                        <span id="more"></span>
+<h1 id="隐马尔科夫模型"><a href="#隐马尔科夫模型" class="headerlink" title="隐马尔科夫模型"></a>隐马尔科夫模型</h1><h2 id="1-历史背景"><a href="#1-历史背景" class="headerlink" title="1. 历史背景"></a>1. 历史背景</h2><h2 id="2-问题引入"><a href="#2-问题引入" class="headerlink" title="2. 问题引入"></a>2. 问题引入</h2><p>假设有一个由多个可观测的样本组合的序列 $\mathbf{x}=(x_1,x_2,\dots,x_T)$，我们称之为观测序列。观测序列中的 $t$ 可以指时间、染色体或 DNA 上位点的索引或单词在句子中的位置，对于每个 $t\in1,2,\dots,T$，我们希望得到一个对应的感兴趣的隐藏状态变量 $z_t\in \mathcal{Z}$，其中 $\mathcal{Z}$ 是有限的集合，由 $z_t$ 组成的序列称为状态序列 $\mathbf{z}$。例如在词性标注中，观测序列就是文档中的 $t$ 个单词，状态序列就是每个单词对应的词性标签。</p>
+<p>试想一下，如果用之前的机器学习方法可以怎么做？</p>
+<p>可以用贝叶斯估计，最大似然条件概率 $\displaystyle\argmax \frac{p(X=\mathbf{x}|Z=\mathbf{z})p(Z=\mathbf{z})}{p(X=\mathbf{x})}$，显然单词间的组合太多了，需要的样本量之多几乎不可能做到，只能利用朴素贝叶斯的思想，假定 $(x_i,z_i)$ 与 $(x_j,z_j)$ 相互独立，这样我们就可以对每一个单词给出一个最大后验概率 $\displaystyle\hat{z}_t=\argmax p(X_t={x_t}|Z_t={z_t})p(Z_t={z_t})$。但这显然是不合理的，最终只能给出每个单词的所属词性最大概率的一个，但实际上每个单词与前后文相关，而在朴素贝叶斯中却无法体现出来。</p>
+<p>为了考虑时序的概率情况，隐马尔科夫模型被提了出来。隐马尔科夫是在马尔科夫链的基础上提出来的，它们之间的不同之处就在于，马尔科夫链中的状态都是可观测的，而隐马尔科夫模型中存在不可观测的状态，但它们之间的根本原理都是无后效性，即未来状态只与当前的状态有关，即</p>
+<script type="math/tex; mode=display">P(Z_{t+1}=z_{t+1}|Z_t=z_t,\cdots,Z_0=z_0)=P(Z_{t+1}=z_{t+1}|Z_t=z_{t})</script><p>隐马尔科夫模型中存在一个隐藏的马尔科夫链，也就是状态序列 $Z=(Z_0,Z_1,\dots,Z_T)$，状态集合为 $\mathcal{Z}$，对于任意两个状态 $i,j\in\mathcal{Z}$ 都可以给出一个转移概率 </p>
+<script type="math/tex; mode=display">a_{ij}=P(Z_{t+1}=j|Z_{t}=i)\qquad i,j=1,2,\dots,N</script><p>因此最终可以得到一个状态转移概率矩阵</p>
+<script type="math/tex; mode=display">A=\begin{bmatrix}
+    a_{11}&a_{12}&\cdots&a_{1N}\\
+    a_{21}&a_{22}&\cdots&a_{2N}\\
+    \vdots  \\
+    a_{N1}&a_{N2}&\cdots&a_{NN}\\
+\end{bmatrix}</script><p>同时存在另一个随机变量序列 $X=(X_0,X_2,\dots,X_T)$ 称为观测序列，它的取值来自于观测空间 $\mathcal{X}$，我们假设观测具有独立性，即任意时刻的观测只依赖于该时刻的马尔科夫链的状态，而与其他时刻观测及状态无关。因此，在给定时刻 $t$ 状态 $b_j$ 的情况下，都可以得到对应观测值 $k$ 的概率</p>
+<script type="math/tex; mode=display">b_{j}(k)=P(X_t=k|Z_t=j)\qquad k=1,2,\dots,M;j=1,2,\dots,N</script><p>进一步地可以得到一个观测概率矩阵</p>
+<script type="math/tex; mode=display">B=\begin{bmatrix}
+    b_{11}&b_{12}&\cdots&b_{1M}\\
+    b_{21}&b_{22}&\cdots&b_{2M}\\
+    \vdots  \\
+    b_{N1}&b_{N2}&\cdots&b_{NM}\\
+\end{bmatrix}</script><p>最后还需要确定初始状态概率 $\pi=(\pi_1,\pi_2,\dots,\pi_N)$，其中</p>
+<script type="math/tex; mode=display">\pi_i=P(Z_1=i)\qquad i=1,2,\dots,N</script><p>通过初始状态概率向量 $\pi$、状态转移概率矩阵 $A$，观测概率矩阵 $B$ 就可以确定隐马尔科夫模型，它们也称为隐马尔科夫模型的三要素</p>
+<script type="math/tex; mode=display">\lambda=(A,B,\pi)</script><p>可以发现，隐马尔科夫是基于无后效性和观测独立性假设提出来的。观测独立性假设，即任意时刻的观测结果只与该时刻的马尔科夫链的状态有关，与其他状态及观测无关</p>
+<script type="math/tex; mode=display">P(X_t|X_T,Z_{T},\dots,X_1,Z_{1})=P(X_t|Z_t)</script><p>有了三要素，给定序列长度 $T$ 就可以生成一个对应的观测序列，而概率矩阵的拟合根据数据是否标记可采用不同的学习算法。最终想要隐马尔科夫模型进行预测需要解决一下三个问题</p>
+<ol>
+<li>学习问题。已知观测序列 $\mathbf{x}=(x_1,x_2,\dots,x_T)$，估计模型 $\lambda=(A,B,\pi)$ 参数，使得在该模型下的观测序列概率 $P(\mathbf{x}|\lambda)$ 最大，也就是用最大似然估计的方法来估计模型参数。</li>
+<li>先验概率问题。给定模型 $\lambda=(A,B,\pi)$ 和观测序列 $\mathbf{x}=(x_1,x_2,\dots,x_T)$，计算在模型 $\lambda$ 下观测序列 $\mathbf{x}$ 出现的概率 $P(\mathbf{x}|\lambda)$，也就是先验概率。</li>
+<li>预测问题。已知模型 $\lambda=(A,B,\pi)$ 和观测序列 $\mathbf{x}=(x_1,x_2,\dots,x_T)$，求在给定观测序列下条件概率 $P(\mathbf{z}|\mathbf{x})$ 最大的状态序列 $\mathbf{z}=(z_1,z_2,\dots,z_T)$。</li>
+</ol>
+<h2 id="3-先验概率计算算法"><a href="#3-先验概率计算算法" class="headerlink" title="3. 先验概率计算算法"></a>3. 先验概率计算算法</h2><p>给定模型 $\lambda=(A,B,\pi)$ 和观测序列 $\mathbf{x}=(x_1,x_2,\dots,x_T)$，计算观测序列 $\mathbf{x}$ 出现的概率 $P(\mathbf{x}|\lambda)$，也就是先验概率。</p>
+<p>通过概率公式可以直接计算，通过列举所有长度为 $T$ 可能的状态序列 $\mathbf{z}=(z_1,z_2,\dots,z_T)$，求每个状态序列 $\mathbf{z}$ 与观测序列 $\mathbf{x}$ 的联合概率 $P(\mathbf{x}, \mathbf{z}|\lambda)$，然后对所有可能的状态序列求和，就可以得到先验概率 $P(\mathbf{x}|\lambda)$。</p>
+<p>状态序列 $\mathbf{z}=(z_1,z_2,\dots,z_T)$ 的概率</p>
+<script type="math/tex; mode=display">P(\mathbf{z}|\lambda)=\pi(z_1)\prod_{t=2}^T A(z_t|z_{t-1})</script><p>给定状态序列，观测序列的条件概率为</p>
+<script type="math/tex; mode=display">p(\mathbf{x}|\mathbf{z},\lambda)=\prod_{t=1}^T B(x_t|z_{t})</script><p>因此状态序列 $\mathbf{z}$ 和观测序列 $\mathbf{x}$ 联合概率为</p>
+<script type="math/tex; mode=display">P(\mathbf{x},\mathbf{z}|\lambda)=P(\mathbf{x}|\mathbf{z},\lambda)P(\mathbf{z}|\lambda)</script><p>然后对所有可能的状态序列 $\mathbf{z}$ 求和，得到观测序列 $\mathbf{x}$ 的概率为 </p>
+<script type="math/tex; mode=display">\begin{aligned}
+    P(\mathbf{x}|\lambda)&=\sum_{\mathbf{z}}P(\mathbf{x}|\mathbf{z},\lambda)P(\mathbf{z}|\lambda)\\
+    &=\sum_{\mathbf{z}}\pi(z_1)\prod_{t=2}^TA(z_{t}|z_{t-1})\prod_{t=1}^TB(x_t|z_t)
+\end{aligned}</script><p>状态序列 $\mathbf{z}$ 的可能情况有 $N^T$ 种，因此时间复杂度为 $O(TN^T)$，通过动态规划的思想可以将算法进行优化。</p>
+<h3 id="3-1-前向算法"><a href="#3-1-前向算法" class="headerlink" title="3.1 前向算法"></a>3.1 前向算法</h3><p>从上可以知道观测序列的概率</p>
+<script type="math/tex; mode=display">P(\mathbf{x}|\lambda)=\sum_{\mathbf{z}}\pi(z_1)\prod_{t=2}^TA(z_{t}|z_{t-1})\prod_{t=1}^TB(x_t|z_t)</script><p>对于不同的状态序列都需要重新计算一遍该公式，但依照动态规划的思想，中间计算结果可以保存下来从而减少计算量，假设 $T=3$ 的情况下</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    P(\mathbf{x}|\lambda)&=\sum_{z_1,z_2,z_3}\pi(z_1)\prod_{t=2}^3A(z_{t}|z_{t-1})\prod_{t=1}^3B(x_t|z_t)\\
+    &=\sum_{z_3}\underbrace{B(x_3|z_3)\sum_{z_2}A(z_{3}|z_{2})\underbrace{B(x_2|z_2)\sum_{z_1}A(z_{2}|z_{1})\underbrace{\pi(z_1)B(x_1|z_1)}_{\alpha_1(z_1)}}_{\alpha_2(z_2)}}_{\alpha_3(z _3)}
+\end{aligned}</script><p>我们可以发现</p>
+<script type="math/tex; mode=display">\alpha_2(z_2)=B(x_2|z_2)\sum_{z_1}A(z_{2}|z_{1})\alpha_1(z_1)</script><script type="math/tex; mode=display">\alpha_3(z_3)=B(x_3|z_3)\sum_{z_2}A(z_{3}|z_{2})\alpha_2(z_2)</script><p>以上 $\alpha_t(z_t)$ 就是每次重复计算的过程结果，如果保存下来的话就可以减少计算量，通过推导可以得到递推公式</p>
+<script type="math/tex; mode=display">\alpha_{t+1}(i)=b_i(x_{t+1})\sum_{j=1}^Na_{ij}\alpha_t(i)\qquad i=1,2,\dots,N</script><p>$\alpha$ 实际上就是时刻 $t$ 给定部分观测序列 $x_1,x_2,\dots,x_t$ 且状态为 $i$ 的概率，称为前向概率</p>
+<script type="math/tex; mode=display">\alpha_t(z_t=i)=P(x_1,x_2,\dots,x_t,z_t=i|\lambda)</script><p>如果状态空间的数量为 $4$，那么原本需要计算 $4<em>4</em>4$ 次，而上述算法只需要 $4<em>4+4</em>4$ 次，时间复杂度由 $O(TN^T)$ 降到了 $O(TN^2)$</p>
+<p>有了递推公式之后，动态规划算法还需要初始化状态和终止条件，前向算法如下</p>
+<ol>
+<li>初始化状态 $\alpha_1(i)=\pi(i)b_i(x_1)$。</li>
+<li>对于每一时刻 $t=1,2,\dots,T-1$ 计算<script type="math/tex; mode=display">\alpha_{t+1}(i)=b_i(x_{t+1})\sum_{j=1}^Na_{ij}\alpha_t(i)\qquad i=1,2,\dots,N</script></li>
+<li>最终计算结束状态<script type="math/tex; mode=display">P(\mathbf{x}|\lambda)=\sum_{i=1}^N\alpha_{T}(i)</script></li>
+</ol>
+<h3 id="3-2-后向算法"><a href="#3-2-后向算法" class="headerlink" title="3.2 后向算法"></a>3.2 后向算法</h3><p>前向算法是从初始状态向结束状态进行计算，后向算法则是从结束状态向前得到递推公式，同样在假设 $T=3$ 的情况下</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    P(\mathbf{x}|\lambda)&=\sum_{z_1,z_2,z_3}\pi(z_1)\prod_{t=2}^3A(z_{t}|z_{t-1})\prod_{t=1}^3B(x_t|z_t)\\
+    &=\underbrace{\sum_{z_1}\pi(z_1)B(x_1|z_1)\underbrace{\sum_{z_2}A(z_{2}|z_{1})B(x_2|z_2)\underbrace{\sum_{z_3}A(z_{3}|z_{2})B(x_3|z_3)}_{\beta_2(z_2)}}_{\beta_1(z_1)}}_{\beta_0}
+\end{aligned}</script><p>对于 $t=2$ 时，根据观测独立性假设有 $P(x_3|z_3) = P(x_3|z_3,z_2)$，因此</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \beta_2(z_2)&=\sum_{z_3}A(z_{3}|z_{2})B(x_3|z_3) \\
+    &=\sum_{z_3}P(z_{3}|z_{2})P(x_3|z_3)\\
+    &=\sum_{z_3}P(z_{3}|z_{2})P(x_3|z_3,z_2) \\
+    &=P(x_3|z_2)
+\end{aligned}</script><p>并且</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \beta_1(z_1)&=\sum_{z_2}A(z_{2}|z_{1})B(x_2|z_2)\beta_2(z_2) \\
+    &=\sum_{z_2}P(z_{2}|z_{1})P(x_2|z_2)P(x_3|z_2)\\
+    &=P(x_2,x_3|z_1)
+\end{aligned}</script><p>通过归纳可以推导出递推公式</p>
+<script type="math/tex; mode=display">\beta_{t}(i)=\sum_{j=1}^Na_{ij}b_j(x_{t+1})\beta_{t+1}(j)\qquad i=1,2,\dots,N</script><p>$\beta_t$ 即为在时刻 $t$ 状态为 $i$ 的条件下，从 $t+1$ 到 $T$ 的部分观测序列的概率，称为后向概率</p>
+<script type="math/tex; mode=display">\beta_{t}(i)=P(x_{t+1},x_{t+2},\dots,x_{T}|z_t=i,\lambda)</script><p>后向算法同样需要确定初始化状态和终止条件</p>
+<ol>
+<li>初始化状态 $\beta_T(i)=1$。</li>
+<li>对于每一时刻 $t=1,2,\dots,T-1$ 计算<script type="math/tex; mode=display">\beta_{t}(i)=\sum_{j=1}^Na_{ij}b_j(x_{t+1})\beta_{t+1}(j)\qquad i=1,2,\dots,N</script></li>
+<li>最终计算结束状态<script type="math/tex; mode=display">P(\mathbf{x}|\lambda)=\sum_{i=1}^N\pi(i)b_i(x_{1})\beta_{1}(i)</script></li>
+</ol>
+<h3 id="3-3-概率计算"><a href="#3-3-概率计算" class="headerlink" title="3.3 概率计算"></a>3.3 概率计算</h3><p>有了前向概率和后向概率，可以直接计算一些概率值。</p>
+<p>由前向概率和后向概率的定义可以知道</p>
+<script type="math/tex; mode=display">\alpha_{t}(i)\beta_{t}(i) = P(z_t=i,\mathbf{x}|\lambda)</script><p>因此，在某一时刻 $t$，观测序列的概率 $P(\mathbf{x}|\lambda)$ 可以由该时刻的前向和后向概率计算</p>
+<script type="math/tex; mode=display">P(\mathbf{x}|\lambda) = \sum_{i=1}^N\alpha_{t}(i)\beta_{t}(i)=\sum_{i=1}^N\sum_{j=1}^N\alpha_{t}(i)a_{ij}b_j(x_{t+1})\beta_{t+1}(j)</script><p>给定观测序列 $\mathbf{x}$ 和模型参数 $\lambda$，在时刻 $t$ 状态为 $i$ 的条件概率为</p>
+<script type="math/tex; mode=display">\gamma_t(i)=P(z_t=i|\mathbf{x},\lambda)=\frac{P(z_t=i,\mathbf{x}|\lambda)}{P(\mathbf{x}|\lambda)}</script><p>因此，由前向和后向概率可得</p>
+<script type="math/tex; mode=display">\gamma_t(i)=\frac{P(z_t=i,\mathbf{x}|\lambda)}{P(\mathbf{x}|\lambda)}=\frac{\alpha_{t}(i)\beta_{t}(i)}{\displaystyle \sum_{i=1}^N\alpha_{t}(i)\beta_{t}(i)}</script><p>给定观测序列 $\mathbf{x}$ 和模型参数 $\lambda$，在时刻 $t$ 状态为 $i$ 且时刻 $t+1$ 的状态为 $j$ 的条件概率为</p>
+<script type="math/tex; mode=display">\xi_t(i,j)=P(z_t=i,z_{t+1}=j|\mathbf{x},\lambda)</script><p>通过前向后向概率计算</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \xi_t(i,j)&=\frac{P(z_t=i,z_{t+1}=j,\mathbf{x}|\lambda)}{P(\mathbf{x}|\lambda)}\\
+    &= \frac{\alpha_{t}(i)a_{ij}b_j(x_{t+1})\beta_{t+1}(j)}{\displaystyle\sum_{i=1}^N\sum_{j=1}^N\alpha_{t}(i)a_{ij}b_j(x_{t+1})\beta_{t+1}(j)}
+\end{aligned}</script><p>给定观测序列 $\mathbf{x}$ ，状态 $i$ 出现的期望值</p>
+<script type="math/tex; mode=display">\sum_{t=1}^T\gamma_t(i)</script><p>给定观测序列 $\mathbf{x}$ ，由状态 $i$ 转移的期望值</p>
+<script type="math/tex; mode=display">\sum_{t=1}^{T-1}\gamma_t(i)</script><p>给定观测序列 $\mathbf{x}$ ，由状态 $i$ 转移的期望值</p>
+<script type="math/tex; mode=display">\sum_{t=1}^{T-1}\xi_t(i,j)</script><h2 id="4-学习算法"><a href="#4-学习算法" class="headerlink" title="4. 学习算法"></a>4. 学习算法</h2><p>隐马尔科夫模型参数的学习可分为监督学习与无监督学习。</p>
+<h3 id="4-1-监督学习"><a href="#4-1-监督学习" class="headerlink" title="4.1 监督学习"></a>4.1 监督学习</h3><p>在监督学习中，观测序列相当于特征值，状态序列相当于标注结果，假设给出数据集</p>
+<script type="math/tex; mode=display">D=\{(\mathbf x_1,\mathbf z_1),(\mathbf x_2,\mathbf z_2),...,(\mathbf x_S,\mathbf z_S)\}</script><p>其中，观测序列 $\mathbf x_i$ 与状态序列 $\mathbf z_i$ 长度均为 $T$，因此可以通过最大似然估计来确定隐马尔科夫模型的参数。</p>
+<p>假设样本中时刻 $t$ 处于状态 $i$ 时刻 $t+1$ 转移到状态 $j$ 的频数为 $c_{ij}$，状态空间的总数为 $N$，那么状态转移概率 $a_{ij}$ 的估计为 </p>
+<script type="math/tex; mode=display">\hat a_{ij}=\frac{c_{ij}}{\displaystyle \sum_{j=1}^{N}c_{ij}}\qquad i,j=1,2,\dots,N</script><p>设样本状态 $j$ 并观测为 $k$ 的频数是 $d_{ij}$，观测空间的总数为 $M$，那么状态为 $j$ 时观测为 $k$ 的概率估计为</p>
+<script type="math/tex; mode=display">\hat{b}_{j}(k)=\frac{d_{ij}}{\displaystyle \sum_{j=1}^{N}d_{ij}}\qquad k=1,2,\dots,M;j=1,2,\dots,N</script><p>初始状态概率 $\pi_i$ 的估计 $\hat{\pi}_i$ 为 $S$ 个样本中初始状态为 $i$ 的频率。</p>
+<h3 id="4-2-无监督学习"><a href="#4-2-无监督学习" class="headerlink" title="4.2 无监督学习"></a>4.2 无监督学习</h3><p>如果给定训练数据只包含 $S$ 个长度为 $T$ 的观测序列，而缺少状态序列，那么状态序列可以视为不可观测的隐藏变量，隐马尔科夫模型实际上就是一个存在隐藏变量的概率模型</p>
+<script type="math/tex; mode=display">P(\mathbf{x}|\lambda)=\sum_{\mathbf{z}}P(\mathbf{x}|\mathbf{z},\lambda)P(\mathbf{z}|\lambda)</script><p>我们可以使用 EM 算法求解上述概率模型，同时应用在 HMM 中的 EM 算法也称为 Baum-Welch 算法。由之前已经推导出，第 $k+1$ 次迭代只需要最大化下式即可。</p>
+<script type="math/tex; mode=display">\argmax_{\lambda} \sum_{\mathbf{z}}{P}(\mathbf{z}|\mathbf{X}, \lambda_k)\ln{P}(\mathbf{X}, \mathbf{z}|\lambda)</script><p>由隐马尔科夫三要素可以得到完全数据的似然函数为</p>
+<script type="math/tex; mode=display">P(\mathbf{x},\mathbf{z}|\lambda)=\pi(z_1)\prod_{t=2}^TA(z_{t}|z_{t-1})\prod_{t=1}^TB(x_t|z_t)</script><p>相应的对数似然函数为</p>
+<script type="math/tex; mode=display">\ln P(\mathbf{x},\mathbf{z}|\lambda)=\ln{\pi(z_1)}+\sum_{t=2}^T\ln A(z_{t}|z_{t-1})+\sum_{t=1}^T\ln B(x_t|z_t)</script><p>E 步，得到在 $\lambda_k$ 下的上述对数似然函数的期望</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    E_{\mathbf{z|\mathbf{X},\lambda}}\{\ln\mathcal{P}(\mathbf{X}, \mathbf{z}|\theta)\} &= \sum_{\mathbf{z}}{P}(\mathbf{z}|\mathbf{X}, \lambda_k)\ln{P}(\mathbf{X}, \mathbf{z}|\lambda) \\
+    &= \sum_{\mathbf{z}}{P}(\mathbf{z}|\mathbf{X}, \lambda_k)\ln{\pi(z_1)}+\sum_{\mathbf{z}}\sum_{t=2}^T{P}(\mathbf{z}|\mathbf{X}, \lambda_k)\ln A(z_{t}|z_{t-1})\\
+    &+\sum_{\mathbf{z}}\sum_{t=1}^T{P}(\mathbf{z}|\mathbf{X}, \lambda_k)\ln B(x_t|z_t)
+\end{aligned}</script><p>M 步，最大化上述期望，可以分别最大化等式中的每一项。</p>
+<p><strong>a. 更新初始状态概率 $\pi$</strong></p>
+<script type="math/tex; mode=display">\begin{aligned}
+    F_1(\pi;\lambda_k) &= \sum_{\mathbf{z}}{P}(\mathbf{z}|\mathbf{X}, \lambda_k)\ln{\pi(z_1)} \\
+    &= \sum_{z_1}{P}(z_1|\mathbf{X}, \lambda_k)\ln{\pi(z_1)}
+\end{aligned}</script><p>对上式进行优化，$\pi$ 是唯一变量，同时满足约束条件 $\displaystyle\sum_{z_1=i}^N\pi(z_1)=1$，利用拉格朗日乘子法，得到拉格朗日函数</p>
+<script type="math/tex; mode=display">\sum_{z_1}{P}(z_1|\mathbf{X}, \lambda_k)\ln{\pi(z_1)}+\theta\left(\displaystyle\sum_{z_1=i}^N\pi(z_1)-1\right)</script><p>对其求偏导数并令结果为 0</p>
+<script type="math/tex; mode=display">\frac{\partial}{\partial\pi(z_1)}\left[\sum_{z_1}{P}(z_1|\mathbf{X}, \lambda_k)\ln{\pi(z_1)}+\theta\left(\displaystyle\sum_{z_1}\pi(z_1)-1\right)\right]</script><p>可得</p>
+<script type="math/tex; mode=display">{P}(z_1|\mathbf{X}, \lambda_k)+\theta\pi(z_1)=0\qquad z_1=i=1,2,\dots,N</script><p>对上式进行合并</p>
+<script type="math/tex; mode=display">\sum_{z_1}{P}(z_1|\mathbf{X}, \lambda_k)+\theta\sum_{z_1}\pi(z_1)=0</script><p>条件概率之和为 1，最终可得</p>
+<script type="math/tex; mode=display">\theta=-1</script><p>因此求得</p>
+<script type="math/tex; mode=display">\pi(z_1)={P}(z_1|\mathbf{X}, \lambda_k)</script><p>由前面已经得到</p>
+<script type="math/tex; mode=display">{P}(z_t=i|\mathbf{X}, \lambda_k)=\gamma_t(i)=\frac{\alpha_{t}(i)\beta_{t}(i)}{\displaystyle \sum_{i=1}^N\alpha_{t}(i)\beta_{t}(i)}</script><p>因此解的</p>
+<script type="math/tex; mode=display">\pi(z_1=i)=\gamma_1(i)</script><p><strong>b. 更新状态转移概率 $A$</strong></p>
+<script type="math/tex; mode=display">\begin{aligned}
+    F_2(A;\lambda_k) &= \sum_{\mathbf{z}}\sum_{t=2}^T{P}(\mathbf{z}|\mathbf{X}, \lambda_k)\ln A(z_{t}|z_{t-1}) \\
+    &= \sum_{t=2}^T\sum_{i,j}{P}(z_{t-1}=i,z_t=j|\mathbf{X}, \lambda_k)\ln{A(z_{t}=j|z_{t-1}=i)}
+\end{aligned}</script><p>前面已经求得</p>
+<script type="math/tex; mode=display">\xi_t(i,j)=P(z_t=i,z_{t+1}=j|\mathbf{x},\lambda)</script><p>因此</p>
+<script type="math/tex; mode=display">F_2(A;\lambda_k)=\sum_{i,j}\sum_{t=2}^{T}\xi_{t-1}(i,j)\ln{a_{ij}}</script><p>如同计算初始状态概率，需要满足约束条件 $\displaystyle \sum_j a_{ij}=1$，通过拉格朗日乘子法得到拉格朗日函数</p>
+<script type="math/tex; mode=display">\sum_{i,j}\sum_{t=2}^{T}\xi_{t-1}(i,j)\ln{a_{ij}}+\theta\left(\displaystyle\sum_{j=1}^Na_{ij}-1\right)</script><p>偏导数</p>
+<script type="math/tex; mode=display">\sum_{t=2}^{T}\xi_{t-1}(i,j)+\theta a_{ij}=0 \qquad i,j=1,2,\dots,N</script><p>根据 $j$ 的所有取值合并上述公式</p>
+<script type="math/tex; mode=display">\sum_j\sum_{t=2}^{T}\xi_{t-1}(i,j)+\theta=0 \qquad i=1,2,\dots,N</script><p>根据条件概率</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \sum_j\sum_{t=2}^{T}\xi_{t-1}(i,j)&=\sum_j\sum_{t=2}^{T}P(z_{t-1}=i,z_{t}=j|\mathbf{x},\lambda)\\
+    &=\sum_{t=2}^{T}\sum_jP(z_{t-1}=i,z_{t}=j|\mathbf{x},\lambda)\\
+    &=\sum_{t=2}^{T}P(z_{t-1}=i|\mathbf{x},\lambda)\\
+    &=\sum_{t=2}^{T}\gamma_{t-1}(i)\\
+\end{aligned}</script><p>因此</p>
+<script type="math/tex; mode=display">\theta=-\sum_{t=2}^{T}\gamma_{t-1}(i)</script><p>最终解得</p>
+<script type="math/tex; mode=display">a_{ij}=\frac{\displaystyle\sum_{t=2}^{T}\xi_{t-1}(i,j)}{\displaystyle\sum_{t=2}^{T}\gamma_{t-1}(i)}</script><p><strong>c. 更新观测概率 $B$</strong></p>
+<script type="math/tex; mode=display">\begin{aligned}
+    F_3(B;\lambda_k) &= \sum_{\mathbf{z}}\sum_{t=1}^T{P}(\mathbf{z}|\mathbf{X}, \lambda_k)\ln B(x_t|z_t) \\
+    &= \sum_{t=1}^T\sum_{z_t}{P}(z_t|\mathbf{X}, \lambda_k)\ln{B(x_t|z_t)}\\
+    &= \sum_{t=1}^T\sum_{j}\gamma_{t}(j)\ln{b_j(x_t))}\\
+\end{aligned}</script><p>同样具有约束条件 $\displaystyle \sum_{k=1}^Mb_j(k)=1$，因此拉格朗日函数</p>
+<script type="math/tex; mode=display">\sum_{t=1}^T\sum_{j}\gamma_{t}(j)\ln{b_j(x_t)}+\theta\left(\sum_{k=1}^Mb_j(k)-1\right)</script><p>偏导数</p>
+<script type="math/tex; mode=display">\sum_{t=1}^{T}\gamma_{t}(j)I(x_t=k)+\theta b_j(k)=0 \qquad k=1,2,\dots,M;j=1,2,\dots,N</script><p>合并 $k$ 个方程，解得 $\displaystyle\theta=-\sum_{t=1}^{T}\gamma_{t}(j)$，因此</p>
+<script type="math/tex; mode=display">b_j(k)=\frac{\displaystyle \sum_{t=1}^{T}\gamma_{t}(j)I(x_t=k)}{\displaystyle \sum_{t=1}^{T}\gamma_{t}(j)}</script><blockquote>
+<p>注意这里是对 $k$ 求和的结果为 $1$，同时 $b_j(k)$ 相当于固定变量，而 $b_j(x_t)$ 只有在 $x_t=k$ 的情况下才是同一个值，才具有偏导数。</p>
+</blockquote>
+<p><strong>总结</strong></p>
+<h2 id="5-预测算法"><a href="#5-预测算法" class="headerlink" title="5. 预测算法"></a>5. 预测算法</h2><p>已知 $\mathbf{x},\lambda$，求得状态概率 $P(\mathbf{z}|\mathbf{x},\lambda)$ 即为预测问题。</p>
+<p>隐马尔科夫模型预测分为近似算法和维特比算法，近似算法相当于路径规划中每走一步只选最短的路线，也就是贪婪算法，而维特比算法则相当于动态规划算法。</p>
+<h3 id="5-1-近似算法"><a href="#5-1-近似算法" class="headerlink" title="5.1 近似算法"></a>5.1 近似算法</h3><p>由前已知</p>
+<script type="math/tex; mode=display">\gamma_t(i)=P(z_t=i|\mathbf{x},\lambda)=\frac{\alpha_{t}(i)\beta_{t}(i)}{\displaystyle \sum_{i=1}^N\alpha_{t}(i)\beta_{t}(i)}</script><p>因此，在给定 $\mathbf{x},\lambda$ 的情况下，想要得到隐藏的状态序列，可以在每一时刻 $t$ 选择最大的条件概率 $P(z_t=i|\mathbf{x},\lambda)$ 对应的隐藏状态 $\hat{z}_t$，由于分母都一样，因此只需要考虑分子即可，即</p>
+<script type="math/tex; mode=display">\hat{z}_t=\argmax_{i}(\alpha_{t}(i)\beta_{t}(i))</script><p>由此得到状态序列</p>
+<script type="math/tex; mode=display">{\mathbf{\hat z}}=(\hat{z}_1,\hat{z}_2,\cdots,\hat{z}_t)</script><h3 id="5-2-维特比算法"><a href="#5-2-维特比算法" class="headerlink" title="5.2 维特比算法"></a>5.2 维特比算法</h3><p>近似算法相当于单步最优，要想得到全局最优的结果，则需要根据联合分布函数得到联合概率最大对应的状态，即</p>
+<script type="math/tex; mode=display">{\mathbf{\hat z}}=\argmax_{\mathbf{z}} P(\mathbf{z},\mathbf{x}|\lambda)</script><p>我们分步求取当前的联合概率，假设</p>
+<script type="math/tex; mode=display">\mathbf{z}_t = (z_1,z_2,\dots,z_t)</script><p>在最终预测的时候模型参数 $\lambda$ 确定，因此可以省略。联合概率为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    P(\mathbf{z}_t,\mathbf{x}_t)&=P(\mathbf{z}_t,\mathbf{x}_t|\mathbf{z}_{t-1},\mathbf{x}_{t-1})P(\mathbf{z}_{t-1},\mathbf{x}_{t-1})\\
+    &=P(z_t,x_t|\mathbf{z}_{t-1},\mathbf{x}_{t-1})P(\mathbf{z}_{t-1},\mathbf{x}_{t-1})\\
+    &=P(x_t|z_t,\mathbf{z}_{t-1},\mathbf{x}_{t-1})P(z_t|\mathbf{z}_{t-1},\mathbf{x}_{t-1})P(\mathbf{z}_{t-1},\mathbf{x}_{t-1})\\
+    &=P(x_t|z_t)P(z_t|z_{t-1})P(\mathbf{z}_{t-1},\mathbf{x}_{t-1})\\
+    &=B(x_t|z_t)A(z_t|z_{t-1})P(\mathbf{z}_{t-1},\mathbf{x}_{t-1})\\
+\end{aligned}</script><p>定义</p>
+<script type="math/tex; mode=display">d_t(i)=\max_{\mathbf{z}_{t-1}}P(\mathbf{z}_{t-1},z_t=i,\mathbf{x}_{t})</script><p>对于 $t=2,\dots,T$ 且 $i=1,\dots,N$，$d_t(i)$ 存在以下递归关系</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    d_t(i)&=\max_{\mathbf{z}_{t-1}}P(\mathbf{z}_{t-1},z_t=i,\mathbf{x}_{t})\\
+    &=\max_{\mathbf{z}_{t-1}}B(x_t|z_t=i)A(z_t=i|z_{t-1})P(\mathbf{z}_{t-1},\mathbf{x}_{t-1})\\
+    &=B(x_t|z_t=i)\max_{z_{t-1}}A(z_t=i|z_{t-1})\max_{\mathbf{z}_{t-2}}P(\mathbf{z}_{t-2},z_{t-1}=j,\mathbf{x}_{t-1})\\
+    &=B(x_t|z_t=i)\max_{z_{t-1}}A(z_t=i|z_{t-1})d_{t-1}(z_{t-1}=j)\\
+\end{aligned}</script><p>再确定初始化和结束条件，最后完善维特比算法</p>
+<p><strong>维特比算法</strong></p>
+<ol>
+<li>初始化，对于 $i=1,2,\dots,N$，计算 $d_1(i)=\pi(i)b_i(x_1)$</li>
+<li>对于 $t=2,3,\dots,T$，计算<script type="math/tex; mode=display">d_t(i)=b_i(x_t)\max_{j}d_{t-1}(j)a_{ji}\qquad i=1,2,\dots,N</script><script type="math/tex; mode=display">f_t(i)=\argmax_jd_{t-1}(j)a_{ji}\qquad i=1,2,\dots,N</script></li>
+<li>最终得到 $\displaystyle z_T^*=\argmax_jd_T(j)$</li>
+<li>回溯，对于 $t=T-1,\dots,1$<script type="math/tex; mode=display">z_{t}^*=f_{t+1}(z_{t+1}^*)</script></li>
+<li>返回 $\mathbf z^<em>=(z^</em>_1, z^<em>_2, \dots, z^</em>_T)$</li>
+</ol>
+<p>当 $T$ 很大时，计算概率时的舍入误差可能会成为问题，为避免问题，可以使用对数计算</p>
+<script type="math/tex; mode=display">d_t(i)=\max_{\mathbf{z}_{t-1}}\log P(\mathbf{z}_{t-1},z_t=i,\mathbf{x}_{t})</script><p>递推公式则为</p>
+<script type="math/tex; mode=display">d_t(i)=\log b_i(x_t)+ \max_{j}\left\{d_{t-1}(j)+\log a_{ji}\right\}\qquad i=1,2,\dots,N</script><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Hidden_Markov_model">1. Hidden Markov model - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26811689">2. 隐马尔科夫模型（HMM）一基本模型与三个基本问题 - zhihu</a><br><a target="_blank" rel="noopener" href="https://www.stats.ox.ac.uk/~caron/teaching/sb1b/lecturehmm.pdf">3. Lecture notes: Hidden Markov Models</a><br><a target="_blank" rel="noopener" href="http://faculty.washington.edu/yenchic/18A_stat516/Lec9_HMM.pdf">4. Lecture 9: Hidden Markov Model</a><br><a target="_blank" rel="noopener" href="https://www.intechopen.com/chapters/15369">5. History and Theoretical Basicsof Hidden Markov Models</a><br><a target="_blank" rel="noopener" href="https://web.stanford.edu/~jurafsky/slp3/A.pdf">6. Hidden Markov Models</a></p>
+</blockquote>
+
+
+                            <!-- Meta -->
+                            <div class="post-meta">
+                                <hr>
+                                <br>
+                                <div class="post-tags">
+                                    
+                                                
+
+<a href="/categories/Machine-learning/">Machine learning</a>
+
+                                                    
+                                </div>
+                                <div class="post-date">
+                                    
+                                        2022-04-22
+                                    
+                                </div>
+                            </div>
+                    </div>
+
+                    <!-- Comments -->
+                    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                        <!-- Disqus Comments -->
+
+
+                    </div>
+                </div>
+            </div>
+        </article>
+</section>
+
+<!-- Image viewer-->
+
+    <!-- Custom picture view-->
+    <link href="/css/viewer.min.css" rel="stylesheet" />
+    <script
+      src="/js/viewer.min.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    
+    <script type="text/javascript">
+      // set image viewer
+      Viewer.setDefaults({
+        zoomRatio: [0.5],
+        navbar: false,
+        toolbar: false,
+        button: false,
+        title: [2, (image, imageData) => `${image.alt}`],
+        show: function() {
+          this.viewer.zoomTo(0.5);
+        }
+      });
+      var imageList = document.getElementsByTagName("img");
+      Array.prototype.forEach.call(imageList, element => {
+        var viewer = new Viewer(element);
+      });
+    </script>
+
+    
+
+<!-- TOC -->
+
+    <aside id="article-toc" role="navigation" class="fixed">
+        <div id="article-toc-inner">
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="toc-text">隐马尔科夫模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5"><span class="toc-text">2. 问题引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87%E8%AE%A1%E7%AE%97%E7%AE%97%E6%B3%95"><span class="toc-text">3. 先验概率计算算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%89%8D%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-text">3.1 前向算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%90%8E%E5%90%91%E7%AE%97%E6%B3%95"><span class="toc-text">3.2 后向算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%A6%82%E7%8E%87%E8%AE%A1%E7%AE%97"><span class="toc-text">3.3 概率计算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95"><span class="toc-text">4. 学习算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="toc-text">4.1 监督学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0"><span class="toc-text">4.2 无监督学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E9%A2%84%E6%B5%8B%E7%AE%97%E6%B3%95"><span class="toc-text">5. 预测算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E8%BF%91%E4%BC%BC%E7%AE%97%E6%B3%95"><span class="toc-text">5.1 近似算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E7%BB%B4%E7%89%B9%E6%AF%94%E7%AE%97%E6%B3%95"><span class="toc-text">5.2 维特比算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol>
+        </div>
+    </aside>
+
+    <!-- Scripts -->
+    <script type="text/javascript">
+    console.log("© He1o 2021-" + new Date().getFullYear());
+</script>
+  
+    <!-- Google Analytics -->
+    
+
+    <!-- Service Worker -->
+    <!-- if using service worker -->
+
+    
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+
+</html>
