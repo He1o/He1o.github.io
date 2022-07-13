@@ -14,7 +14,7 @@
     <!--Description-->
     
         <meta name="description" content="人工神经网络1. 历史背景1943 年，Warren McCulloch 和 Walter Pitts 提出形式神经元模型。 
-在 1940 年代后期，D. O. Hebb[4] 基于神经可塑性机制创建了一个学习假设，即赫布学习。 Farley 和 Wesley A. Clark[5] (1954)">
+在 1940 年代后期，D. O. Hebb[4] 基于神经可塑性机制创建了一个学习假设，即赫布学习。 Farley 和 Wesley A. Clark[5] \left(">
     
 
     <!--Author-->
@@ -95,30 +95,31 @@
                     <div class="post-content col-lg-10  col-md-10 ">
                         <span id="more"></span>
 <h1 id="人工神经网络"><a href="#人工神经网络" class="headerlink" title="人工神经网络"></a>人工神经网络</h1><h2 id="1-历史背景"><a href="#1-历史背景" class="headerlink" title="1. 历史背景"></a>1. 历史背景</h2><p>1943 年，Warren McCulloch 和 Walter Pitts 提出形式神经元模型。 </p>
-<p>在 1940 年代后期，D. O. Hebb[4] 基于神经可塑性机制创建了一个学习假设，即赫布学习。 Farley 和 Wesley A. Clark[5] (1954) 首先使用计算机器，然后称为“计算器”来模拟 Hebbian 网络。 </p>
+<p>在 1940 年代后期，D. O. Hebb[4] 基于神经可塑性机制创建了一个学习假设，即赫布学习。 Farley 和 Wesley A. Clark[5] \left(1954\right) 首先使用计算机器，然后称为“计算器”来模拟 Hebbian 网络。 </p>
 <p>1958 年，心理学家 Frank Rosenblatt 发明了感知器，这是第一个人工神经网络，由美国海军研究办公室资助。</p>
 <p>1969 年，Minsky 和 ​​Papert 提出感知机无法处理线性不可分问题，他们发现基本感知器无法处理异或电路，并且计算机缺乏足够的能力来处理有用的神经网络。</p>
 <p>1965 年，Ivakhnenko 和 Lapa 提出第一个具有多层的神经网络。</p>
 <p>1960 年，Henry J. Kelley 和 Arthur L. Bryson 使用动态规划原理在控制理论的背景下得出连续反向传播的基础。</p>
 <p>1986 年，Rumelhart, Hinton &amp; Williams 再次提出反向传播一词，并阐述和推广使其在神经网络中的普遍使用，但该技术被独立地重新发现了很多次。</p>
 <h2 id="2-基础预备"><a href="#2-基础预备" class="headerlink" title="2 基础预备"></a>2 基础预备</h2><h3 id="2-1-激活函数"><a href="#2-1-激活函数" class="headerlink" title="2.1 激活函数"></a>2.1 激活函数</h3><p><strong>sigmoid 函数</strong></p>
-<p>该函数将取值为 $(-\infty,+\infty)$ 的数映射到 $(0,1)$ 之间。sigmoid 的公式为 </p>
-<script type="math/tex; mode=display">g(z)=\frac{1}{1+e^{-z}}</script><p>导函数为</p>
-<script type="math/tex; mode=display">g'(z)=g(z)(1-g(z))</script><p>sigmoid函数存在的问题在于</p>
+<p>该函数将取值为 $\left(-\infty,+\infty\right)$ 的数映射到 $\left(0,1\right)$ 之间。sigmoid 的公式为 </p>
+<script type="math/tex; mode=display">g\left(z\right)=\frac{1}{1+e^{-z}}</script><p>导函数为</p>
+<script type="math/tex; mode=display">g'\left(z\right)=g\left(z\right)\left(1-g\left(z\right)\right)</script><p>sigmoid函数存在的问题在于</p>
 <ol>
 <li>需要计算指数，计算时间花费多。</li>
 <li>当取值非常大或非常小时，sigmoid 的导数接近于 0，有可能会产生梯度消失。</li>
 <li>函数的输出值不是以 0 为均值，不利于下层的计算，因此最好不用于隐藏层，可以作为输出层使用。</li>
 </ol>
 <p><strong>tanh 函数</strong></p>
-<p>将取值为 $(-\infty,+\infty)$ 的数映射到 $(-1,1)$ 之间。tanh 的公式为</p>
-<script type="math/tex; mode=display">g(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}}</script><p>tanh 函数的导函数为</p>
-<script type="math/tex; mode=display">g'(z)=1-g(z)^2</script><p>tanh 函数均值为 0，弥补了 sigmoid 函数均值为 $0.5$ 的缺点。但由于 $g’(z)$ 在两端取值接近于 0，因此也会有梯度消失的情况发生。</p>
+<p>将取值为 $\left(-\infty,+\infty\right)$ 的数映射到 $\left(-1,1\right)$ 之间。tanh 的公式为</p>
+<script type="math/tex; mode=display">g\left(z\right)=\frac{e^z-e^{-z}}{e^z+e^{-z}}</script><p>tanh 函数的导函数为</p>
+<script type="math/tex; mode=display">g'\left(z\right)=1-g\left(z\right)^2</script><p>tanh导数具有较大的值域，可以缓解梯度消失的情况</p>
+<p>tanh 函数均值为 0，弥补了 sigmoid 函数均值为 $0.5$ 的缺点。但由于 $g’\left(z\right)$ 在两端取值接近于 0，因此也会有梯度消失的情况发生。</p>
 <p><strong>ReLU 函数</strong></p>
 <p>ReLU 函数又称为修正线性单元（Rectified Linear Unit），是一种分段线性函数，其弥补了 sigmoid 函数以及 tanh 函数的梯度消失问题。</p>
 <p>ReLU 函数的公式为：</p>
 <script type="math/tex; mode=display">{\displaystyle 
-g(z)={
+g\left(z\right)={
     \begin{cases}
         z&z\geq 0\\
         0&z<0
@@ -126,7 +127,7 @@ g(z)={
     }
 }</script><p>ReLU 函数的导函数为</p>
 <script type="math/tex; mode=display">{\displaystyle 
-g‘(z)={
+g‘\left(z\right)={
     \begin{cases}
         1&z\geq 0\\
         0&z<0
@@ -136,16 +137,16 @@ g‘(z)={
 <p><strong>Leaky ReLU 函数</strong></p>
 <p>公式为</p>
 <script type="math/tex; mode=display">{\displaystyle 
-g(z)={
+g\left(z\right)={
     \begin{cases}
         z&z\geq 0\\
         az&z<0
     \end{cases}
     }
-}</script><p>其中，$a$ 的取值在 $(0,1)$ 之间。</p>
+}</script><p>其中，$a$ 的取值在 $\left(0,1\right)$ 之间。</p>
 <p>导函数为</p>
 <script type="math/tex; mode=display">{\displaystyle 
-g(z)={
+g\left(z\right)={
     \begin{cases}
         1&z\geq 0\\
         a&z<0
@@ -154,55 +155,105 @@ g(z)={
 }</script><p>Leaky ReLU 函数解决了ReLU函数在输入为负的情况下产生的梯度消失问题。</p>
 <p><strong>Sfotmax 函数</strong></p>
 <p>softmax 函数通常被认为是多个 sigmoid 的组合。当神经网络用于二分类问题时，只需要 sigmoid 输出一个区间在 $[0,1]$ 的值即可。当用于多分类问题时，输出层的神经元数量和类别总数量是一样的，通过 softmax 函数输出每一个类别的概率。</p>
-<script type="math/tex; mode=display">g(\mathbf{z})_j=\frac{e^{z_j}}{\displaystyle \sum^K_{k=1}e^{z_k}} \qquad j=1,2,\dots,K</script><p>求导函数需要分情况讨论，当 $z_i=z_j$ 时</p>
+<script type="math/tex; mode=display">g\left(\mathbf{z}\right)_j=\frac{e^{z_j}}{\displaystyle \sum^K_{k=1}e^{z_k}} \qquad j=1,2,\dots,K</script><p>求导函数需要分情况讨论，当 $z_i=z_j$ 时</p>
 <script type="math/tex; mode=display">\begin{aligned}
-    g'(z_i=z_j)&=\frac{e^{z_j}\sum^K_{k=1}e^{z_k}-(e^{z_j})^2}{(\sum^K_{k=1}e^{z_k})^2} \\
-    &= g(\mathbf{z})_j-g(\mathbf{z})_j^2 \\
-    &=g(\mathbf{z})_j(1-g(\mathbf{z})_j)
+    g'\left(z_i=z_j\right)&=\frac{e^{z_j}\sum^K_{k=1}e^{z_k}-\left(e^{z_j}\right)^2}{\left(\sum^K_{k=1}e^{z_k}\right)^2} \\
+    &= g\left(\mathbf{z}\right)_j-g\left(\mathbf{z}\right)_j^2 \\
+    &=g\left(\mathbf{z}\right)_j\left(1-g\left(\mathbf{z}\right)_j\right)
 \end{aligned}</script><p>当 $z_i\ne z_j$ 时</p>
 <script type="math/tex; mode=display">\begin{aligned}
-    g'(z_i\ne z_j)&=\frac{0-e^{z_j}e^{z_i}}{(\sum^K_{k=1}e^{z_k})^2} \\
-    &= -g(\mathbf{z})_j\cdot g(\mathbf{z})_i \\
+    g'\left(z_i\ne z_j\right)&=\frac{0-e^{z_j}e^{z_i}}{\left(\sum^K_{k=1}e^{z_k}\right)^2} \\
+    &= -g\left(\mathbf{z}\right)_j\cdot g\left(\mathbf{z}\right)_i \\
 \end{aligned}</script><p>因此偏导数的最终表达式为</p>
 <script type="math/tex; mode=display">{\displaystyle 
-\frac{\partial g(\mathbf{z})_j}{\partial z_i}={
+\frac{\partial g\left(\mathbf{z}\right)_j}{\partial z_i}={
     \begin{cases}
-        g(\mathbf{z})_j(1-g(\mathbf{z})_j)&z_i=z_j\\
-        -g(\mathbf{z})_j\cdot g(\mathbf{z})_i&z_i\ne z_j
+        g\left(\mathbf{z}\right)_j\left(1-g\left(\mathbf{z}\right)_j\right)&z_i=z_j\\
+        -g\left(\mathbf{z}\right)_j\cdot g\left(\mathbf{z}\right)_i&z_i\ne z_j
     \end{cases}
     }}</script><h3 id="2-2-损失函数"><a href="#2-2-损失函数" class="headerlink" title="2.2 损失函数"></a>2.2 损失函数</h3><p>损失函数用来评价模型的预测值和真实值不一样的程度，损失函数越好，通常模型的性能越好。不同的模型用的损失函数一般也不一样。</p>
 <p>损失函数分为经验风险损失函数和结构风险损失函数。经验风险损失函数指预测结果和实际结果的差别，结构风险损失函数是指经验风险损失函数加上正则项。</p>
 <p>平方损失函数</p>
-<script type="math/tex; mode=display">L = \sum_k\frac{1}{2}(r_k-y_k)^2</script><p>交叉熵损失函数</p>
+<script type="math/tex; mode=display">L = \sum_k\frac{1}{2}\left(r_k-y_k\right)^2</script><p>均方误差是与单位高斯分布的输出相关联的交叉熵损失，也就是高斯分布最大似然函数的相反数。</p>
+<p>交叉熵损失函数</p>
 <script type="math/tex; mode=display">L = -\sum_kr_k\ln y_k</script><p>交叉熵函数实际上是多项式分布的最大似然函数加上一个负号，将最大值问题转换为损失值最小的问题，本质是一样的。在多分类问题中，输出是 softmax 函数，如同逻辑回归一样。</p>
 <p>假设 softmax 函数的输入是 $z_i$，推导一下交叉熵损失函数的偏导数</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial z_i}=-\sum_k\frac{r_k}{g(\mathbf{z})_k}\frac{\partial g(\mathbf{z})_k}{\partial z_i}</script><p>分为 $k=i$ 与 $k\ne i$ 进行求和</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial z_i}=-\sum_k\frac{r_k}{g\left(\mathbf{z}\right)_k}\frac{\partial g\left(\mathbf{z}\right)_k}{\partial z_i}</script><p>分为 $k=i$ 与 $k\ne i$ 进行求和</p>
 <script type="math/tex; mode=display">\begin{aligned}
-    \frac{\partial L}{\partial z_i}&=\sum_{k\ne i}\frac{r_k}{g(\mathbf{z})_k}g(\mathbf{z})_k\cdot g(\mathbf{z})_i - \frac{r_i}{g(\mathbf{z})_i}g(\mathbf{z})_i(1-g(\mathbf{z})_i)\\
-    &=\sum_{k\ne i}r_kg(\mathbf{z})_i+r_ig(\mathbf{z})_i-r_i\\
-    &=g(\mathbf{z})_i\sum_k r_k- r_i
+    \frac{\partial L}{\partial z_i}&=\sum_{k\ne i}\frac{r_k}{g\left(\mathbf{z}\right)_k}g\left(\mathbf{z}\right)_k\cdot g\left(\mathbf{z}\right)_i - \frac{r_i}{g\left(\mathbf{z}\right)_i}g\left(\mathbf{z}\right)_i\left(1-g\left(\mathbf{z}\right)_i\right)\\
+    &=\sum_{k\ne i}r_kg\left(\mathbf{z}\right)_i+r_ig\left(\mathbf{z}\right)_i-r_i\\
+    &=g\left(\mathbf{z}\right)_i\sum_k r_k- r_i
 \end{aligned}</script><p>多分类问题都采用 one-hot 编码，只有一个类别的标签值为 $1$，其余为 $0$，因此</p>
 <script type="math/tex; mode=display">\sum_k r_k=1</script><p>最终得到</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial z_i}=g(\mathbf{z})_i-r_i</script><h2 id="2-多层感知机模型"><a href="#2-多层感知机模型" class="headerlink" title="2. 多层感知机模型"></a>2. 多层感知机模型</h2><p>人工神经网络实际上就是多层感知机模型。感知机最大局限性在于它是一个线性分类器，无法处理非线性分类的问题，而多层感知机就可以解决这样的问题。多层感知器指的是由多层结构的感知器递阶组成的输入值向前传播的网络，也被称为前馈网络或正向传播网络。</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial z_i}=g\left(\mathbf{z}\right)_i-r_i</script><h2 id="2-多层感知机模型"><a href="#2-多层感知机模型" class="headerlink" title="2. 多层感知机模型"></a>2. 多层感知机模型</h2><p>人工神经网络实际上就是多层感知机模型。感知机最大局限性在于它是一个线性分类器，无法处理非线性分类的问题，而多层感知机就可以解决这样的问题。多层感知器指的是由多层结构的感知器递阶组成的输入值向前传播的网络，也被称为前馈网络或正向传播网络。</p>
 <p>多层感知机的思想就是一个函数不行，就使用多个简单函数共同作用。例如三层的感知机模型，由输入层、中间层和输出层组成。中间层的感知器通过权重与输入层的各单元（unit）相连接，通过阈值函数计算中间层各单元的输出值。中间层与输出层之间同样是通过权重相连接。</p>
 <p>那么，如何确定各层之间的连接权重呢？单层感知器是通过误差修正学习确定输入层与输出层之间的连接权重的。初期的多层感知器使用随机数确定输入层与中间层之间的连接权重，只对中间层与输出层之间的连接权重进行误差修正学习。所以，就会出现输入数据虽然不同，但是中间层的输出值却相同，以至于无法准确分类的情况。直到误差反向传播算法的提出，多层感知机才被广泛应用。</p>
 <h3 id="2-1-前向传播"><a href="#2-1-前向传播" class="headerlink" title="2.1 前向传播"></a>2.1 前向传播</h3><p>多层感知机每一层都有多个神经元，也称为单元。每个单元接受 $n$ 个输入并产生一个输出，并且不同的单元具有各自的权重和偏置。假设输入为 $\mathbf{x}=[x_1,x_2,\cdots,x_n]$，单元 $j$ 的权重为 $\mathbf{w}_j = [w_{j1},w_{j2},\cdots,w_{jn}]$，偏置为 $b_j$，则输出为</p>
 <script type="math/tex; mode=display">z_j=\sum_i w_{ji}x_i+b_j</script><p>为了保证输出的值在区间 $[0,1]$ 之中，并且引入非线性变换，通常再将线性变换的输出值 $z_j$ 放入到激活函数当中。同时，这一层的输出可以作为下一层的输入，因此</p>
-<script type="math/tex; mode=display">x_j=g(z_j)</script><p>我们再定义一层输出层</p>
+<script type="math/tex; mode=display">x_j=g\left(z_j\right)</script><p>我们再定义一层输出层</p>
 <script type="math/tex; mode=display">z_k=\sum_j w_{kj}x_j+b_k</script><p>最终输出结果为</p>
-<script type="math/tex; mode=display">y_k=g(z_k)</script><p>输出结果可以与标注结果进行比对，通过损失函数可以衡量结果的准确性。在这里使用平方误差作为损失函数。</p>
-<script type="math/tex; mode=display">L=\sum_k\frac{1}{2}(r_k-y_k)^2</script><h3 id="2-2-反向传播"><a href="#2-2-反向传播" class="headerlink" title="2.2 反向传播"></a>2.2 反向传播</h3><p>一步一步求偏导数即可，首先是损失函数关于输出 $y_k$ 的导数</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial y_k}=-(r_k-y_k)</script><p>激活函数都使用 sigmoid 函数，因此</p>
-<script type="math/tex; mode=display">\frac{\partial y_k}{\partial z_k}=g'(z)=g(z)(1-g(z))=y_k(1-y_k)</script><p>同时</p>
+<script type="math/tex; mode=display">y_k=g\left(z_k\right)</script><p>输出结果可以与标注结果进行比对，通过损失函数可以衡量结果的准确性。在这里使用平方误差作为损失函数。</p>
+<script type="math/tex; mode=display">L=\sum_k\frac{1}{2}\left(r_k-y_k\right)^2</script><h3 id="2-2-反向传播"><a href="#2-2-反向传播" class="headerlink" title="2.2 反向传播"></a>2.2 反向传播</h3><p>一步一步求偏导数即可，首先是损失函数关于输出 $y_k$ 的导数</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial y_k}=-\left(r_k-y_k\right)</script><p>激活函数都使用 sigmoid 函数，因此</p>
+<script type="math/tex; mode=display">\frac{\partial y_k}{\partial z_k}=g'\left(z\right)=g\left(z\right)\left(1-g\left(z\right)\right)=y_k\left(1-y_k\right)</script><p>同时</p>
 <script type="math/tex; mode=display">\frac{\partial z_k}{\partial w_{kj}}=x_j</script><p>所以输出层权重的偏导数为</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{kj}}=\frac{\partial L}{\partial y_k}\frac{\partial y_k}{\partial z_k}\frac{\partial z_k}{\partial w_{kj}}=-(r_k-y_k)y_k(1-y_k)x_j</script><p>类似的可以得到偏置</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial b_k}=\frac{\partial L}{\partial y_k}\frac{\partial y_k}{\partial z_k}\frac{\partial z_k}{\partial b_k}=-(r_k-y_k)y_k(1-y_k)</script><p>将偏导数再次向前转播</p>
-<script type="math/tex; mode=display">\frac{\partial z_k}{\partial w_{ji}}=\frac{\partial z_k}{\partial x_j}\frac{\partial x_j}{\partial z_j}\frac{\partial z_j}{\partial w_{ji}}=w_{kj}x_j(1-x_j)x_i</script><p>同时，对于输入层权重的偏导数是所有输出单元的导数的加权求和</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{kj}}=\frac{\partial L}{\partial y_k}\frac{\partial y_k}{\partial z_k}\frac{\partial z_k}{\partial w_{kj}}=-\left(r_k-y_k\right)y_k\left(1-y_k\right)x_j</script><p>类似的可以得到偏置</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial b_k}=\frac{\partial L}{\partial y_k}\frac{\partial y_k}{\partial z_k}\frac{\partial z_k}{\partial b_k}=-\left(r_k-y_k\right)y_k\left(1-y_k\right)</script><p>将偏导数再次向前转播</p>
+<script type="math/tex; mode=display">\frac{\partial z_k}{\partial w_{ji}}=\frac{\partial z_k}{\partial x_j}\frac{\partial x_j}{\partial z_j}\frac{\partial z_j}{\partial w_{ji}}=w_{kj}x_j\left(1-x_j\right)x_i</script><p>同时，对于输入层权重的偏导数是所有输出单元的导数的加权求和</p>
 <script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ji}}=\sum_k\frac{\partial L}{\partial y_k}\frac{\partial y_k}{\partial z_k}\frac{\partial z_k}{\partial w_{ji}}</script><p>因此</p>
-<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ji}}=\sum_k-(r_k-y_k)y_k(1-y_k)w_{kj}x_j(1-x_j)x_i</script><p>最终不同层权重的调节值为</p>
-<script type="math/tex; mode=display">\triangle w_{kj}=\eta(r_k-y_k)y_k(1-y_k)x_j</script><script type="math/tex; mode=display">\triangle w_{ji}=\eta\sum_k\left[(r_k-y_k)y_k(1-y_k)w_{kj}\right]x_j(1-x_j)x_i</script><p>$\eta$ 为取值 $(0,1)$ 之间的学习率。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Artificial_neural_network">1. Artificial neural network - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Backpropagation">2. Backpropagation - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/80730031">3. 深度学习中【激活函数】存在的意义是什么？</a><br><a target="_blank" rel="noopener" href="https://www.datalearner.com/blog/1051508750742453">4. 深度学习基础——激活函数以及什么时候该使用激活函数</a><br><a target="_blank" rel="noopener" href="https://www.analyticsvidhya.com/blog/2020/01/fundamentals-deep-learning-activation-functions-when-to-use-them/">5. Fundamentals of Deep Learning – Activation Functions and When to Use Them?</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/105722023">6. 一文详解Softmax函数 - zhihu</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/58883095">7. 常见的损失函数(loss function)总结 - zhihu</a><br><a target="_blank" rel="noopener" href="https://web.stanford.edu/class/cs224n/readings/cs224n-2019-notes03-neuralnets.pdf">8. CS224n: Natural Language Processing with Deep Learning</a><br><a target="_blank" rel="noopener" href="https://www.cs.toronto.edu/~urtasun/courses/CSC411_Fall16/10_nn1.pdf">9. CSC 411: Lecture 10: Neural Networks</a></p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial w_{ji}}=\sum_k-\left(r_k-y_k\right)y_k\left(1-y_k\right)w_{kj}x_j\left(1-x_j\right)x_i</script><p>最终不同层权重的调节值为</p>
+<script type="math/tex; mode=display">\triangle w_{kj}=\eta\left(r_k-y_k\right)y_k\left(1-y_k\right)x_j</script><script type="math/tex; mode=display">\triangle w_{ji}=\eta\sum_k\left[\left(r_k-y_k\right)y_k\left(1-y_k\right)w_{kj}\right]x_j\left(1-x_j\right)x_i</script><p>$\eta$ 为取值 $\left(0,1\right)$ 之间的学习率。</p>
+<h3 id="2-3-矩阵求解"><a href="#2-3-矩阵求解" class="headerlink" title="2.3 矩阵求解"></a>2.3 矩阵求解</h3><p>用矩阵法表示两层神经网络并进行求解。最后一层的激活函数为 softmax，损失函数为交叉熵函数，可以用矩阵表示为</p>
+<script type="math/tex; mode=display">L=-\mathbf{y}^T\log\mathrm{softmax}\left(W_2\sigma\left(W_1\mathbf{x}\right)\right)</script><p>其中 $\mathbf{y}$ 是除一个元素为 $1$ 外其元素为 $0$ 的 $m\times1$ 列向量，$W_2$ 为 $m\times p$ 矩阵，$W_1$ 为 $p\times n$ 矩阵，$\mathbf{x}$ 为 $n\times1$ 列向量，$\displaystyle\mathrm{softmax}\left(\mathbf{z}\right)=\frac{\exp\left(\mathbf{z}\right)}{\mathbf{1}^T\exp\left(\mathbf{z}\right)}$，其中 $\exp$ 表示逐元素求指数，$\mathbf{1}$ 表示值均为 $1$ 的列向量；$\ell$ 为标量；sigmoid 是逐元素函数 $\displaystyle \sigma\left(\mathbf{z}\right)=\frac{1}{1+\exp\left(-\mathbf{z}\right)}$。</p>
+<p>定义 $\mathbf{z}_1=W_1\mathbf{x}$，$\mathbf{h}_1=\sigma\left(\mathbf{z}_1\right)$，$\mathbf{z}_2=W_2\mathbf{h}_1$，因此 $L=-\mathbf{y}^T\log\mathrm{softmax}\left(\mathbf{z}_2\right)$</p>
+<p>在逻辑回归中已经求得 </p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial \mathbf{z}_2}=\mathrm{softmax}\left(\mathbf{z}_2\right)-\mathbf y</script><p>使用复合法则</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \mathrm{d}L&=\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{z}_2}^T \mathrm{d}\mathbf{z}_2\right)\\
+    &=\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{z}_2}^T \mathrm{d}\left(W_2\mathbf{h}_1\right)\right)\\
+    &=\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{z}_2}^T \mathrm{d}W_2\mathbf{h}_1\right)+\underbrace{\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{z}_2}^T W_2\mathrm{d}\mathbf{h}_1\right)}_{\mathrm{d}L_2}\\
+\end{aligned}</script><p>从第一项可以得到</p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial W_2}=\frac {\partial L }{\partial \mathbf{z}_2}\mathbf{h}_1^T</script><p>从第二项可以得到</p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial \mathbf{h}_1}=W_2^T\frac {\partial L }{\partial \mathbf{z}_2}</script><p>继续对后进行复合法则</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \mathrm{d}L_2&=\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{h}_1}^T \mathrm{d}\mathbf{h}_1\right)\\
+    &=\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{h}_1}^T \mathrm{d}\sigma\left(\mathbf{z}_1\right)\right)\\
+    &=\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{h}_1}^T \sigma'\left(\mathbf{z}_1\right)\odot\mathrm{d}\mathbf{z}_1\right)\\
+    &=\mathrm{tr}\left(\left(\frac {\partial L }{\partial \mathbf{h}_1}\odot\sigma'\left(\mathbf{z}_1\right)\right)^T\mathrm{d}\mathbf{z}_1\right)\\
+\end{aligned}</script><p>可以得到</p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial \mathbf{z}_1}=\frac {\partial L }{\partial \mathbf{h}_1}\odot\sigma'\left(\mathbf{z}_1\right)</script><p>最后再进行一个复合法则</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \mathrm{d}L_2&=\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{z}_1}^T \mathrm{d}\mathbf{z}_1\right)\\
+    &=\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{z}_1}^T \mathrm{d}\left(W_1\mathbf{x}\right)\right)\\
+    &=\mathrm{tr}\left(\frac {\partial L }{\partial \mathbf{z}_1}^T \mathrm{d}W_1\mathbf{x}\right)\\
+\end{aligned}</script><p>可以得到</p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial W_1}=\frac {\partial L }{\partial \mathbf{z}_1}\mathbf{x}^T</script><p>将以上式子联立即可得到</p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial W_2}=\left(\mathrm{softmax}\left(\mathbf{z}_2\right)-\mathbf y\right)\mathbf{h}_1^T</script><script type="math/tex; mode=display">\frac {\partial L }{\partial W_1}=W_2^T\left(\mathrm{softmax}\left(\mathbf{z}_2\right)-\mathbf y\right)\odot\sigma'\left(\mathbf{z}_1\right)\mathbf{x}^T</script><h3 id="2-4-矩阵形式推广"><a href="#2-4-矩阵形式推广" class="headerlink" title="2.4 矩阵形式推广"></a>2.4 矩阵形式推广</h3><p>具有多个样本 $\{\left(\mathbf{x}_1,\mathbf{y}_1\right),\left(\mathbf{x}_2,\mathbf{y}_2\right),\dots,\left(\mathbf{x}_N,\mathbf{y}_N\right)\}$ 时，损失函数为</p>
+<script type="math/tex; mode=display">L=-\sum_{i=1}^{N}\mathbf{y}_i^T\log\mathrm{softmax}\left(W_2\sigma\left(W_1\mathbf{x}_i+\mathbf{b}_1\right)+\mathbf{b}_2\right)</script><p>其中 $\mathbf{b}_1$ 为 $p\times 1$ 列向量，$\mathbf{b}_1$ 为 $m\times 1$ 列向量，其余定义同上</p>
+<p>定义 $\mathbf{z}_{1,i}=W_1\mathbf{x}_i+\mathbf{b}_1$，$\mathbf{h}_{1,i}=\sigma\left(\mathbf{z}_{1,i}\right)$，$\mathbf{z}_{2,i}=W_2\mathbf{h}_{1,i}+\mathbf{b}_2$</p>
+<p>如同上可以求出</p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial \mathbf{z}_{2,i}}=\mathrm{softmax}\left(\mathbf{z}_{2,i}\right)-\mathbf y_i</script><p>使用复合法则</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \mathrm{d}L&=\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{2,i}}^T \mathrm{d}\mathbf{z}_{2,i}\right)\\
+    &=\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{2,i}}^T \mathrm{d}\left(W_2\mathbf{h}_{1,i}+\mathbf{b}_2\right)\right)\\
+    &=\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{2,i}}^T \mathrm{d}W_2\mathbf{h}_{1,i}\right)+\underbrace{\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{2,i}}^T W_2\mathrm{d}\mathbf{h}_{1,i}\right)}_{\mathrm{d}L_2}+\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{2,i}}^T \mathrm{d}\mathbf{b}_2\right)\\
+\end{aligned}</script><p>从第一项可以得到 $\displaystyle\frac {\partial L }{\partial W_{2}}=\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{2,i}}\mathbf{h}_{1,i}^T$，从第二项可以得到 $\displaystyle\frac {\partial L }{\partial \mathbf{h}_{1,i}}=W_2^T\frac {\partial L }{\partial \mathbf{z}_{2,i}}$，从第三项可以得到 $\displaystyle\frac {\partial L }{\partial \mathbf{b}_{2}}=\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{2,i}}$</p>
+<p>对第二项继续使用复合法则</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \mathrm{d}L_2&=\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{h}_{1,i}}^T \mathrm{d}\mathbf{h}_{1,i}\right)\\
+    &=\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{h}_1}^T \mathrm{d}\sigma\left(\mathbf{z}_{1,i}\right)\right)\\
+    &=\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{h}_{1,i}}^T \sigma'\left(\mathbf{z}_{1,i}\right)\odot\mathrm{d}\mathbf{z}_{1,i}\right)\\
+    &=\mathrm{tr}\left(\sum_{i=1}^{N}\left(\frac {\partial L }{\partial \mathbf{h}_{1,i}}\odot\sigma'\left(\mathbf{z}_{1,i}\right)\right)^T\mathrm{d}\mathbf{z}_{1,i}\right)\\
+\end{aligned}</script><p>可以得到</p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial \mathbf{z}_{1,i}}=\frac {\partial L }{\partial \mathbf{h}_{1,i}}\odot\sigma'\left(\mathbf{z}_{1,i}\right)</script><p>最后再进行一个复合法则</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \mathrm{d}L_2&=\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{1,i}}^T \mathrm{d}\mathbf{z}_{1,i}\right)\\
+    &=\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{1,i}}^T \mathrm{d}\left(W_1\mathbf{x}_i+\mathbf{b}_1\right)\right)\\
+    &=\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{1,i}}^T \mathrm{d}W_1\mathbf{x}_i\right)+\mathrm{tr}\left(\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{1,i}}^T \mathrm{d}\mathbf{b}_1\right)\\
+\end{aligned}</script><p>可以得到</p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial W_1}=\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{1,i}}\mathbf{x}_i^T</script><script type="math/tex; mode=display">\frac {\partial L }{\partial \mathbf{b}_1}=\sum_{i=1}^{N}\frac {\partial L }{\partial \mathbf{z}_{1,i}}</script><p>将以上式子联立即可得到</p>
+<script type="math/tex; mode=display">\frac {\partial L }{\partial W_2}=\sum_{i=1}^{N}\left(\mathrm{softmax}\left(\mathbf{z}_{2,i}\right)-\mathbf y_i\right)\mathbf{h}_{1,i}^T</script><script type="math/tex; mode=display">\displaystyle\frac {\partial L }{\partial \mathbf{b}_{2}}=\sum_{i=1}^{N}\left(\mathrm{softmax}\left(\mathbf{z}_{2,i}\right)-\mathbf y_i\right)</script><script type="math/tex; mode=display">\frac {\partial L }{\partial W_1}=\sum_{i=1}^{N}W_2^T\left(\mathrm{softmax}\left(\mathbf{z}_{2,i}\right)-\mathbf y_i\right)\odot\sigma(\mathbf{z}_{1,i})\odot(1-\sigma(\mathbf{z}_{1,i}))\mathbf{x}_i^T</script><script type="math/tex; mode=display">\frac {\partial L }{\partial \mathbf{b}_1}=\sum_{i=1}^{N}W_2^T\left(\mathrm{softmax}\left(\mathbf{z}_{2,i}\right)-\mathbf y_i\right)\odot\sigma(\mathbf{z}_{1,i})\odot(1-\sigma\left(\mathbf{z}_{1,i})\right)</script><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Artificial_neural_network">1. Artificial neural network - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Backpropagation">2. Backpropagation - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/80730031">3. 深度学习中【激活函数】存在的意义是什么？</a><br><a target="_blank" rel="noopener" href="https://www.datalearner.com/blog/1051508750742453">4. 深度学习基础——激活函数以及什么时候该使用激活函数</a><br><a target="_blank" rel="noopener" href="https://www.analyticsvidhya.com/blog/2020/01/fundamentals-deep-learning-activation-functions-when-to-use-them/">5. Fundamentals of Deep Learning – Activation Functions and When to Use Them?</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/105722023">6. 一文详解Softmax函数 - zhihu</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/58883095">7. 常见的损失函数(loss function)总结 - zhihu</a><br><a target="_blank" rel="noopener" href="https://web.stanford.edu/class/cs224n/readings/cs224n-2019-notes03-neuralnets.pdf\right">8. CS224n: Natural Language Processing with Deep Learning</a><br><a target="_blank" rel="noopener" href="https://www.cs.toronto.edu/~urtasun/courses/CSC411_Fall16/10_nn1.pdf">9. CSC 411: Lecture 10: Neural Networks</a></p>
 </blockquote>
 
 
@@ -271,7 +322,7 @@ g(z)={
 
     <aside id="article-toc" role="navigation" class="fixed">
         <div id="article-toc-inner">
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">人工神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9F%BA%E7%A1%80%E9%A2%84%E5%A4%87"><span class="toc-text">2 基础预备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="toc-text">2.1 激活函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-text">2.2 损失函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA%E6%A8%A1%E5%9E%8B"><span class="toc-text">2. 多层感知机模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-text">2.1 前向传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-text">2.2 反向传播</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%BA%E5%B7%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">人工神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9F%BA%E7%A1%80%E9%A2%84%E5%A4%87"><span class="toc-text">2 基础预备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="toc-text">2.1 激活函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-text">2.2 损失函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA%E6%A8%A1%E5%9E%8B"><span class="toc-text">2. 多层感知机模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%89%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-text">2.1 前向传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-text">2.2 反向传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E7%9F%A9%E9%98%B5%E6%B1%82%E8%A7%A3"><span class="toc-text">2.3 矩阵求解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E7%9F%A9%E9%98%B5%E5%BD%A2%E5%BC%8F%E6%8E%A8%E5%B9%BF"><span class="toc-text">2.4 矩阵形式推广</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol>
         </div>
     </aside>
 

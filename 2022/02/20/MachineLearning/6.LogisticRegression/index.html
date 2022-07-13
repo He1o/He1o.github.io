@@ -128,45 +128,64 @@
 <script type="math/tex; mode=display">\displaystyle {\frac {\partial \ell }{\partial \beta _{0}}}=\sum _{k=1}^{K}(y_{k}-p_{k})</script><script type="math/tex; mode=display">\displaystyle {\frac {\partial \ell }{\partial \beta _{1}}}=\sum _{k=1}^{K}(y_{k}-p_{k})x_{k}</script><p>结果和线性回归太相似了，$p_k$ 如果是线性函数，那么上式就是线性回归。事实上，$p(x)$ 的作用就是将线性函数 $\beta _{0}+\beta _{1}x$ 的结果映射到 $[0,1]$ 概率区间。如果让上式分别等于 0，则得到似然方程。</p>
 <p>不过，尽管结果相似，但上式是非线性的，因此无法像线性回归一样，求出似然方程组的解析解。因此，需要用数值方法，如牛顿迭代法和梯度下降法等等。牛顿迭代法是求解的似然方程组，梯度下降法则是直接求似然函数的极值，区别在于牛顿迭代法需要二次导数。下面给出梯度下降法的计算公式，其实很简单，沿与梯度相反的方向移动即可，导数已经给出，梯度则为</p>
 <script type="math/tex; mode=display">\bigtriangledown p(\beta_0,\beta_1)=(\frac {\partial \ell }{\partial \beta _{0}},\frac {\partial \ell }{\partial \beta _{1}})</script><p>假设第 $t$ 次的迭代结果为 $\beta^t_0,\beta^t_1$，则</p>
-<script type="math/tex; mode=display">\beta^{t+1}_0=\beta^t_0-\alpha\sum _{k=1}^{K}(y_{k}-{\frac {1}{1+e^{-(\beta^t_0+\beta^t_1x)}}})</script><script type="math/tex; mode=display">\beta^{t+1}_1=\beta^t_1-\alpha\sum _{k=1}^{K}(y_{k}-{\frac {1}{1+e^{-(\beta^t_0+\beta^t_1x)}}})x_{k}</script><p>上面求解的是简单的情况，只有一个特征。进一步地，将上面结果推广到具有多个特征的情况。</p>
-<p>用矩阵形式表述如下：$X$ 是样本特征矩阵，大小为 $m\times n$，$n$ 是特征维度加1，$m$ 是样本数量，第 $i$ 行形如 $[1, x_1^{(i)}, x_2^{(i)}, x_3^{(i)},\dots, , x_{n-1}^{(i)}]$；$\boldsymbol w$ 是 $n\times1$ 系数向量，形如 $[\beta_1,\beta_2,\dots,\beta_n]^T$；$\boldsymbol y$ 是 $m\times1$ 列向量，形如 $[y_1,y_2,\dots,y_m]^T$，每个元素取值 $0$ 或 $1$；$\boldsymbol 1$ 为值均为 $1$ 的向量。逻辑函数为</p>
-<script type="math/tex; mode=display">p(X\boldsymbol w)={\frac {1}{1+e^{-X\boldsymbol w}}}</script><p>对数似然函数的矩阵形式为</p>
-<script type="math/tex; mode=display">\ell(\boldsymbol w)=\boldsymbol y^T\ln p(X\boldsymbol w)+(\boldsymbol 1-\boldsymbol y^T)\ln(\boldsymbol 1^T-p(X\boldsymbol w))</script><p>根据逐元素函数法则，逻辑函数的微分</p>
+<script type="math/tex; mode=display">\beta^{t+1}_0=\beta^t_0-\alpha\sum _{k=1}^{K}(y_{k}-{\frac {1}{1+e^{-(\beta^t_0+\beta^t_1x_k)}}})</script><script type="math/tex; mode=display">\beta^{t+1}_1=\beta^t_1-\alpha\sum _{k=1}^{K}(y_{k}-{\frac {1}{1+e^{-(\beta^t_0+\beta^t_1x_k)}}})x_{k}</script><p>上面求解的是简单的情况，只有一个特征。进一步地，将上面结果推广到具有多个特征的情况。</p>
+<p>用矩阵形式表述如下：$X$ 是样本特征矩阵，大小为 $m\times n$，$n$ 是特征维度加1，$m$ 是样本数量，第 $i$ 行形如 $[1, x_1^{(i)}, x_2^{(i)}, x_3^{(i)},\dots, , x_{n-1}^{(i)}]$；$\mathbf{w}$ 是 $n\times1$ 系数向量，形如 $[\beta_1,\beta_2,\dots,\beta_n]^T$；$\mathbf y$ 是 $m\times1$ 列向量，形如 $[y_1,y_2,\dots,y_m]^T$，每个元素取值 $0$ 或 $1$，其中只有一个元素为 $1$；$\mathbf 1^T$ 为值均为 $1$ 的列向量。逻辑函数为</p>
+<script type="math/tex; mode=display">p(X\mathbf{w})={\frac {1}{1+e^{-X\mathbf{w}}}}</script><p>对数似然函数的矩阵形式为</p>
+<script type="math/tex; mode=display">\ell(\mathbf{w})=\mathbf y^T\ln p(X\mathbf{w})+(\mathbf 1^T-\mathbf y^T)\ln(\mathbf 1-p(X\mathbf{w}))</script><p>根据逐元素函数法则，逻辑函数的微分</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-    \mathrm{d}p(X\boldsymbol w)&=p'(X\boldsymbol w)\odot\mathrm{d}X\boldsymbol w \\
-    &= p(X\boldsymbol w)\odot(\boldsymbol 1^T-p(X\boldsymbol w))\odot ((\mathrm{d}X)\boldsymbol w+X\mathrm{d}\boldsymbol w) \\
-    &=p(X\boldsymbol w)\odot(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w
+    \mathrm{d}p(X\mathbf{w})&=p'(X\mathbf{w})\odot\mathrm{d}X\mathbf{w} \\
+    &= p(X\mathbf{w})\odot(\mathbf 1-p(X\mathbf{w}))\odot ((\mathrm{d}X)\mathbf{w}+X\mathrm{d}\mathbf{w}) \\
+    &=p(X\mathbf{w})\odot(\mathbf 1-p(X\mathbf{w}))\odot X\mathrm{d}\mathbf{w}
 \end{aligned}</script><p>$\ln$ 函数的微分</p>
 <script type="math/tex; mode=display">\mathrm{d}\ln Y=Y^{-1}\odot\mathrm{d}Y</script><p>因此可以得到</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\mathrm{d}\ell(\boldsymbol w)&=\boldsymbol y^T(p(X\boldsymbol w))^{-1}\odot p(X\boldsymbol w)\odot(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w \\
-&+(\boldsymbol 1-\boldsymbol y^T)(\boldsymbol 1^T-p(X\boldsymbol w))^{-1}\odot -p(X\boldsymbol w)\odot(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w \\
-&=\boldsymbol y^T(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w - (\boldsymbol 1-\boldsymbol y^T)p(X\boldsymbol w)\odot X\mathrm{d}\boldsymbol w \\
+\mathrm{d}\ell(\mathbf{w})&=\mathbf y^T(p(X\mathbf{w}))^{-1}\odot p(X\mathbf{w})\odot(\mathbf 1-p(X\mathbf{w}))\odot X\mathrm{d}\mathbf{w} \\
+&+(\mathbf 1^T-\mathbf y^T)(\mathbf 1-p(X\mathbf{w}))^{-1}\odot -p(X\mathbf{w})\odot(\mathbf 1-p(X\mathbf{w}))\odot X\mathrm{d}\mathbf{w} \\
+&=\mathbf y^T(\mathbf 1-p(X\mathbf{w}))\odot X\mathrm{d}\mathbf{w} - (\mathbf 1^T-\mathbf y^T)p(X\mathbf{w})\odot X\mathrm{d}\mathbf{w} \\
 \end{aligned}</script><p>将上式套上迹</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\mathrm{d}\ell(\boldsymbol w)&=\mathrm{tr}(\boldsymbol y^T(\boldsymbol 1^T-p(X\boldsymbol w))\odot X\mathrm{d}\boldsymbol w- (\boldsymbol 1-\boldsymbol y^T)p(X\boldsymbol w)\odot X\mathrm{d}\boldsymbol w)\\
-&=\mathrm{tr}([\boldsymbol y\odot(\boldsymbol 1^T-p(X\boldsymbol w))]^TX\mathrm{d}\boldsymbol w - [(\boldsymbol 1-\boldsymbol y^T)^T\odot p(X\boldsymbol w)]^T X\mathrm{d}\boldsymbol w)\\
-&=\mathrm{tr}([\boldsymbol y-\boldsymbol y\odot p(X\boldsymbol w)]^TX\mathrm{d}\boldsymbol w - [p(X\boldsymbol w)-\boldsymbol y^T\odot p(X\boldsymbol w)]^T X\mathrm{d}\boldsymbol w)\\
-&=\mathrm{tr}(\boldsymbol y ^ TX\mathrm{d}\boldsymbol w - p(X\boldsymbol w)^T X\mathrm{d}\boldsymbol w)\\
-&=\mathrm{tr}([X^T(\boldsymbol y- p(X\boldsymbol w) )]^T\mathrm{d}\boldsymbol w)\\
+\mathrm{d}\ell(\mathbf{w})&=\mathrm{tr}(\mathbf y^T(\mathbf 1-p(X\mathbf{w}))\odot X\mathrm{d}\mathbf{w}- (\mathbf 1^T-\mathbf y^T)p(X\mathbf{w})\odot X\mathrm{d}\mathbf{w})\\
+&=\mathrm{tr}([\mathbf y\odot(\mathbf 1-p(X\mathbf{w}))]^TX\mathrm{d}\mathbf{w} - [(\mathbf 1-\mathbf y)\odot p(X\mathbf{w})]^T X\mathrm{d}\mathbf{w})\\
+&=\mathrm{tr}([\mathbf y-\mathbf y\odot p(X\mathbf{w})]^TX\mathrm{d}\mathbf{w} - [p(X\mathbf{w})-\mathbf y\odot p(X\mathbf{w})]^T X\mathrm{d}\mathbf{w})\\
+&=\mathrm{tr}(\mathbf y ^ TX\mathrm{d}\mathbf{w} - p(X\mathbf{w})^T X\mathrm{d}\mathbf{w})\\
+&=\mathrm{tr}([X^T(\mathbf y- p(X\mathbf{w}) )]^T\mathrm{d}\mathbf{w})\\
 \end{aligned}</script><p>根据微分与导数的关系</p>
 <script type="math/tex; mode=display">\mathrm{d}f=\mathrm{tr}(\frac {\partial f }{\partial X}^T \mathrm{d}X)</script><p>就可以得到</p>
-<script type="math/tex; mode=display">\frac {\partial f }{\partial X}=X^T(\boldsymbol y- p(X\boldsymbol w) )</script><p>迭代公式</p>
-<script type="math/tex; mode=display">\boldsymbol w=\boldsymbol w-\alpha X^T(\boldsymbol y- p(X\boldsymbol w) )</script><h3 id="2-3-多元逻辑回归"><a href="#2-3-多元逻辑回归" class="headerlink" title="2.3 多元逻辑回归"></a>2.3 多元逻辑回归</h3><p>一个事件的几率（odds）是指该事件的发生的概率与不发生的概率的比值。如果一个事件发生的概率 $p$，则不发生的概率为 $1-p$，那么该事件的几率为 $\displaystyle\frac{p}{1-p}$，该事件的对数几率或 logit 函数是</p>
+<script type="math/tex; mode=display">\frac {\partial f }{\partial \mathbf{w}}=X^T(\mathbf y- p(X\mathbf{w}) )</script><p>迭代公式</p>
+<script type="math/tex; mode=display">\mathbf{w}=\mathbf{w}-\alpha X^T(\mathbf y- p(X\mathbf{w}) )</script><h3 id="2-3-多元逻辑回归"><a href="#2-3-多元逻辑回归" class="headerlink" title="2.3 多元逻辑回归"></a>2.3 多元逻辑回归</h3><p>一个事件的几率（odds）是指该事件的发生的概率与不发生的概率的比值。如果一个事件发生的概率 $p$，则不发生的概率为 $1-p$，那么该事件的几率为 $\displaystyle\frac{p}{1-p}$，该事件的对数几率或 logit 函数是</p>
 <script type="math/tex; mode=display">\mathrm{logit}(p)=\ln \frac{p}{1-p}</script><p>对于逻辑回归，一定满足</p>
-<script type="math/tex; mode=display">\ln \frac{p}{1-p}=\boldsymbol w\cdot\boldsymbol x</script><p>假设多元逻辑回归事件的类别分别为 $1,2,\dots,K$。多元逻辑回归相较于二元逻辑回归，概率计算公式不变</p>
-<script type="math/tex; mode=display">\displaystyle p(\boldsymbol x)={\frac {1}{1+e^{-\boldsymbol w\cdot\boldsymbol x}}}</script><p>区别在于对于同一个实例，它所有类别的概率和为 1。在二元逻辑回归中，$y=0$ 时的概率就是 $1-p$，因此只需要一组参数即可，而在多元逻辑回归中， $K$ 个类别分别对应一组参数</p>
-<script type="math/tex; mode=display">\ln \frac{p(y=1|\boldsymbol x)}{1-p(y=0|\boldsymbol x)}=\boldsymbol w_1\cdot\boldsymbol x</script><script type="math/tex; mode=display">\ln \frac{p(y=2|\boldsymbol x)}{1-p(y=0|\boldsymbol x)}=\boldsymbol w_2\cdot\boldsymbol x</script><script type="math/tex; mode=display">\cdots</script><p>同时满足</p>
-<script type="math/tex; mode=display">\sum_{i=1}^Kp(y=i|\boldsymbol x)=1</script><p>最终解得</p>
-<script type="math/tex; mode=display">p(y=k|\boldsymbol x)=\frac{e^{\boldsymbol w_k\cdot\boldsymbol x}}{\displaystyle 1+\sum_{i=1}^{K-1}e^{\boldsymbol w_i\cdot\boldsymbol x}}</script><script type="math/tex; mode=display">p(y=K|\boldsymbol x)=\frac{1}{\displaystyle 1+\sum_{i=1}^{K-1}e^{\boldsymbol w_i\cdot\boldsymbol x}}</script><p>实际上就是 softmax 函数的一种特例，输出的结果为 $k-1$ 个，因为概率和为 1，自然可以求出最后剩下的一个概率值。其实也可以输出 $k$ 个结果，概率的计算公式为</p>
-<script type="math/tex; mode=display">p(y=k|\boldsymbol x)=\frac{e^{\boldsymbol w_k\cdot\boldsymbol x}}{\displaystyle \sum_{i=1}^Ke^{\boldsymbol w_i\cdot\boldsymbol x}}</script><p>我们采用后一种方式，似然函数为</p>
-<script type="math/tex; mode=display">L=\prod_{i=0}^mp_1(\boldsymbol{x_i})^{y_i^1}p_2(\boldsymbol{x_i})^{y_i^2}\dots p_k(\boldsymbol{x_i})^{y_i^K}</script><p>对于一组输入 $\boldsymbol{x_i}$，$(y_i^1,y_i^2,\dots,y_i^K)$ 中只有一个值为 $1$，其他为 $0$。对数似然函数即为</p>
-<script type="math/tex; mode=display">\ell=\sum_{i}\sum_ky_i^k\log p_k(\boldsymbol{x_i})</script><p>将对数似然函数写成矩阵形式，对于每一组实例</p>
-<script type="math/tex; mode=display">\ell=\boldsymbol{y}^T\log \mathrm{softmax}(W\boldsymbol{x})</script><p>对于所有实例</p>
-<script type="math/tex; mode=display">\ell=\mathrm{tr}(Y^T\log \mathrm{softmax}(WX))</script><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<script type="math/tex; mode=display">\ln \frac{p}{1-p}=\mathbf{w}\cdot\mathbf x</script><p>假设多元逻辑回归事件的类别分别为 $1,2,\dots,K$。多元逻辑回归相较于二元逻辑回归，概率计算公式不变</p>
+<script type="math/tex; mode=display">\displaystyle p(\mathbf x)={\frac {1}{1+e^{-\mathbf{w}\cdot\mathbf x}}}</script><p>区别在于对于同一个实例，它所有类别的概率和为 1。在二元逻辑回归中，$y=0$ 时的概率就是 $1-p$，因此只需要一组参数即可，而在多元逻辑回归中， $K$ 个类别分别对应一组参数</p>
+<script type="math/tex; mode=display">\ln \frac{p(y=1|\mathbf x)}{1-p(y=0|\mathbf x)}=\mathbf w_1\cdot\mathbf x</script><script type="math/tex; mode=display">\ln \frac{p(y=2|\mathbf x)}{1-p(y=0|\mathbf x)}=\mathbf w_2\cdot\mathbf x</script><script type="math/tex; mode=display">\cdots</script><p>同时满足</p>
+<script type="math/tex; mode=display">\sum_{i=1}^Kp(y=i|\mathbf x)=1</script><p>最终解得</p>
+<script type="math/tex; mode=display">p(y=k|\mathbf x)=\frac{e^{\mathbf w_k\cdot\mathbf x}}{\displaystyle 1+\sum_{i=1}^{K-1}e^{\mathbf w_i\cdot\mathbf x}}</script><script type="math/tex; mode=display">p(y=K|\mathbf x)=\frac{1}{\displaystyle 1+\sum_{i=1}^{K-1}e^{\mathbf w_i\cdot\mathbf x}}</script><p>实际上就是 softmax 函数的一种特例，输出的结果为 $k-1$ 个，因为概率和为 1，自然可以求出最后剩下的一个概率值。其实也可以输出 $k$ 个结果，概率的计算公式为</p>
+<script type="math/tex; mode=display">p(y=k|\mathbf x)=\frac{e^{\mathbf w_k\cdot\mathbf x}}{\displaystyle \sum_{i=1}^Ke^{\mathbf w_i\cdot\mathbf x}}</script><p>我们采用后一种方式，似然函数为</p>
+<script type="math/tex; mode=display">L=\prod_{i=0}^mp_1(\mathbf{x}_i)^{y_i^1}p_2(\mathbf{x}_i)^{y_i^2}\dots p_k(\mathbf{x}_i)^{y_i^K}</script><p>对于一组输入 $\mathbf{x}_i$，$(y_i^1,y_i^2,\dots,y_i^K)$ 中只有一个值为 $1$，其他为 $0$。对数似然函数即为</p>
+<script type="math/tex; mode=display">\ell=\sum_{i}\sum_ky_i^k\log p_k(\mathbf{x}_i)</script><p>将对数似然函数写成矩阵形式，对于每一组实例</p>
+<script type="math/tex; mode=display">\ell=\mathbf{y}^T\log \mathrm{softmax}(W\mathbf{x})</script><p>其中，$\mathbf{y}$ 是除一个元素为 $1$ 外其元素为 $0$ 的 $m\times1$ 列向量，$W$ 为 $m\times n$ 矩阵，$\mathbf{x}$ 为 $n\times1$ 列向量，$\displaystyle\mathrm{softmax}(\mathbf{z})=\frac{\exp(\mathbf{z})}{\mathbf{1}^T\exp(\mathbf{z})}$，其中 $\exp$ 表示逐元素求指数，$\mathbf{1}$ 表示值均为 $1$ 的列向量；$\ell$ 为标量。</p>
+<p>将 $\mathrm{softmax}$ 带入 $\ell$</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \ell&=\mathbf{y}^T\left(\log \exp(W\mathbf{x})-\mathbf{1}\log \mathbf{1}^T\exp(W\mathbf{x})\right)\\
+    &=\mathbf{y}^TW\mathbf{x}-\log\left( \mathbf{1}^T\exp(W\mathbf{x})\right)
+\end{aligned}</script><p>在这里用到了 $\log(\mathbf{u}/c)=\log\mathbf{u}-\mathbf{1}\log c$，以及 $\mathbf{y}^T\mathbf{1}=1$。</p>
+<p>进行微分</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \mathrm{d}\ell&=\mathrm{d}(\mathbf{y}^TW\mathbf{x})-\mathrm{d}\left(\log( \mathbf{1}^T\exp(W\mathbf{x}))\right)\\
+    &=\mathbf{y}^T\mathrm{d}W\mathbf{x}-(\mathbf{1}^T\exp(W\mathbf{x}))^{-1}\odot \mathrm{d}(\mathbf{1}^T\exp(W\mathbf{x}))\\
+    &=\mathbf{y}^T\mathrm{d}W\mathbf{x}-(\mathbf{1}^T\exp(W\mathbf{x}))^{-1}\odot \mathbf{1}^T\mathrm{d}(\exp(W\mathbf{x}))\\
+    &=\mathbf{y}^T\mathrm{d}W\mathbf{x}-(\mathbf{1}^T\exp(W\mathbf{x}))^{-1}\odot \mathbf{1}^T\left(\exp(W\mathbf{x})\odot\mathrm{d}(W\mathbf{x})\right)\\
+\end{aligned}</script><p>其中</p>
+<script type="math/tex; mode=display">\mathbf{1}^T\left(\exp(W\mathbf{x})\odot\mathrm{d}(W\mathbf{x})\right)=(\mathbf{1}\odot \exp(W\mathbf{x}))^T\mathrm{d}(W\mathbf{x})=\exp(W\mathbf{x})^T\mathrm{d}(W\mathbf{x})</script><p>带入原式并且套上迹</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \mathrm{d}\ell&=\mathrm{tr}\left(\mathbf{y}^T\mathrm{d}W\mathbf{x}-\frac{\exp(W\mathbf{x})^T\mathrm{d}(W\mathbf{x})}{\mathbf{1}^T\exp(W\mathbf{x})}\right)\\
+    &=\mathrm{tr}\left(\mathbf{y}^T\mathrm{d}W\mathbf{x}-\mathrm{softmax}(W\mathbf{x})^T\mathrm{d}(W\mathbf{x})\right)\\
+    &=\mathrm{tr}\left(\mathbf{x}(\mathbf{y}-\mathrm{softmax}(W\mathbf{x}))^T\mathrm{d}W\right)\\
+\end{aligned}</script><p>根据微分与导数的关系</p>
+<script type="math/tex; mode=display">\mathrm{d}f=\mathrm{tr}(\frac {\partial f }{\partial X}^T \mathrm{d}X)</script><p>因此</p>
+<script type="math/tex; mode=display">\frac {\partial f }{\partial W}=(\mathbf y- \mathrm{softmax}(W\mathbf{x}))\mathbf{x}^T</script><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
 <p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Logistic_regression">1. Logistic regression - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://papers.tinbergen.nl/02119.pdf">2. Cramer, J. S. (2002). The origins of logistic regression</a><br><a target="_blank" rel="noopener" href="https://synapse.koreamed.org/upload/synapsedata/pdfdata/0006jkan/jkan-43-154.pdf">3. An Introduction to Logistic Regression: From Basic Concepts to Interpretation with Particular Attention to Nursing Domain</a><br><a target="_blank" rel="noopener" href="https://ftp.idu.ac.id/wp-content/uploads/ebook/ip/REGRESI%20LOGISTIK/Practical%20Guide%20to%20Logistic%20Regression%20(%20PDFDrive%20">4. Practical Guide to Logistic Regression</a>.pdf)<br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Logistic_function">5. Logistic function - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pinard/p/6029432.html">6. 逻辑回归原理小结 - 刘建平</a></p>
 </blockquote>
 

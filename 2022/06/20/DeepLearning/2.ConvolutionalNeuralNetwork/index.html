@@ -13,7 +13,7 @@
 
     <!--Description-->
     
-        <meta name="description" content="决策树1. 历史背景1984 年，Leslie Valiant 提出概率近似正确（probably approximately correct，PAC）学习框架。当存在算法满足 $P[R(h_S)\le\epsilon]\ge 1-\delta$，$R(h_S)$ 是算法 $h$ 数据集 $S$ 上">
+        <meta name="description" content="卷积神经网络1. 历史背景1950 年代和 1960 年代，Hubel 和 Wiesel 在 的工作表明，猫的视觉皮层包含单独对视野的小区域做出反应的神经元。如果眼睛不动，则视觉刺激影响单个神经元放电的视觉空间区域称为其感受野。相邻细胞具有相似和重叠的感受野。感受野大小和位置在整个皮层系统地变化，以">
     
 
     <!--Author-->
@@ -23,7 +23,7 @@
 
     <!-- Title -->
     
-    <title>8. Adaptive Boost | He1o</title>
+    <title>2. Convolutional Neural Network | He1o</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="//cdn.jsdelivr.net/npm/bootstrap@3.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -78,7 +78,7 @@
                     <div class="col-lg-8  col-md-10 ">
                         <div class="post-heading">
                             <h1>
-                                8. Adaptive Boost
+                                2. Convolutional Neural Network
                             </h1>
                         </div>
                     </div>
@@ -93,120 +93,99 @@
                     <!-- Post Main Content -->
                     <div class="post-content col-lg-10  col-md-10 ">
                         <span id="more"></span>
-<h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><h2 id="1-历史背景"><a href="#1-历史背景" class="headerlink" title="1. 历史背景"></a>1. 历史背景</h2><p>1984 年，Leslie Valiant 提出概率近似正确（probably approximately correct，PAC）学习框架。当存在算法满足 $P[R(h_S)\le\epsilon]\ge 1-\delta$，$R(h_S)$ 是算法 $h$ 数据集 $S$ 上的经验误差，同时样本量 $m\ge poly(1/\epsilon,1/\delta,n,size(c))$，则称该算法为 PAC可学习的（learnable）。当 $\epsilon \in (0, 0.5)$ 且 $\delta \in (0, 0.5)$ 时，即算法学习成功的概率大于 $0.5$，且误分类率 $err(h)&lt;\epsilon$，则称算法拟合的那个概念是强可学习的；如果满足 $\delta \in [0, 0.5]$ 的基础上，算法的误差率 $err(h)&lt;1/2-\gamma$，则称为弱可学习。</p>
-<p>1988 年，Michael Kearns 提出问题 “is weakly learnability equivalent to strong learnability?” 是提升机器学习算法（boosting）的起源。</p>
-<p>1990 年，Yoav Freund 提出 Boost-by-majority 算法，并给予证明，即 PAC 学习架构下强可学习和弱可学习是充分必要条件，但该算法并不实用。</p>
-<p>1995 年，Yoav Freund 和 Robert Schapire 提出 AdaBoost 算法，他们的工作获得了 2003 年哥德尔奖。</p>
-<p>2000 年，Friedman 等人提出 Boosting Tree 算法。</p>
-<h2 id="2-Adaboost-算法"><a href="#2-Adaboost-算法" class="headerlink" title="2. Adaboost 算法"></a>2. Adaboost 算法</h2><p>boosting 算法是一种集成算法，主要作用就是将弱可学习分类器转化为强可学习分类器，因为在分类问题中，给定一个训练样本集，弱分类器是比较容易得到的。Adaboost 是自适应算法，通过调整训练数据的概率分布，使随后的弱学习器更关注那些被先前分类器错误分类的实例，这样就保证在不同的弱分类器中，使得所有训练数据都能被有效的分类，最后通过多个弱学习器加权多数表决的方法，得到最终分类结果。        </p>
-<p>给定二元分类训练数据集：</p>
-<script type="math/tex; mode=display">T=\{(\mathbf x_1,y_1),(\mathbf x_2,y_2),...,(\mathbf x_N,y_N)\}</script><p>其中，${\displaystyle \mathbf x_i\in \mathcal{X}\subseteq R^n}$ 表示实例的特征向量，$y\in \mathcal{Y}=\{-1,+1\}$ 表示实例的类别，也就是标记（label）。给定实例特征向量$\mathbf x$，输出所属的类 $y$ 。</p>
-<p>首先初始化训练数据集的权重</p>
-<script type="math/tex; mode=display">D_1=(1/N,1/N,\dots,1/N)</script><p>假设第 $t$ 轮的权重为 $D_t$，通过弱分类算法 $A$ 产生一个弱分类器 $h_t\in \mathcal{H},h_t:\mathcal{X}\rightarrow \mathcal{Y}$，</p>
-<p>弱分类器的误分类率为</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-    \epsilon_t &= error_{D_t}(h_t)\\
-    &=P(h_t(\mathbf x_i)\ne y_i) \\
-    &=\sum_{i=t}^N D_t(i)\cdot I (h_t(\mathbf x_i)\ne y_i)\\
-    &=\sum_{h_t(\mathbf x_i)\ne y_i} D_t(i)
-\end{aligned}</script><p>弱分类算法 $A$ 的损失函数就是最小化误分类率 $\epsilon_t$，在这里需要保证 $\epsilon_t&lt;1/2$，否则就不是弱分类器，算法停止。</p>
-<p>计算弱分类器 $h_t$ 的系数 </p>
-<script type="math/tex; mode=display">\alpha_t=\frac{1}{2}\ln \frac{1-\epsilon_t}{\epsilon_t}</script><p>从公式中可以看出，当 $\epsilon_t<1/2$ 时，$\alpha_t>0$，且 $\alpha_t$ 随着 $\epsilon_t$ 的减小而增加，因此分类误差率越小的弱分类器在最后多数表决时起的作用越大。</p>
-<p>更新训练数据集的权重</p>
-<script type="math/tex; mode=display">D_{t+1}(i)=\frac{D_t(i)}{Z_t}e^{-\alpha_ty_ih_t(\mathbf x_i)}</script><p>$Z_t$ 是规范化因子，它保证了更新后的权重也是一个概率分布</p>
-<script type="math/tex; mode=display">Z_t=\sum_{i=1}^N D_t(i)e^{-\alpha_ty_ih_t(\mathbf x_i)}</script><p>从更新公式中可以看出，当分类正确时，权重乘以 $e^{-\alpha}$ 会降低 ，当分类错误时，权重乘以 $e^{\alpha}$ 会增加。相较于正确分类样本，误分类样本的权值被放大 $\displaystyle e^{2\alpha}=\frac{1-\epsilon}{\epsilon}$倍。</p>
-<p>将以上步骤重复 $T$ 次，就得到了 $T$ 个弱分类器，最终 Adaboost 的输出结果为</p>
-<script type="math/tex; mode=display">H(\mathbf x)=\mathrm{sign}\left(\sum_{t=1}^T \alpha_t h_t(\mathbf x)\right)</script><p>在式中，$\displaystyle \sum_{t=1}^T \alpha_t h_t(\mathbf x)$ 的正负号决定了实例 $\mathbf{x}$ 的分类结果，绝对值表示分类的确信度。</p>
-<h2 id="2-Adaboost-算法分析与证明"><a href="#2-Adaboost-算法分析与证明" class="headerlink" title="2. Adaboost 算法分析与证明"></a>2. Adaboost 算法分析与证明</h2><p>Adaboost 算法对于给定的训练数据集，对于足够多的轮次 $T$ 之后，可以证明出最后的分类器 $H$ 的训练误差很小。定义 $H$ 在训练数据集 $S$ 上的训练误差为</p>
-<script type="math/tex; mode=display">err_S(H)=\frac{1}{N}\sum_{i=1}^N \mathbf I (H(\mathbf x_i)\ne y_i)</script><p>对于每一轮 $t$，目前为止构建的弱分类器的线性组合为</p>
-<script type="math/tex; mode=display">F_t(\mathbf x)=\sum_{j=1}^t\alpha_j h_j(\mathbf{x})</script><p><strong>引理 1.</strong> 对于每一轮 $t$，$D_{t+1}(i)\propto e^{-y_iF_t(\mathbf x_i)}$，即分布 $D_{t+1}(i)$ 根据历史弱分类器 $F_t$ 的值对结果进行加权。</p>
-<p>证明：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-    D_{t+1}(i) &= \frac{D_t(i)}{Z_t}e^{-\alpha_ty_ih_t(\mathbf x_i)}\\
-    &=\frac{D_{t-1}(i)}{Z_tZ_{t-1}}e^{-\alpha_ty_ih_t(\mathbf x_i)}e^{-\alpha_{t-1}y_ih_{t-1}(\mathbf x_i)} \\
-    &\dots \\
-    &= \frac{D_1(i)}{ \prod_{j=1}^t Z_j}e^{ -y_i  \sum_{j=1}^t\alpha_jh_j(\mathbf x_i)} \\
-    &= \frac{1}{ N\prod_{j=1}^t Z_j}e^{-y_iF_t(\mathbf x_i)}
-\end{aligned}</script><p>因此，分布 $D_{t+1}$ 根据目前得到的函数 $F_t$ 的间隔（margin） $y_iF_t(\mathbf x_i)$ 为 $S$ 中的样本 $(\mathbf x_i, y_i)$ 分配权重。间隔越小表示分类效果越差，因此权重越大，这迫使第 $t+1$ 轮的弱学习器专注于 $F_t$ 未准确分类的实例。</p>
-<p><strong>引理 2.</strong> $\displaystyle err_S(H)\le \frac{1}{N}\sum_{i=1}^N e^{-y_iF_T(\mathbf x_i)}=\prod_{j=1}^T Z_j$</p>
-<p>证明：当 $H(\mathbf x_i)\ne y_i$ 时，$y_iF_T(\mathbf x_i)\le0$，因此 $e^{-y_iF_T(\mathbf x_i)}\ge1$，从而得到</p>
-<script type="math/tex; mode=display">err_S(H)\le 1 \le \frac{1}{N}\sum_{i=1}^N e^{-y_iF_T(\mathbf x_i)}</script><p>进一步地，由引理 1 得到</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-    \frac{1}{N}&\sum_{i=1}^N e^{-y_iF_T(\mathbf x_i)} \\
-     &= \prod_{j=1}^t Z_j \sum_{i=1}^ND_{t+1}(i) 
-\end{aligned}</script><p>由于 </p>
-<script type="math/tex; mode=display">\displaystyle \sum_{i=1}^ND_{t+1}(i) =1</script><p>因此 </p>
-<script type="math/tex; mode=display">\displaystyle \frac{1}{N}\sum_{i=1}^N e^{-y_iF_T(\mathbf x_i)}=\prod_{j=1}^T Z_j</script><p><strong>引理 3.</strong> 对于给定的 $\alpha_t$，每一轮归一化常数具有简单形式 $Z_t=2\sqrt{\epsilon_t(1-\epsilon_t)}$</p>
-<p>证明：根据前面可知</p>
-<script type="math/tex; mode=display">\displaystyle e^{2\alpha_t}=\frac{1-\epsilon_t}{\epsilon_t}</script><p>推出</p>
-<script type="math/tex; mode=display">\displaystyle e^{-\alpha_t}=\sqrt{\frac{\epsilon_t}{1-\epsilon_t}}</script><p>并且</p>
-<script type="math/tex; mode=display">{\displaystyle 
-y_ih_t(\mathbf x_i)={
-    \begin{cases}
-        +1&\mathrm{if}\quad h_t(\mathbf x_i)=y_i\\
-        -1&\mathrm{otherwise}
-    \end{cases}
-    }
-}</script><p>因此</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-     Z_t&=\sum_{i=1}^N D_t(i)e^{-\alpha_ty_ih_t(\mathbf x_i)}\\
-     &= \sum_{i=1}^N D_t(i)\left(e^{-\alpha_t}I( h_t(\mathbf x_i)=y_i)+e^{\alpha_t}I( h_t(\mathbf x_i)\ne y_i)\right)\\
-     &=e^{-\alpha_t}\sum_{i=1}^N D_t(i)\cdot I( h_t(\mathbf x_i)=y_i) + e^{\alpha_t}\sum_{i=1}^N D_t(i)\cdot I( h_t(\mathbf x_i)\ne y_i)\\
-     &= \sqrt{\frac{\epsilon_t}{1-\epsilon_t}} (1-\epsilon_t)+\sqrt{\frac{1-\epsilon_t}{\epsilon_t}}\epsilon_t \\
-     &=2\sqrt{\epsilon_t(1-\epsilon_t)}
-\end{aligned}</script><p><strong>引理 4.</strong> $\displaystyle\gamma \in (0,\frac{1}{2}]$时，如果 $\displaystyle\epsilon_t\le \frac{1}{2}-\gamma$，存在 $err_S(H)\le e^{-2T\gamma^2}$</p>
-<p>证明：由引理 2 和引理 3 可得</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-     err_S(H)&\le \prod_{t=1}^T Z_j\\ 
-     &= \prod_{t=1}^T 2\sqrt{\epsilon_t(1-\epsilon_t)}\\
-     &\le2^T\prod_{t=1}^T \sqrt{(\frac{1}{2}-\gamma)(\frac{1}{2}+\gamma)},\\
-     &\qquad \text{ since } \epsilon_t\le \frac{1}{2}-\gamma，\mathrm{and} \sqrt{x(1-x)} \text{ is an increasing function of } x \text{ on }  (0,\frac{1}{2}]\\
-     &= 2^T\prod_{t=1}^T \sqrt{\frac{1}{4}-\gamma^2} \\
-     &= (1-4\gamma^2)^{T/2}\\
-     &\le e^{-2T\gamma^2},\text{ since } 1-x\le e^{-x}
-\end{aligned}</script><p>从引理中可以看出，如果弱学习器的分类结果比随机预测 $(0.5)$ 的结果要好，那么最终分类器 $H$ 的误差将随着 $T$ 的增加呈指数下降，且对于足够大的 $T$，误差会变得足够小。</p>
-<h2 id="3-Adaboost-损失函数"><a href="#3-Adaboost-损失函数" class="headerlink" title="3. Adaboost 损失函数"></a>3. Adaboost 损失函数</h2><p>前面的算法过程是直接给出了 $\alpha$ 的取值方式，如果给定 Adaboost 的损失函数，事实上每一步 $\alpha_t$ 的取值都是为了使损失函数最小。</p>
-<p>定义指数损失函数为</p>
-<script type="math/tex; mode=display">L(y,f)=e^{-yf}</script><p>定义 Adaboost 的损失函数为指数损失函数</p>
-<script type="math/tex; mode=display">L(Y,F_T(X))=\sum_{i=1}^N e^{-y_iF_T(\mathbf x_i)}</script><p>其中</p>
-<script type="math/tex; mode=display">F_T(\mathbf x)=\sum_{j=1}^T\alpha_j h_j(\mathbf{x})</script><p>求解该损失函数极小化问题是一个复杂的优化问题，可以使用前向分布算法的思想。前向分步算法类似动态规划中的前向计算，每一步只求取一个的最优分类器 $h_j$ 及其参数 $\alpha_j$，与之前的过程无关，即前 $t-1$ 步求取的分类器及参数都当做定值。</p>
-<p>从上述思想中可以得到第 $t$ 次迭代得到的分类器为</p>
-<script type="math/tex; mode=display">F_t(\mathbf{x}_i)=F_{t-1}(\mathbf{x}_i)+\alpha_th_t(\mathbf{x}_i)</script><p>损失函数为</p>
+<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><h2 id="1-历史背景"><a href="#1-历史背景" class="headerlink" title="1. 历史背景"></a>1. 历史背景</h2><p>1950 年代和 1960 年代，Hubel 和 Wiesel 在 的工作表明，猫的视觉皮层包含单独对视野的小区域做出反应的神经元。如果眼睛不动，则视觉刺激影响单个神经元放电的视觉空间区域称为其感受野。相邻细胞具有相似和重叠的感受野。感受野大小和位置在整个皮层系统地变化，以形成完整的视觉空间图。每个半球的皮层代表对侧视野。</p>
+<p>1968 年，他们的论文确定了大脑中两种基本的视觉细胞类型：，简单细胞会对<br>感受野中特定朝向的线段做出反应，而复杂细胞对于特定朝向的线段移动也能做出反应。Hubel 和 Wiesel 还提出了这两种类型的细胞的级联模型，用于模式识别任务。</p>
+<p>1980 年，福岛邦彦在此基础上提出了神经认知机模型，引入了卷积层和池化层。卷积层包含的单元的感受野覆盖了前一层的一部分。这种单元的权重向量（一组自适应参数）通常称为滤波器。单元可以共享滤波器。下采样层包含其感受野覆盖先前卷积层块的单元。这样的单元通常计算其补丁中单元激活的平均值。这种下采样有助于正确分类视觉场景中的对象，即使对象发生移动也是如此。</p>
+<p>1989 年，Yann LeCun 等人。使用反向传播直接从手写数字的图像中学习卷积核系数。因此，学习是全自动的，比手动系数设计表现更好，并且适用于更广泛的图像识别问题和图像类型。</p>
+<h2 id="2-基本原理"><a href="#2-基本原理" class="headerlink" title="2. 基本原理"></a>2. 基本原理</h2><h3 id="2-1-卷积运算"><a href="#2-1-卷积运算" class="headerlink" title="2.1 卷积运算"></a>2.1 卷积运算</h3><p>在数字信号中，卷积的计算公式为</p>
+<script type="math/tex; mode=display">W(T)=\int _{0 }^{T }f(\tau )g(T-\tau )\,\mathrm {d} \tau</script><p>$f$ 函数是输入信号，$g$ 函数是系统响应。卷积是建立在<strong>输入信号对系统产生的响应是随时间进行累积的</strong>，并且影响的大小与输入的大小具有线性关系。因此，$t$ 时刻进入系统的信号在系统中存在的时间为 $T-t$，由于线性关系，产生的影响即为 $f(t)g(T-t)$，然后对区间 $[0,T]$ 每一时刻的影响进行累加即可，连续情况下也就是积分。</p>
+<p>在数字信号中， $g$ 函数是一个递减的函数，即距离时刻 $T$ 越近的输入信号造成的影响也就越大。</p>
+<p>在图像处理中，卷积是通过卷积核进行计算的。卷积核矩阵的大小决定了感知野的大小，卷积核中的值决定了图像中相应元素的重要程度，本质上就是加权求和。因此，特定的卷积核可以产生特定的效果，例如相同权重值的卷积核会对输入值进行平均处理，从而对图片进行平滑滤波；而下式中的卷积核则可以对图片进行边缘提取，只有周围像素值差别大的地方例如边缘位置值才不会为 $0$。</p>
+<script type="math/tex; mode=display">\begin{bmatrix}
+    0 &-1 & 0\\
+    -1 &-4 & -1\\
+    0 &-1 & 0\\
+\end{bmatrix}</script><p>假设把一张二维的图 $I$ 作为输入，同样有一个二维的核 $K$，卷积的结果为</p>
+<script type="math/tex; mode=display">S(i,j)=(I*K)(i,j)=\sum_m\sum_nI(m,n)K(i-m,j-n)</script><p>卷积是可交换的，可以等价的写为</p>
+<script type="math/tex; mode=display">S(i,j)=(I*K)(i,j)=\sum_m\sum_nI(i-m,j-n)K(m,n)</script><p>卷积的可交换性在于将核的相对输入进行了翻转，但在神经网络中卷积核并不是给定的，而是随着迭代改变的，因此翻转与否并不重要。在神经网络中实际使用的是互相关函数</p>
+<script type="math/tex; mode=display">S(i,j)=(I*K)(i,j)=\sum_m\sum_nI(i+m,j+n)K(m,n)</script><p>卷积核的意义在于稀疏交互 （sparse interactions）、 参数共享（parameter sharing）和等变表示（equivariant representations）</p>
+<p>卷积核通过限制输入的作用范围从而达到稀疏连接。如果有 $m$ 个输入和 $n$ 个输出，全连接层的时间复杂度为 $O(m\times n)$，卷积核的大小为 $k$，卷积运算的时间复杂度则为 $O(k\times n)$。尽管同一层输入只对部分输出产生影响，但在深度卷积网络中，深层单元与绝大部分输入具有间接交互。</p>
+<p>在传统的神经网络中，当计算一层的输出时，权重矩阵的每一个元素只使用一次，当<br>它乘以输入的一个元素后就再也不会用到了。而卷积核对于输入都是共享的，因此节省了存储空间。</p>
+<p>卷积运算还具有平移等变的特性。如果我们移动输入中的对象，它的表示也会在输出中移动同样的量。<br><a target="_blank" rel="noopener" href="https://cs231n.github.io/assets/conv-demo/index.html">https://cs231n.github.io/assets/conv-demo/index.html</a></p>
+<h3 id="2-2-池化"><a href="#2-2-池化" class="headerlink" title="2.2 池化"></a>2.2 池化</h3><p>在得到卷积特征后，下一步就是用来做分类。理论上，可以用提取到的所有特征训练分类器，但用所有特征的计算量开销会很大，而且也会使分类器倾向于过拟合。</p>
+<p>为了解决这个问题，考虑到要描述一个大图像，一个自然的方法是在不同位置处对特征进行汇总统计。例如，可以计算在图像中某一区域的一个特定特征的平均值 (或最大值)，这样概括统计出来的数据，其规模 (相比使用提取到的所有特征) 就低得多，同时也可以改进分类结果 (使模型不易过拟合)。这样的聚集操作称为 “池化”。池化可以保留显著特征，降低特征规模。</p>
+<ul>
+<li>最大池化函数 (Max Pooling) 给出相邻矩形区域内的最大值</li>
+<li>平均池化 (Average Pooling) 计算相邻矩形区域内的平均值</li>
+<li>其他常用的池化函数包括 L2 范数以及基于距中心像素距离的加权平均函数</li>
+</ul>
+<p>池化函数具有局部平移不变形。平移的不变性是指当我们对输入进行少量平移时，经过<br>池化函数后的大多数输出并不会发生改变。当算法关心某个特征是否出现而不是具体位置时，池化就变得尤为有用。</p>
+<h2 id="3-卷积层与参数"><a href="#3-卷积层与参数" class="headerlink" title="3. 卷积层与参数"></a>3. 卷积层与参数</h2><h3 id="3-1-填充"><a href="#3-1-填充" class="headerlink" title="3.1 填充"></a>3.1 填充</h3><p>假设输入图片大小 $(m,n)$，卷积核大小 $(f,f)$，则卷积后的输出图片大小为 $(m-f+1,m-f+1)$。这样会导致卷积运算后输出图片变小，并且图片的角落与边缘像素只参与一次运算，从而会丢失边缘位置的特征信息。</p>
+<p>因此在卷积操作前，需要对输入图片进行填充，以增加矩阵大小，通常用 $0$ 来作为填充值。</p>
+<p>设每个方向上填充像素点数量为 $p$，填充后的图片大小为 $(m+2p,n+2p)$，卷积核的大小仍为 $(f,f)$，则输出图片大小为 $(m+2p-f+1,n+2p-f+1)$。</p>
+<p>填充方法有</p>
+<ul>
+<li>有效(valid)卷积，不填充，直接卷积，输出大小即为 $(m-f+1,m-f+1)$</li>
+<li>相同(same)卷积，用 $0$ 填充，使卷积后结果大小与输入一致，$p=(f-1)/2$</li>
+<li>全(full)卷积，通过填充，使输出大小为 $(m+f-1,n+f-1)$</li>
+</ul>
+<h3 id="3-2-步幅"><a href="#3-2-步幅" class="headerlink" title="3.2 步幅"></a>3.2 步幅</h3><p>除了需要通过填充来避免信息损失，有时也需要通过设置步幅 (Stride) 来压缩一部分信息。步幅表示核在原始图片的水平方向和垂直方向上每次移动的距离。使用卷积步幅，跳过核中的一些位置 (看作对输出的下采样) 来降低计算的开销。如果水平方向和垂直方向的步幅都设为 $s$，则输出尺寸为</p>
+<script type="math/tex; mode=display">([\frac{m+2p-f}{s}+1,\frac{n+2p-f}{s}+1])</script><h3 id="3-3-多通道与并行"><a href="#3-3-多通道与并行" class="headerlink" title="3.3 多通道与并行"></a>3.3 多通道与并行</h3><p>卷积神经网络中，可以用多组卷积核提取不同的特征，相应的会增加输出的维度，例如输入大小 $(m,n)$，卷积核有两组 $(f,f,2)$，使用 same 卷积，输出则为 $(m,n,2)$。</p>
+<p>输入通常也不仅仅是实值的网格，而是由一系列向量的网格，如一幅彩色图像在每一个像素点都会有红绿蓝三种颜色的亮度。当处理图像时，通常把卷积的输入输出都看作是 3 维的张量，其中一个索引用于标明不同的通道 (例如 RGB)，另外两个索引标明在每个通道上的空间坐标。</p>
+<p>同样上面的例子，假设输入有三通道，即 $(m,n,3)$，卷积核则为 $(f,f,3,2)$，输出即为 $(m,n,3,2)$。</p>
+<p>定义输入通道为 $k$，输出通道为 $l$，则计算公式为</p>
+<script type="math/tex; mode=display">S^l(i,j)=\sum_k(I_k*K^l_k)(i,j)</script><h2 id="4-反向传播"><a href="#4-反向传播" class="headerlink" title="4. 反向传播"></a>4. 反向传播</h2><h3 id="4-1-卷积层反向传播"><a href="#4-1-卷积层反向传播" class="headerlink" title="4.1 卷积层反向传播"></a>4.1 卷积层反向传播</h3><p>先不考虑多通道，假设输入是矩阵的情况下进行推导。</p>
+<p>输入 $\mathbf{x}$，卷积核 $\mathbf{w}$，卷积结果为 $\mathbf{y}$，因此卷积计算为</p>
+<script type="math/tex; mode=display">\mathbf{y}=\mathbf{x}*\mathbf{w}</script><p>每一个元素的计算方法（这里下标 $-1$ 是由于矩阵的角标从 $1$ 开始）</p>
+<script type="math/tex; mode=display">y_{i,j}=(\mathbf{x}*\mathbf{w})(i,j)=\sum_m\sum_nx_{i+m-1,j+n-1}w_{m,n}</script><p>因此偏导数分别为</p>
+<script type="math/tex; mode=display">\frac{\partial y_{i,j}}{\partial w_{m,n}}=x_{i+m-1,j+n-1}</script><script type="math/tex; mode=display">\frac{\partial y_{i-m+1,j-n+1}}{\partial x_{i,j}}=w_{m,n}</script><p>应用链式法则，得到 $L$ 关于 $\mathbf{x}$ 和 $\mathbf{w}$ 的导数</p>
 <script type="math/tex; mode=display">\begin{aligned}
-    L(Y,F_t(X))&=\sum_{i=1}^N e^{-y_i(F_{t-1}(\mathbf{x}_i)+\alpha_th_t(\mathbf{x}_i))}\\
-    &=\sum_{i=1}^Ne^{-y_iF_{t-1}(\mathbf{x}_i)} e^{\alpha_t y_ih_t(\mathbf{x}_i)}\\
-    &=\sum_{i=1}^N (N\prod_{j=1}^{t-1} Z_j) D_{t}(i) e^{\alpha_t y_ih_t(\mathbf{x}_i)}
-\end{aligned}</script><p>最小化上述损失函数，对于任意的 $\alpha_t&gt;0$，使损失函数最小可以得到</p>
-<script type="math/tex; mode=display">h_t(\mathbf{x})=\argmin_h \sum_{i=1}^N D_{t}(i)I( h_t(\mathbf x_i)\ne y_i)</script><p>其实就是弱分类器的误分类率</p>
-<p>由之间的定理 3 将损失函数进一步拆分</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-     L(Y,F_t(X))&=(N\prod_{j=1}^{t-1} Z_j)\sum_{i=1}^N D_t(i)e^{-\alpha_ty_ih_t(\mathbf x_i)}\\
-     &= (N\prod_{j=1}^{t-1} Z_j)\sum_{i=1}^N D_t(i)\left(e^{-\alpha_t}I( h_t(\mathbf x_i)=y_i)+e^{\alpha_t}I( h_t(\mathbf x_i)\ne y_i)\right)\\
-     &= (N\prod_{j=1}^{t-1} Z_j)(e^{-\alpha_t} (1-\epsilon_t)+e^{\alpha_t}\epsilon_t) \\
-\end{aligned}</script><p>对 $\alpha_t$ 求导，并令导数为 0，可以得到</p>
-<script type="math/tex; mode=display">-e^{-\alpha_t} (1-\epsilon_t)+e^{\alpha_t}\epsilon_t=0</script><p>解得</p>
-<script type="math/tex; mode=display">\alpha_t=\frac{1}{2}\ln{\frac{1-\epsilon_t}{\epsilon_t}}</script><p>结果与前面给出的一致。</p>
-<p>实际上每一步 $t$ 的弱分类器是加权后的误分类率 $\epsilon_t$ 最小，然后确定最小的误分类率之后，$\alpha_t$ 的取值使最终分类器的损失函数最小。</p>
-<h2 id="3-Adaboost-回归"><a href="#3-Adaboost-回归" class="headerlink" title="3. Adaboost 回归"></a>3. Adaboost 回归</h2><p>相对应于分类问题的误分类率，在回归问题中则是误差率，需要归一化处理并最后取平均值得到平均误差率，保证其值在 $[0,1]$ 之间即可。</p>
-<p>首先初始化训练数据集的权重</p>
-<script type="math/tex; mode=display">D_1=(1/N,1/N,\dots,1/N)</script><p>假设第 $t$ 轮的权重为 $D_t$，通过弱分类算法 $A$ 产生一个弱学习器 $h_t\in \mathcal{H},h_t:\mathcal{X}\rightarrow \mathcal{Y}$</p>
-<p>每个样本的相对误差</p>
-<script type="math/tex; mode=display">e_i = \frac{|y_i-h(\mathbf x_i)|}{\displaystyle \max_j |y_j-h(\mathbf x_j)|}</script><p>这里是曼哈顿距离，如果是平方误差则为</p>
-<script type="math/tex; mode=display">e_i = \frac{(y_i-h(\mathbf x_i))^2}{\displaystyle \max_j (y_j-h(\mathbf x_j))^2}</script><p>指数误差则为（存疑）</p>
-<script type="math/tex; mode=display">e_i = 1-\exp({\frac{|y_i-h(\mathbf x_i)|}{\displaystyle\max_j |y_j-h(\mathbf x_j)|}})</script><p>第 $t$ 轮弱学习器的误差率为</p>
-<script type="math/tex; mode=display">\epsilon_t = \sum_i^N D_t(i)e_i</script><p>计算弱学习器 $h_t$ 的系数 </p>
-<script type="math/tex; mode=display">\alpha_t=\frac{1}{1-\epsilon_t}-1=\frac{\epsilon_t}{1-\epsilon_t}</script><p>更新训练数据集的权重</p>
-<script type="math/tex; mode=display">D_{t+1}(i)=\frac{D_t(i)}{Z_t}\alpha_t^{1-e_i}</script><p>$Z_t$ 是规范化因子</p>
-<script type="math/tex; mode=display">Z_t=\sum_{i=1}^N D_t(i)\alpha_t^{1-e_i}</script><p>最后是结合策略，采用的是对加权的弱学习器取权重中位数对应的弱学习器作为强学习器的方法，最终的强回归器为</p>
-<script type="math/tex; mode=display">\ln \frac{1}{\alpha_t},t=1,2,3,\dots,T</script><p>的中位数值序号 $t^<em>$ 对应的学习器 $h_{t^</em>}$</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/66799567">1. 【Mohri-机器学习基础】第2章: PAC学习框架-zhihu</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/rongxiang20054209/article/details/77601091?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-1-77601091.pc_agg_new_rank&amp;utm_term=pac%E5%BC%B1%E5%8F%AF%E5%AD%A6%E4%B9%A0&amp;spm=1000.2123.3001.4430">2. PAC（probably approximately correct） 学习架构介绍-csdn</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Boosting_(machine_learning">3. Boosting (machine learning)-wiki</a>)<br><a target="_blank" rel="noopener" href="https://www.shivani-agarwal.net/Teaching/CIS-520/Spring-2018/Lectures/Reading/boosting.pdf">4. CIS 520: Machine Learning Spring 2018: Lecture 9 Boosting</a></p>
+    \frac{\partial L}{\partial x_{i,j}}&=\sum_m\sum_n\frac{\partial L}{\partial y_{i-m+1,j-n+1}}\frac{\partial y_{i-m+1,j-n+1}}{\partial x_{i,j}}\\
+    &=\sum_m\sum_n\delta^{(y)}_{i-m+1,j-n+1}w_{m,n}\\
+    &=\delta^{(\mathbf{y})}*\mathrm{flip}(\mathbf{w})(i,j)
+\end{aligned}</script><p>其中，$\delta^{(\mathbf{y})}$ 为 $\mathbf{y}$ 的误差矩阵，注意这里为了保证导数矩阵的维度和 $\mathbf{x}$ 一致，需要对 $\delta^{(\mathbf{y})}$ 进行填充，填充后和 $\mathbf{x}$ 一致。</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \frac{\partial L}{\partial w_{m,n}}&=\sum_m\sum_n\frac{\partial L}{\partial y_{i,j}}\frac{\partial y_{i,j}}{\partial w_{m,n}}\\
+    &=\sum_m\sum_n\delta^{(y)}_{i,j}x_{i+m-1,j+n-1}\\
+    &=\delta^{(\mathbf{y})}*\mathbf{x}(m,n)
+\end{aligned}</script><p>经过激活函数，卷积层的输出为</p>
+<script type="math/tex; mode=display">\mathbf{a}=g(\mathbf{y})=g(\mathbf{x}*\mathbf{w}+\mathbf{b})</script><p>因此反向传播为</p>
+<script type="math/tex; mode=display">\frac{\partial L}{\partial x_{i,j}}=\delta^{(\mathbf{y})}*\mathrm{flip}(\mathbf{w})\odot g'(\mathbf{y})</script><h3 id="4-2-池化层反向传播"><a href="#4-2-池化层反向传播" class="headerlink" title="4.2 池化层反向传播"></a>4.2 池化层反向传播</h3><p>池化函数是一个下采样函数，对于大小为 $m$ 的池化区域，池化函数及导数定义为</p>
+<ul>
+<li>最大池化：$g(x)=max(x)$，导数为 $\displaystyle\frac{\partial g}{\partial x_i}={\begin{cases}1&amp;x_i=max(x)\\0&amp;\mathrm{otherwise}\end{cases}}$</li>
+<li>均值池化：$\displaystyle g(x)=\frac{\sum_k x_k}{m}$，导数为 $\displaystyle\frac{\partial g}{\partial x_i}=\frac{1}{m}$</li>
+<li>p 范数池化：$g(x)=|x|_p=(\sum_k |x_k|^p)^{1/p}$，导数为$\displaystyle \frac{\partial g}{\partial x_i}=(\sum_k |x_k|^p)^{1/p -1}|x_i|^{p-1}$</li>
+</ul>
+<p>定义池化的反向传播为</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    \frac{\partial L}{\partial x_{(n-1)m-1:nm}} &=\frac{\partial L}{\partial y_n}\frac{\partial y_n}{\partial x_{(n-1)m-1:nm}}\\
+    &=\delta_n^{(y)}g_n'\\
+    &=upsample(\delta_n^{(y)},g_n')
+\end{aligned}</script><p>上式是一维的上采样（upsample）方式，对于二维大小为 $m*m$ 的池化方式相同。</p>
+<p>假设池化大小 $2\times 2$，池化层输出反向传播回来的梯度为</p>
+<script type="math/tex; mode=display">\delta_k^{(y)}=\begin{pmatrix}
+    2 & 4 \\
+    6 & 8
+\end{pmatrix}</script><p>根据输入矩阵的大小，将梯度进行填充</p>
+<script type="math/tex; mode=display">\begin{pmatrix}
+    0 &0 & 0 &0 \\
+    0 &2 & 4 &0 \\
+    0 &6 & 8 &0 \\
+    0 &0 & 0 &0 \\
+\end{pmatrix}</script><p>如果是最大池化，假设之前在前向传播时记录的最大值位置分别是左上，右上，左下，右下，则转换后的矩阵为</p>
+<script type="math/tex; mode=display">\begin{pmatrix}
+    2 &0 & 0 &4 \\
+    0 &0 & 0 &0 \\
+    0 &0 & 0 &0 \\
+    6 &0 & 0 &8 \\
+\end{pmatrix}</script><p>如果是均值池化，根据公式可以得到：</p>
+<script type="math/tex; mode=display">\begin{pmatrix}
+    0.5 &0.5 & 1.0 &1.0 \\
+    0.5 &0.5 & 1.0 &1.0 \\
+    1.5 &1.5 & 2.0 &2.0 \\
+    1.5 &1.5 & 2.0 &2.0 \\
+\end{pmatrix}</script><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Convolutional_neural_network">1. Convolutional neural network - Wikipedia</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/22298352/answer/228543288">2. 如何通俗易懂地解释卷积？ - zhihu</a><br><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/52237725">3. 卷积神经网络的卷积核 - zhihu</a><br><a target="_blank" rel="noopener" href="https://github.com/MingchaoZhu/DeepLearning/releases/download/v0.0.1/DL_cn.pdf">4. 《深度学习》——IanGoodfellow</a><br><a target="_blank" rel="noopener" href="https://github.com/MingchaoZhu/DeepLearning">5. MingchaoZhu  DeepLearning</a><br><a target="_blank" rel="noopener" href="https://cs231n.github.io/convolutional-networks/">6. CS231n: Convolutional Neural Networks for Visual Recognition.</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/49205794">7. 从0到1：实现卷积神经网络(实现篇) - zhihu</a><br><a target="_blank" rel="noopener" href="https://web-archive.southampton.ac.uk/cogprints.org/5869/1/cnn_tutorial.pdf">8. Notes on Convolutional Neural Networks</a><br><a target="_blank" rel="noopener" href="https://www.cs.toronto.edu/~urtasun/courses/CSC411_Fall16/10_nn1.pdf">9. CSC 411: Lecture 10: Neural Networks</a></p>
 </blockquote>
 
 
@@ -218,13 +197,13 @@ y_ih_t(\mathbf x_i)={
                                     
                                                 
 
-<a href="/categories/Machine-learning/">Machine learning</a>
+<a href="/categories/Deep-learning/">Deep learning</a>
 
                                                     
                                 </div>
                                 <div class="post-date">
                                     
-                                        2022-03-19
+                                        2022-06-20
                                     
                                 </div>
                             </div>
@@ -275,7 +254,7 @@ y_ih_t(\mathbf x_i)={
 
     <aside id="article-toc" role="navigation" class="fixed">
         <div id="article-toc-inner">
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%B3%E7%AD%96%E6%A0%91"><span class="toc-text">决策树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Adaboost-%E7%AE%97%E6%B3%95"><span class="toc-text">2. Adaboost 算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Adaboost-%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E8%AF%81%E6%98%8E"><span class="toc-text">2. Adaboost 算法分析与证明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Adaboost-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-text">3. Adaboost 损失函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Adaboost-%E5%9B%9E%E5%BD%92"><span class="toc-text">3. Adaboost 回归</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-text">卷积神经网络</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2%E8%83%8C%E6%99%AF"><span class="toc-text">1. 历史背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">2. 基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%8D%B7%E7%A7%AF%E8%BF%90%E7%AE%97"><span class="toc-text">2.1 卷积运算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%B1%A0%E5%8C%96"><span class="toc-text">2.2 池化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%8D%B7%E7%A7%AF%E5%B1%82%E4%B8%8E%E5%8F%82%E6%95%B0"><span class="toc-text">3. 卷积层与参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%A1%AB%E5%85%85"><span class="toc-text">3.1 填充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%AD%A5%E5%B9%85"><span class="toc-text">3.2 步幅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%A4%9A%E9%80%9A%E9%81%93%E4%B8%8E%E5%B9%B6%E8%A1%8C"><span class="toc-text">3.3 多通道与并行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-text">4. 反向传播</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%8D%B7%E7%A7%AF%E5%B1%82%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-text">4.1 卷积层反向传播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%B1%A0%E5%8C%96%E5%B1%82%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="toc-text">4.2 池化层反向传播</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li></ol>
         </div>
     </aside>
 
