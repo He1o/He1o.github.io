@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-07-28T07:05:20.718Z</updated>
+  <updated>2022-08-16T00:08:29.905Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>1. EDA</title>
+    <link href="http://example.com/2022/08/12/FeatureEngineering/1.ExploratoryDataAnalysis/"/>
+    <id>http://example.com/2022/08/12/FeatureEngineering/1.ExploratoryDataAnalysis/</id>
+    <published>2022-08-11T16:00:00.000Z</published>
+    <updated>2022-08-16T00:08:29.905Z</updated>
+    
+    <content type="html"><![CDATA[<span id="more"></span><h1 id="Exploratory-Data-Analysis"><a href="#Exploratory-Data-Analysis" class="headerlink" title="Exploratory Data Analysis"></a>Exploratory Data Analysis</h1><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>数据科学家使用探索性数据分析 (Exploratory Data Analysis) 来分析和调查数据集并总结其主要特征，通常采用数据可视化方法。它有助于确定如何最好地操纵数据源以获得所需的答案，从而使数据科学家更容易发现模式、发现异常、检验假设或检查假设。</p><p>EDA 主要用于查看在正式建模或假设检验任务之外可以揭示哪些数据，并提供对数据集变量及其之间关系的更好理解。它还可以帮助确定您正在考虑用于数据分析的统计技术是否合适。</p><p>EDA 技术最初由美国数学家 John Tukey 在 1970 年代开发，在今天的数据发现过程中仍然是一种广泛使用的方法。</p><p>EDA 的主要目的是帮助在做出任何假设之前查看数据。它可以帮助识别明显的错误，更好地理解数据中的模式，检测异常值或异常事件，找到变量之间的有趣关系。</p><p>EDA 是任何数据分析中重要的第一步。了解异常值出现的位置以及变量之间的关系有助于设计能够产生有意义结果的统计分析。</p><p>数据科学家可以使用探索性分析来确保他们产生的结果是有效的并且适用于任何期望的业务成果和目标。EDA 还通过确认他们提出正确的问题来帮助利益相关者。EDA 可以帮助回答有关标准差、分类变量和置信区间的问题。一旦 EDA 完成并得出见解，它的功能就可以用于更复杂的数据分析或建模，包括机器学习。</p><h2 id="2-数据总览"><a href="#2-数据总览" class="headerlink" title="2. 数据总览"></a>2. 数据总览</h2><p>本文实例数据使用 kaggle 的 Spaceship Titanic 数据集。</p><p>先导入数据</p><pre><code class="lang-python">import pandas as pdtrain_data = pd.read_csv(&#39;Data/train.csv&#39;)test_data = pd.read_csv(&#39;Data/test.csv&#39;)</code></pre><p><img src="https://raw.githubusercontent.com/He1o/Cyrus_NoteBook/main/Kaggle/img/1.png" alt="最小二乘法拟合图"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;span id=&quot;more&quot;&gt;&lt;/span&gt;
+&lt;h1 id=&quot;Exploratory-Data-Analysis&quot;&gt;&lt;a href=&quot;#Exploratory-Data-Analysis&quot; class=&quot;headerlink&quot; title=&quot;Exploratory Data A</summary>
+      
+    
+    
+    
+    <category term="Feature Engineering" scheme="http://example.com/categories/Feature-Engineering/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>14. RandomForest</title>
@@ -432,29 +455,6 @@
       
     <summary type="html">&lt;span id=&quot;more&quot;&gt;&lt;/span&gt;
 &lt;h1 id=&quot;Hexo&quot;&gt;&lt;a href=&quot;#Hexo&quot; class=&quot;headerlink&quot; title=&quot;Hexo&quot;&gt;&lt;/a&gt;Hexo&lt;/h1&gt;&lt;h2 id=&quot;1-安装-NodeJs&quot;&gt;&lt;a href=&quot;#1-安装-NodeJ</summary>
-      
-    
-    
-    
-    <category term="Command" scheme="http://example.com/categories/Command/"/>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Linux</title>
-    <link href="http://example.com/2022/01/09/Command/Linux/"/>
-    <id>http://example.com/2022/01/09/Command/Linux/</id>
-    <published>2022-01-08T16:00:00.000Z</published>
-    <updated>2022-01-24T09:29:56.552Z</updated>
-    
-    <content type="html"><![CDATA[<span id="more"></span><h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><h2 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h2><h3 id="网络第一包慢"><a href="#网络第一包慢" class="headerlink" title="网络第一包慢"></a>网络第一包慢</h3><pre><code class="lang-bash">ping -n refclient.ext.here.com</code></pre><blockquote><p>PING refclient.ext.here.com (108.139.1.24) 56(84) bytes of data.<br>64 bytes from 108.139.1.24: icmp_seq=1 ttl=243 time=1.18 ms<br>64 bytes from 108.139.1.24: icmp_seq=2 ttl=243 time=1.18 ms<br>64 bytes from 108.139.1.24: icmp_seq=3 ttl=243 time=1.14 ms<br>64 bytes from 108.139.1.24: icmp_seq=4 ttl=243 time=1.15 ms<br>64 bytes from 108.139.1.24: icmp_seq=5 ttl=243 time=1.14 ms<br>64 bytes from 108.139.1.24: icmp_seq=6 ttl=243 time=1.14 ms</p></blockquote><pre><code class="lang-bash">time ping -n refclient.ext.here.com -c 1</code></pre><blockquote><p>1 packets transmitted, 1 received, 0% packet loss, time 0ms<br>rtt min/avg/max/mdev = 1.188/1.188/1.188/0.000 ms<br>real    0m5.011s<br>user    0m0.000s<br>sys     0m0.000s</p></blockquote>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;span id=&quot;more&quot;&gt;&lt;/span&gt;
-&lt;h1 id=&quot;Linux&quot;&gt;&lt;a href=&quot;#Linux&quot; class=&quot;headerlink&quot; title=&quot;Linux&quot;&gt;&lt;/a&gt;Linux&lt;/h1&gt;&lt;h2 id=&quot;网络&quot;&gt;&lt;a href=&quot;#网络&quot; class=&quot;head</summary>
       
     
     
